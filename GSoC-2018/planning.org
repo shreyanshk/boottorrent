@@ -22,7 +22,13 @@ https://summerofcode.withgoogle.com/projects/#587215616501350
 ** TODO Coding officially begins!                                 :milestone:
    [2018-05-14]
 
-*** TODO fix project naming?
+*** TODO project naming
+
+is BootTorrent the best (final) project name?
+
+*** TODO define use cases
+
+*** TODO Debian packaging
 
 ** TODO Mentors and students: submit Phase 1 Evaluation           :milestone:
    SCHEDULED: <2018-06-11 16:00 UTC>
