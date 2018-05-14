@@ -1,0 +1,49 @@
+#+TITLE: BootTottent Project - GSoC 2018
+#+DESCRIPTION: P2P Network Boot with BitTorrent
+#+AUTHOR: Giovanni Biscuolo
+#+EMAIL: g@xelera.eu
+
+#+BEGIN_ABSTRACT
+In this project, we explore the solutions that allow P2P network booting of Linux based systems and then create an easy to use and distribution agnostic system of the said solution. We also aim to, at the very least, package the solution as a standard Debian package.
+#+END_ABSTRACT
+
+* Intro
+
+** TODO expand this section
+   DEADLINE: <2018-05-15>
+
+https://summerofcode.withgoogle.com/projects/#587215616501350
+
+* Tasks
+
+** DONE Community Bonding Period                                  :milestone:
+   CLOSED: [2018-05-14]
+
+** TODO Coding officially begins!                                 :milestone:
+   [2018-05-14]
+
+*** TODO fix project naming?
+
+** TODO Mentors and students: submit Phase 1 Evaluation           :milestone:
+   SCHEDULED: <2018-06-11 16:00 UTC>
+   DEADLINE: <2018-06-15 16:00 UTC>
+
+** TODO Work Period
+
+Students work on their project with guidance from Mentors
+
+** TODO Mentors and students: submit Phase 2 Evaluation           :milestone:
+   SCHEDULED: <2018-07-09 16:00 UTC>
+   DEADLINE: <2018-07-13 16:00 UTC>
+
+** TODO Work Period
+
+Students continue working on their project with guidance from Mentors
+
+** TODO Students: submit final work and final mentor evaluation   :milestone:
+   SCHEDULED: <2018-08-06>
+   DEADLINE: <2018-08-14 16:00 UTC>
+
+** TODO Mentors: submit final student evaluations                 :milestone:
+   SCHEDULED: <2018-08-14>
+   DEADLINE: <2018-08-21 16:00 UTC>
