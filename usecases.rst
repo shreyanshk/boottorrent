@@ -52,7 +52,7 @@ Diskless clustered computers (with human input/attended)
 
 A university laboratory can have multiple computers with students wishing to run different distributions/versions of operating systems. They will provide sufficient input to the program executing in the bootstrap image and the program will initiate the download of correct torrent and kexec the downloaded kernel.
 Another reason could be that the Lab supervisor want to centrally manage the operating systems. The person can modify the base OS images on his computer and those changes will be reflected to the other computers on their reboot.
-In this case the computer managed by the supervisor can be designated as ‘server’ and other computers can be called ‘node’. Only the ‘node’ computer is controlled by the students.
+In this case the computer managed by the supervisor can be designated as ‘server’ and other computers can be called ‘node’. Only the ‘node’ computer is controlled by the students (i.e. the boot process is not completely automatic).
 
 Actors
 ~~~~~~
@@ -98,3 +98,26 @@ Actions available:
 
 * Power On/Off the node
 * Select the OS
+
+
+
+.. (atrent) I'm adding some usecase I can think of
+
+Booting a VM (qemu/virtualbox) by selecting an 'boottorrent-able' image from a selection
+----------------------------------------------------------------------------------------
+
+On a "normal" machine a user may want to boot a particular O.S. inside a VM, this usually involve a preliminary downloading (of the image/iso), then a configuration of a VM (e.g. by choosing command line parameters of qemu).
+The process could be sped up by creating a small boottorrent wrapper program that could let the user choose from a list of 'boottorrent-able' images...
+
+
+Re-booting a "normal" pc by selecting an 'boottorrent-able' image from a selection
+----------------------------------------------------------------------------------
+
+Same as above but 'kexec'-ing into a new boot instead of launching a VM.
+(easier than the proposal above)
+
+
+Diskless clustered computers OPTION
+-----------------------------------
+
+In the "diskless" usecases above a VM implementation may be developed, i.e., insetad of 'kexec'-ing into the new O.S. the bootstrap kernel may be kept running, WITH the bittorrent daemon active, so that the torrenting may be sped up since all the booted nodes are also seeders...
