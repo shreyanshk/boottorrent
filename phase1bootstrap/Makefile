@@ -1,14 +1,17 @@
 .DEFAULT_GOAL := pack
 
-pack:
-	@echo "Packing folder rootfs into rootfs.gz";
-	@rm rootfs.gz
-	@fakeroot bsdtar -c --format cpio -f rootfs.gz --lzma rootfs
+initrd:
+	@echo "Adding/Replacing content of diff and rootfs_orig.gz into rootfs.gz";
+	@bsdtar -c --format cpio -f rootfs.gz @rootfs_orig.gz -Cdiff .;
 
-unpack:
+initrd_compressed:
+	@echo "(Compressed) Adding/Replacing content of diff and rootfs_orig.gz into rootfs.gz";
+	@bsdtar -c --format cpio -f rootfs.gz --lzma @rootfs_orig.gz -Cdiff .;
+
+unpackorig:
 	@echo "Unpacking rootfs_orig.gz"
 	@rm -rf rootfs;
 	@mkdir rootfs;
 	@fakeroot bsdtar -x -f rootfs_orig.gz -C ./rootfs;
 
-.PHONY: pack unpack
+.PHONY: initrd initrd_compressed unpackorig
