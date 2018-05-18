@@ -1,11 +1,13 @@
 # -*- coding: utf-8 -*-
 
 """Console script for boottorrent."""
+from boottorrent import boottorrent
 import click
 from distutils.dir_util import copy_tree
 import os
-import sys
 import pkg_resources
+import sys
+import yaml
 
 
 @click.group()
@@ -16,8 +18,7 @@ class main:
 @click.command()
 @click.argument('name')
 def init(name):
-    """Initialize an empty project."""
-    click.echo("I'll initialize an empty project.")
+    """Initialize an new project."""
     base = pkg_resources.resource_filename('boottorrent', 'assets/skel/config.yaml')
     base = os.path.dirname(base)
     nfolder = os.path.join(os.getcwd(), name)
@@ -25,9 +26,13 @@ def init(name):
 
 
 @click.command()
-def start(args=None):
+def start():
     """Bring the system up and running."""
-    click.echo("I'll run the services.")
+    pdir = os.getcwd()
+    config = open(os.path.join(pdir, 'config.yaml'), 'r')
+    pconfig = yaml.load(config)
+    config.close()
+    boottorrent.start(pconfig, pdir)
 
 
 @click.command()
