@@ -1,1 +1,19 @@
- 
+boottorrent:
+  version: 0
+
+dnsmasq:
+  port: 0
+  interface: eth0
+  bind_interfaces: True
+  dhcp_range: "192.168.0.50,192.168.0.150,12h"
+
+aria2:
+  seed:
+    enable_dht: True
+    max_overall_upload_speed: 0
+  client:
+    bt_enable_lpd: True
+    check_integrity: True
+    enable_dht: True
+    enable_dht6: True
+    enable_peer_exchange: True
