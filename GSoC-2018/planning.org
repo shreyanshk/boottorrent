@@ -28,6 +28,14 @@ is BootTorrent the best (final) project name?
 
 *** TODO define use cases
 
+*** TODO insert somewhere a reference to the original thesis work (http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en)
+
+*** TODO list similar projects and studies (at least http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en#Similar_works)
+
+*** TODO describe components you're working on
+
+*** TODO create schemas/pictures of the system (future users must understand at a glance the architecture)
+
 *** TODO Debian packaging
 
 ** TODO Mentors and students: submit Phase 1 Evaluation           :milestone:
