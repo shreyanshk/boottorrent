@@ -1,5 +1,5 @@
 Welcome to boottorrent's documentation!
-======================================
+=======================================
 
 .. toctree::
    :maxdepth: 2
