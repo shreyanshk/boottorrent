@@ -26,7 +26,7 @@ https://summerofcode.withgoogle.com/projects/#587215616501350
 
 is BootTorrent the best (final) project name?
 
-*** TODO define use cases
+*** TODO define use cases (actors, actions, contexts)
 
 *** TODO insert somewhere a reference to the original thesis work (http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en)
 
@@ -34,7 +34,13 @@ is BootTorrent the best (final) project name?
 
 *** TODO describe components you're working on
 
+*** TODO prepare instructions to reproduce the docker testing and upload docker config
+
 *** TODO create schemas/pictures of the system (future users must understand at a glance the architecture)
+
+*** TODO the README.rst should be *good* first glance of the projects
+
+*** TODO doc page (on readthedocs) is now empty...
 
 *** TODO Debian packaging
 
