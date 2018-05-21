@@ -20,13 +20,6 @@ class BootTorrent:
     def start(self):
         """
         To start the DHCP + TFTP + Torrent Seed with the arguments received in config.
-
-        Parameters
-        ----------
-        config : dict
-            Parameters that will be passed to the processes of various services.
-        wd : str
-            Path of the base folder of the configuration.
         """
         signal.signal(signal.SIGINT, self.sigint_handler)
         assetsdir = os.path.dirname(__file__) + "/assets"
