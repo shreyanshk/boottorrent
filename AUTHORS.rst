@@ -10,4 +10,5 @@ Development Lead
 Contributors
 ------------
 
-None yet. Why not be the first?
+* Andrea Trentini <andrea.trentini@unimi.it>
+* Giovanni Biscuolo <g@xelera.eu>
