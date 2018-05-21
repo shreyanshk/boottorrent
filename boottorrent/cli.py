@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Console script for boottorrent."""
-from boottorrent import boottorrent
+from boottorrent import BootTorrent
 import click
 from distutils.dir_util import copy_tree
 import os
@@ -32,7 +32,8 @@ def start():
     config = open(os.path.join(pdir, 'config.yaml'), 'r')
     pconfig = yaml.load(config)
     config.close()
-    boottorrent.start(pconfig, pdir)
+    bt = BootTorrent(pconfig, pdir)
+    bt.start()
 
 
 @click.command()

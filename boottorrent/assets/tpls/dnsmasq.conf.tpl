@@ -10,6 +10,6 @@ keep-in-foreground
 log-facility=/dev/stdout
 port={{ port }}
 #PXE bootloader to run
-tftp-root={{ assets }}
+tftp-root={{ ph1 }}
 user={{ user }}
 
