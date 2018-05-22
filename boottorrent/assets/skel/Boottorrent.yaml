@@ -1,5 +1,7 @@
 boottorrent:
   version: 0
+  timeout: 30
+  seed_time: 60
 
 dnsmasq:
   port: 0
@@ -8,10 +10,9 @@ dnsmasq:
   dhcp_range: "192.168.0.50,192.168.0.150,12h"
   user: nobody
 
-aria2:
+transmission:
   seed:
-    enable_dht: True
-    max_overall_upload_speed: 0
+    rpc_port: 9091
   client:
     bt_enable_lpd: True
     check_integrity: True
