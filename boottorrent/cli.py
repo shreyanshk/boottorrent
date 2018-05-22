@@ -30,6 +30,13 @@ def start():
     wd = os.getcwd()
     cfgfilepath = wd + '/Boottorrent.yaml'
     if pathlib.Path(cfgfilepath).exists():
+        if not os.access(wd, os.W_OK):
+            click.echo(
+                    "Error: Unable to create intermediate files "
+                    "as current directory is not writable. "
+                    "Hence, cannot continue."
+                    )
+            exit()
         with open(cfgfilepath, 'r') as cfgfile:
             cfg = yaml.load(cfgfile)
         bt = BootTorrent(cfg, wd)
