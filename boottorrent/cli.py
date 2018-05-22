@@ -5,7 +5,7 @@ from boottorrent import BootTorrent
 import click
 from distutils.dir_util import copy_tree
 import os
-import pkg_resources
+import pathlib
 import sys
 import yaml
 
@@ -19,21 +19,26 @@ class main:
 @click.argument('name')
 def init(name):
     """Initialize an new project."""
-    base = pkg_resources.resource_filename('boottorrent', 'assets/skel/config.yaml')
-    base = os.path.dirname(base)
-    nfolder = os.path.join(os.getcwd(), name)
+    base = os.path.dirname(__file__) + '/assets/skel'
+    nfolder = os.getcwd() + '/' + name
     copy_tree(base, nfolder)
 
 
 @click.command()
 def start():
     """Bring the system up and running."""
-    pdir = os.getcwd()
-    config = open(os.path.join(pdir, 'config.yaml'), 'r')
-    pconfig = yaml.load(config)
-    config.close()
-    bt = BootTorrent(pconfig, pdir)
-    bt.start()
+    wd = os.getcwd()
+    cfgfilepath = wd + '/Boottorrent.yaml'
+    if pathlib.Path(cfgfilepath).exists():
+        with open(cfgfilepath, 'r') as cfgfile:
+            cfg = yaml.load(cfgfile)
+        bt = BootTorrent(cfg, wd)
+        bt.start()
+    else:
+        click.echo("Error: can't find suitable configuration file in this directory.")
+        click.echo("Are you in the right directory?")
+        click.echo("Supported filename is: Boottorrent.yaml")
+        exit()
 
 
 @click.command()

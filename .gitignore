@@ -2,6 +2,7 @@
 dummyproject/
 venv/
 local/
+docs/_static/
 
 #files
 .directory

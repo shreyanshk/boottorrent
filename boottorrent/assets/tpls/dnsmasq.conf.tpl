@@ -1,15 +1,18 @@
-{% if bind_interfaces %}bind-interfaces{% endif %}
-dhcp-boot=pxelinux.0
-dhcp-leasefile={{ dhcp_leasefile }}
-#path of config file for the pxe bootloader (relative to root of assets)
-dhcp-option-force=209,isolinux.cfg
-dhcp-range={{ dhcp_range }}
-enable-tftp
+{% if bind_interfaces %}
+	bind-interfaces
+{% endif %}
 interface={{ interface }}
 keep-in-foreground
 log-facility=/dev/stdout
 port={{ port }}
-#PXE bootloader to run
-tftp-root={{ ph1 }}
 user={{ user }}
 
+dhcp-boot=pxelinux.0
+dhcp-leasefile={{ dhcp_leasefile }}
+dhcp-option-force=209,pxelinux.cfg
+dhcp-range={{ dhcp_range }}
+
+{% if enable_tftp %}
+	enable-tftp
+	tftp-root={{ ph1 }}
+{% endif %}
