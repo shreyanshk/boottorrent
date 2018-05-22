@@ -19,6 +19,7 @@ class BootTorrent:
 
     def sigint_handler(self, signal, frame):
         subprocess.call(["kill", "-9", str(self.dnsmasqpid)])
+        subprocess.call(["kill", "-9", str(self.transmissionpid)])
         exit()
 
     def start(self):
@@ -27,7 +28,7 @@ class BootTorrent:
         self.configure_dnsmasq()
         self.generate_torrents()
         self.generate_initrd()
-        # self.configure_torrent_seed
+        self.configure_transmission_host()
         self.start_processes()
 
     def configure_dnsmasq(self):
@@ -43,6 +44,16 @@ class BootTorrent:
         with open(self.wd+'/out/dnsmasq/dnsmasq.conf', 'w') as dnsmasqfile:
             dnsmasqfile.write(dnsmasqconf)
 
+    def configure_transmission_host(self):
+        self.config['transmission']['seed']['osdir'] = self.wd+'/oss'
+        with open(self.assets+'/tpls/transmission.json.tpl', 'r') as f:
+            data = f.read()
+            transmissionconf = Template(data).render(
+                    **self.config['transmission']['seed']
+                    )
+        with open(self.wd+'/out/transmission/settings.json', 'w') as f:
+            f.write(transmissionconf)
+
     def start_processes(self):
         dnsmasqprocess = subprocess.Popen(
                 ['dnsmasq', '-C', self.wd+'/out/dnsmasq/dnsmasq.conf'],
@@ -50,9 +61,21 @@ class BootTorrent:
                 stderr=subprocess.STDOUT,
                 )
         self.dnsmasqpid = dnsmasqprocess.pid
-        while not dnsmasqprocess.poll():
+        transmissionprocess = subprocess.Popen(
+                [
+                    'transmission-daemon',
+                    '-f', '-g',
+                    self.wd+'/out/transmission',
+                    ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                )
+        self.transmissionpid = transmissionprocess.pid
+        while True:
             for line in dnsmasqprocess.stdout:
                 print("dnsmasq: " + line.decode())
+            for line in transmissionprocess.stdout:
+                print("Transmission: " + line.decode())
 
     def generate_torrents(self):
         oss = self.config['boottorrent']['display_oss']
@@ -62,7 +85,7 @@ class BootTorrent:
             p = subprocess.Popen(
                     [
                         'transmission-create',
-                        self.wd + '/oss' + os,
+                        self.wd + '/oss/' + os,
                         '-o', filename,
                         ],
                 stdout=subprocess.PIPE,
