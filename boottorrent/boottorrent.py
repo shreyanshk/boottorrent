@@ -5,6 +5,7 @@ from distutils.dir_util import copy_tree
 from jinja2 import Template
 import os
 import pathlib
+import yaml
 import shutil
 import signal
 import subprocess
@@ -24,7 +25,8 @@ class BootTorrent:
         signal.signal(signal.SIGINT, self.sigint_handler)
         self.recreate_output_dir()
         self.configure_dnsmasq()
-        # self.create_torrents
+        self.generate_torrents()
+        self.generate_initrd()
         # self.configure_torrent_seed
         self.start_processes()
 
@@ -52,8 +54,40 @@ class BootTorrent:
             for line in dnsmasqprocess.stdout:
                 print("dnsmasq: " + line.decode())
 
-    def torrent():
-        pass
+    def generate_torrents(self):
+        oss = self.config['boottorrent']['display_oss']
+        oslist = []
+        for os in oss:
+            filename = self.wd + '/out/torrents/' + os + '.torrent'
+            p = subprocess.Popen(
+                    [
+                        'transmission-create',
+                        self.wd + '/oss' + os,
+                        '-o', filename,
+                        ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                )
+            p.wait()
+            oslist.append(os)
+            shutil.copyfile(
+                    self.wd+'/oss/'+os+'/config.yaml',
+                    self.wd+'/out/torrents/'+os+'.yaml'
+                    )
+            for line in p.stdout:
+                print("transmission: " + line.decode())
+        with open(self.wd + '/out/torrents/list.yaml', 'w') as f:
+            f.write(yaml.dump(oslist))
+
+    def generate_initrd(self):
+        t = subprocess.Popen([
+            'bsdtar',
+            '-c', '--format', 'newc', '--lzma',
+            '-f', self.wd+'/out/dnsmasq/ph1/torrents.gz',
+            '-C', self.wd+'/out',
+            'torrents',
+            ])
+        t.wait()
 
     def recreate_output_dir(self):
         shutil.rmtree(self.wd + "/out", ignore_errors=True)
@@ -65,6 +99,11 @@ class BootTorrent:
         copy_tree(self.assets+"/ph1", self.wd + "/out/dnsmasq/ph1")
         pathlib.Path.mkdir(
                 pathlib.Path(self.wd + "/out/torrents"),
+                parents=True,
+                exist_ok=False,
+                )
+        pathlib.Path.mkdir(
+                pathlib.Path(self.wd + "/out/transmission"),
                 parents=True,
                 exist_ok=False,
                 )
