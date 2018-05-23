@@ -3,12 +3,16 @@
 """Main module."""
 from distutils.dir_util import copy_tree
 from jinja2 import Template
+import json
 import os
 import pathlib
-import yaml
+import requests
 import shutil
 import signal
 import subprocess
+import threading
+import time
+import yaml
 
 
 class BootTorrent:
@@ -29,7 +33,40 @@ class BootTorrent:
         self.generate_torrents()
         self.generate_initrd()
         self.configure_transmission_host()
-        self.start_processes()
+        thread = threading.Thread(
+                target=self.start_processes,
+                )
+        thread.start()
+        time.sleep(3) # wait for the processes to start
+        self.add_generated_torrents()
+        thread.join()
+
+    def add_generated_torrents(self):
+        port = self.config['transmission']['seed']['rpc_port']
+        # get X-Transmission-Session-Id; To make torrent-add request later
+        text = requests.get(f"http://localhost:{port}/transmission/rpc").text
+        csrftoken = text[522:570]
+        with open(self.wd + '/out/torrents/list.yaml', 'r') as f:
+            data = f.read()
+            oss = yaml.load(data)
+        for os in oss:
+            args = {
+                    'paused': False,
+                    'download-dir': f"{self.wd}/oss",
+                    'filename': f"{self.wd}/out/torrents/{os}.torrent",
+                    }
+            req = requests.post(
+                    f"http://localhost:{port}/transmission/rpc",
+                    data = json.dumps({
+                        "method": "torrent-add",
+                        "arguments": args,
+                        }),
+                    headers = {
+                        'X-Transmission-Session-Id': csrftoken,
+                        }
+                    )
+            if req.status_code == 200:
+                print(f'Transmission: Added torrent for {os}.')
 
     def configure_dnsmasq(self):
         self.config['dnsmasq']['dhcp_leasefile'] = (
