@@ -71,7 +71,7 @@ class BootTorrent:
                         }
                     )
             if req.status_code == 200:
-                print(f'Transmission: Added torrent for {os}.')
+                print(f'TRANSMISSION: Added torrent for {os}.')
 
     def configure_dnsmasq(self):
         self.config['dnsmasq']['dhcp_leasefile'] = (
@@ -133,6 +133,7 @@ class BootTorrent:
                         ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
+                universal_newlines=True,
                 )
             p.wait()
             oslist.append(os)
@@ -141,7 +142,7 @@ class BootTorrent:
                     self.wd+'/out/torrents/'+os+'.yaml'
                     )
             for line in p.stdout:
-                print("transmission: " + line.decode())
+                print(f"TRANSMISSION-CREATE: {line}", end="")
         with open(self.wd + '/out/torrents/list.yaml', 'w') as f:
             f.write(yaml.dump(oslist))
 
