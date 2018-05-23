@@ -22,9 +22,9 @@ class BootTorrent:
         self.assets = os.path.dirname(__file__) + "/assets"
 
     def sigint_handler(self, signal, frame):
-        subprocess.call(["kill", "-9", str(self.dnsmasqpid)])
-        subprocess.call(["kill", "-9", str(self.transmissionpid)])
-        exit()
+        print('Attempting to terminate the processes...')
+        self.p_dnsmasq.terminate()
+        self.p_transmission.terminate()
 
     def start(self):
         signal.signal(signal.SIGINT, self.sigint_handler)
@@ -33,13 +33,18 @@ class BootTorrent:
         self.generate_torrents()
         self.generate_initrd()
         self.configure_transmission_host()
-        thread = threading.Thread(
-                target=self.start_processes,
+        t_thread = threading.Thread(
+                target=self.start_process_transmission,
                 )
-        thread.start()
+        t_thread.start()
+        d_thread = threading.Thread(
+                target=self.start_process_dnsmasq,
+                )
+        d_thread.start()
         time.sleep(3) # wait for the processes to start
         self.add_generated_torrents()
-        thread.join()
+        t_thread.join()
+        d_thread.join()
 
     def add_generated_torrents(self):
         port = self.config['transmission']['seed']['rpc_port']
@@ -91,28 +96,29 @@ class BootTorrent:
         with open(self.wd+'/out/transmission/settings.json', 'w') as f:
             f.write(transmissionconf)
 
-    def start_processes(self):
-        dnsmasqprocess = subprocess.Popen(
-                ['dnsmasq', '-C', self.wd+'/out/dnsmasq/dnsmasq.conf'],
+    def start_process_dnsmasq(self):
+        self.p_dnsmasq = subprocess.Popen(
+                ['dnsmasq', '-C', f'{self.wd}/out/dnsmasq/dnsmasq.conf'],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
+                universal_newlines=True,
                 )
-        self.dnsmasqpid = dnsmasqprocess.pid
-        transmissionprocess = subprocess.Popen(
+        for line in self.p_dnsmasq.stdout:
+            print(f"DNSMASQ: {line}", end="")
+
+    def start_process_transmission(self):
+        self.p_transmission = subprocess.Popen(
                 [
                     'transmission-daemon',
                     '-f', '-g',
-                    self.wd+'/out/transmission',
+                    f'{self.wd}/out/transmission',
                     ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
+                universal_newlines=True,
                 )
-        self.transmissionpid = transmissionprocess.pid
-        while True:
-            for line in dnsmasqprocess.stdout:
-                print("dnsmasq: " + line.decode())
-            for line in transmissionprocess.stdout:
-                print("Transmission: " + line.decode())
+        for line in self.p_transmission.stdout:
+            print(f"TRANSMISSION: {line}", end="")
 
     def generate_torrents(self):
         oss = self.config['boottorrent']['display_oss']
