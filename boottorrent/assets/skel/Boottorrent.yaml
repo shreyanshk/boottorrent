@@ -1,21 +1,59 @@
 boottorrent:
-  version: 0
-  timeout: 30
-  seed_time: 60
+    version: 0
+
+    # Operating Systems (OSs) choices available to clients. (list)
+    # Populated with the name of the folders in the oss/ directory.
+    # display_oss:
+
+    # In case of multiple OSs, wait this long (seconds) before choosing default
+    # TODO [WIP]
+    # timeout: 30
+
+    # The default choice in case of no input from user.
+    # Must be a value from the display_oss list.
+    # TODO [WIP]
+    # default_os:
+
+    # How long to seed the downloaded OS before loading it.
+    # TODO [WIP]
+    # seed_time: 60
+
+    # IP of this host as visible to the clients
+    # host_ip: 192.168.0.1
+
 
 dnsmasq:
-  port: 0
-  interface: eth0
-  bind_interfaces: True
-  dhcp_range: "192.168.0.50,192.168.0.150,12h"
-  user: nobody
+    # These params have one-to-one correlation with those of Dnsmasq
+    # When in doubt, please visit it's official documentation at
+    # http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
+
+    # Enable build-in DHCP server (needs root access).
+    # enable_dhcp: True
+
+    # Switches to this user after dropping root privileges.
+    # user: nobody
+
+    # Interface on which the DHCP server should run.
+    # interface: eth0
+
+    # To bind to the interface or not.
+    # Useful when the interface can go up/down or change
+    # addresses during runtime.
+    # bind_interfaces: True
+
+    # Range for DHCP server (if enabled).
+    # dhcp_range: "192.168.0.50,192.168.0.150,12h"
+
+    # Enable build-in TFTP server.
+    # enable_tftp: True
+
 
 transmission:
-  seed:
-    rpc_port: 9091
-  client:
-    bt_enable_lpd: True
-    check_integrity: True
-    enable_dht: True
-    enable_dht6: True
-    enable_peer_exchange: True
+    seed:
+        rpc_port: 9091
+    client:
+        bt_enable_lpd: False
+        check_integrity: True
+        enable_dht: True
+        enable_dht6: True
+        enable_peer_exchange: True
