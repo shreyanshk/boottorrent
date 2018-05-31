@@ -124,7 +124,7 @@ class BootTorrent:
         oss = self.config['boottorrent']['display_oss']
         oslist = []
         for os in oss:
-            filename = self.wd + '/out/torrents/' + os + '.torrent'
+            filename = f"{self.wd}/out/torrents/{os}.torrent"
             p = subprocess.Popen(
                     [
                         'transmission-create',
@@ -138,8 +138,8 @@ class BootTorrent:
             p.wait()
             oslist.append(os)
             shutil.copyfile(
-                    self.wd+'/oss/'+os+'/config.yaml',
-                    self.wd+'/out/torrents/'+os+'.yaml'
+                    f"{self.wd}/oss/{os}/config.yaml",
+                    f"{self.wd}/out/torrents/{os}.yaml",
                     )
             for line in p.stdout:
                 print(f"TRANSMISSION-CREATE: {line}", end="")
