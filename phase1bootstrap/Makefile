@@ -1,12 +1,12 @@
 .DEFAULT_GOAL := pack
 
 initrd:
-	@echo "Adding/Replacing content of diff and rootfs_orig.gz into rootfs.gz";
-	@bsdtar -c --format newc -f rootfs.gz @rootfs_orig.gz -Cdiff .;
+	@echo "Adding content of diff into diff.gz";
+	@bsdtar -c --format newc -f diff.gz -Cdiff .;
 
 initrd_compressed:
-	@echo "(Compressed) Adding/Replacing content of diff and rootfs_orig.gz into rootfs.gz";
-	@bsdtar -c --format newc -f rootfs.gz --lzma @rootfs_orig.gz -Cdiff .;
+	@echo "(Compressed) Adding content of diff into diff.gz";
+	@bsdtar -c --format newc -f diff.gz --lzma -Cdiff .;
 
 unpackorig:
 	@echo "Unpacking rootfs_orig.gz"
