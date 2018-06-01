@@ -3,6 +3,8 @@ boottorrent
 ===========
 
 
+.. at least a link to https://wiki.debian.org/SummerOfCode2018/Projects/BootTorrent should be present!
+
 .. image:: https://img.shields.io/pypi/v/boottorrent.svg
         :target: https://pypi.python.org/pypi/boottorrent
 
