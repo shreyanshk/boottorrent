@@ -6,6 +6,7 @@ from jinja2 import Template
 import json
 import os
 import pathlib
+import queue
 import requests
 import shutil
 import signal
@@ -17,14 +18,18 @@ import yaml
 
 class BootTorrent:
     def __init__(self, config, wd):
-        self.config = config
-        self.wd = wd
         self.assets = os.path.dirname(__file__) + "/assets"
+        self.config = config
+        self.output = queue.Queue()
+        self.threads = dict({})
+        self.wd = wd
 
     def sigint_handler(self, signal, frame):
         print('Attempting to terminate the processes...')
         self.p_dnsmasq.terminate()
         self.p_transmission.terminate()
+        # Putting None ends the output thread
+        self.output.put(None)
 
     def start(self):
         signal.signal(signal.SIGINT, self.sigint_handler)
@@ -33,18 +38,40 @@ class BootTorrent:
         self.generate_torrents()
         self.generate_initrd()
         self.configure_transmission_host()
+
         t_thread = threading.Thread(
                 target=self.start_process_transmission,
                 )
-        t_thread.start()
+        self.threads['transmission'] = t_thread
         d_thread = threading.Thread(
                 target=self.start_process_dnsmasq,
                 )
-        d_thread.start()
-        time.sleep(3) # wait for the processes to start
+        self.threads['dnsmasq'] = d_thread
+        o_thread = threading.Thread(
+                target=self.display_output,
+                )
+        self.threads['output'] = o_thread
+
+        for _, val in self.threads.items():
+            val.start()
+
+        # wait for the transmission process to start and
+        # initialize before adding torrents
+        time.sleep(3)
         self.add_generated_torrents()
-        t_thread.join()
-        d_thread.join()
+
+        # wait for threads to finish before exiting
+        for _, val in self.threads.items():
+            val.join()
+
+    def display_output(self):
+        while True:
+            # Set as blocking because the function is launched as a thread.
+            line = self.output.get(block=True, timeout=None)
+            if line is None:
+                break
+            print(line, end="")
+            self.output.task_done()
 
     def add_generated_torrents(self):
         port = self.config['transmission']['seed']['rpc_port']
@@ -71,7 +98,7 @@ class BootTorrent:
                         }
                     )
             if req.status_code == 200:
-                print(f'TRANSMISSION: Added torrent for {os}.')
+                self.output.put(f"TRANSMISSION: Added torrent for {os}.\n")
 
     def configure_dnsmasq(self):
         self.config['dnsmasq']['dhcp_leasefile'] = (
@@ -104,7 +131,7 @@ class BootTorrent:
                 universal_newlines=True,
                 )
         for line in self.p_dnsmasq.stdout:
-            print(f"DNSMASQ: {line}", end="")
+            self.output.put(f"DNSMASQ: {line}")
 
     def start_process_transmission(self):
         self.p_transmission = subprocess.Popen(
@@ -118,7 +145,7 @@ class BootTorrent:
                 universal_newlines=True,
                 )
         for line in self.p_transmission.stdout:
-            print(f"TRANSMISSION: {line}", end="")
+            self.output.put(f"TRANSMISSION: {line}")
 
     def generate_torrents(self):
         oss = self.config['boottorrent']['display_oss']
@@ -142,7 +169,7 @@ class BootTorrent:
                     f"{self.wd}/out/torrents/{os}.yaml",
                     )
             for line in p.stdout:
-                print(f"TRANSMISSION-CREATE: {line}", end="")
+                self.output.put(f"TRANSMISSION-CREATE: {line}\n")
         with open(self.wd + '/out/torrents/list.yaml', 'w') as f:
             f.write(yaml.dump(oslist))
 
