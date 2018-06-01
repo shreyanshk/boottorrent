@@ -21,13 +21,14 @@ class BootTorrent:
         self.assets = os.path.dirname(__file__) + "/assets"
         self.config = config
         self.output = queue.Queue()
+        self.process = dict({})
         self.threads = dict({})
         self.wd = wd
 
     def sigint_handler(self, signal, frame):
         print('Attempting to terminate the processes...')
-        self.p_dnsmasq.terminate()
-        self.p_transmission.terminate()
+        for _, process in self.process.items():
+            process.terminate()
         # Putting None ends the output thread
         self.output.put(None)
 
@@ -124,17 +125,18 @@ class BootTorrent:
             f.write(transmissionconf)
 
     def start_process_dnsmasq(self):
-        self.p_dnsmasq = subprocess.Popen(
+        process = subprocess.Popen(
                 ['dnsmasq', '-C', f'{self.wd}/out/dnsmasq/dnsmasq.conf'],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
                 )
-        for line in self.p_dnsmasq.stdout:
+        self.process['dnsmasq'] = process
+        for line in process.stdout:
             self.output.put(f"DNSMASQ: {line}")
 
     def start_process_transmission(self):
-        self.p_transmission = subprocess.Popen(
+        process = subprocess.Popen(
                 [
                     'transmission-daemon',
                     '-f', '-g',
@@ -144,7 +146,8 @@ class BootTorrent:
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
                 )
-        for line in self.p_transmission.stdout:
+        self.process['transmission'] = process
+        for line in process.stdout:
             self.output.put(f"TRANSMISSION: {line}")
 
     def generate_torrents(self):
