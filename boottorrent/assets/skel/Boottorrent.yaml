@@ -1,59 +1,110 @@
 boottorrent:
+    # Handle backward/forward compatibility.
+    # (type: int)
     version: 0
 
-    # Operating Systems (OSs) choices available to clients. (list)
+    # Operating Systems (OSs) choices available to clients.
     # Populated with the name of the folders in the oss/ directory.
+    # (type: list of strings)
     # display_oss:
 
     # In case of multiple OSs, wait this long (seconds) before choosing default
+    # (type: int, default: 30)
     # TODO [WIP]
-    # timeout: 30
+    timeout: 30
 
     # The default choice in case of no input from user.
     # Must be a value from the display_oss list.
+    # (type: string)
     # TODO [WIP]
     # default_os:
 
     # How long to seed the downloaded OS before loading it.
+    # (type: int, default: 30)
     # TODO [WIP]
-    # seed_time: 60
+    seed_time: 30
 
-    # IP of this host as visible to the clients
-    # host_ip: 192.168.0.1
+    # IPv4 of this host as visible to the clients
+    # (type: string)
+    host_ip: 192.168.1.1
 
 
+# Dnsmasq is used to provide a DHCP server and TFTP server for
+# the purpose of network boot to the clients.
 dnsmasq:
     # These params have one-to-one correlation with those of Dnsmasq
     # When in doubt, please visit it's official documentation at
     # http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
 
     # Enable build-in DHCP server (needs root access).
-    # enable_dhcp: True
+    # (type: bool, default: True)
+    enable_dhcp: True
 
-    # Switches to this user after dropping root privileges.
+    # Switch to this user when dropping root privileges.
+    # (type: string, default: nobody)
     # user: nobody
 
     # Interface on which the DHCP server should run.
-    # interface: eth0
+    # (type: string, default: eth0)
+    interface: eth0
 
     # To bind to the interface or not.
     # Useful when the interface can go up/down or change
     # addresses during runtime.
-    # bind_interfaces: True
+    # (type: bool, default: True)
+    bind_interfaces: True
 
     # Range for DHCP server (if enabled).
-    # dhcp_range: "192.168.0.50,192.168.0.150,12h"
+    # (type: string, default: "192.168.1.50,192.168.1.150,12h")
+    dhcp_range: "192.168.1.50,192.168.1.150,12h"
 
     # Enable build-in TFTP server.
-    # enable_tftp: True
+    # (type: bool, default: True)
+    enable_tftp: True
 
 
+# Hefur is a standalone and lightweight BitTorrent tracker
+# It is used to help clients discover seeds/peers faster.
+hefur:
+    # Required for seed/peer discovery in clients.
+    # Requires that you set host_ip field.
+    # (type: bool, default: True)
+    enable: True
+
+    # Port on which to run the tracker
+    # (type: int, default: 10001)
+    port: 10001
+
+
+# An instance of Transmission is launched on the host to
+# serve the Operating System files in the oss/ folder
+# to the clients via torrents.
 transmission:
-    seed:
-        rpc_port: 9091
-    client:
-        bt_enable_lpd: False
-        check_integrity: True
-        enable_dht: True
-        enable_dht6: True
-        enable_peer_exchange: True
+    # The port where Transmission will provide it's WebUI and API. (required)
+    # (type: int, default: 9091)
+    rpc_port: 9091
+
+    # Distributed Hash Table (DHT) & Local Peer Discovery (LPD)
+    # can be enabled to help clients find other seeds/peers if
+    # Hehur is not enabled.
+    # Consider enabling DHT and LPD on Aria2 as well for
+    # these to be effective if enabled here.
+    # (type: bool, default: False)
+    dht_enabled: False
+    lpd_enabled: False
+
+
+# Aria2 is used on client side to download files.
+aria2:
+    # Enable Local Peer Discovery (LPD) or Distributed Hash Table (DHT)
+    # (type: bool, default: False)
+    bt_enable_lpd: False
+    enable_dht: False
+
+    # Additionally verify data authenticity on client.
+    # (type: bool, default: False)
+    # check_integrity: False
+
+    # Enable Peer Exchange (PEX)
+    # (type: bool, default: True)
+    enable_peer_exchange: True
