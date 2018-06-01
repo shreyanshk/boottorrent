@@ -48,6 +48,13 @@ class BootTorrent:
                 target=self.start_process_dnsmasq,
                 )
         self.threads['dnsmasq'] = d_thread
+
+        if self.config['hefur']['enable']:
+            h_thread = threading.Thread(
+                    target=self.start_process_hefur,
+                    )
+            self.threads['hefur'] = h_thread
+
         o_thread = threading.Thread(
                 target=self.display_output,
                 )
@@ -75,7 +82,7 @@ class BootTorrent:
             self.output.task_done()
 
     def add_generated_torrents(self):
-        port = self.config['transmission']['seed']['rpc_port']
+        port = self.config['transmission']['rpc_port']
         # get X-Transmission-Session-Id; To make torrent-add request later
         text = requests.get(f"http://localhost:{port}/transmission/rpc").text
         csrftoken = text[522:570]
@@ -103,25 +110,23 @@ class BootTorrent:
 
     def configure_dnsmasq(self):
         self.config['dnsmasq']['dhcp_leasefile'] = (
-                self.wd
-                + '/out/dnsmasq/dnsmasq.leases'
+                f"{self.wd}/out/dnsmasq/dnsmasq.leases"
                 )
-        self.config['dnsmasq']['ph1'] = self.wd+'/out/dnsmasq/ph1'
-        self.config['dnsmasq']['enable_tftp'] = True
-        with open(self.assets+'/tpls/dnsmasq.conf.tpl', 'r') as dnsmasqtpl:
+        self.config['dnsmasq']['ph1'] = f'{self.wd}/out/dnsmasq/ph1'
+        with open(f'{self.assets}/tpls/dnsmasq.conf.tpl', 'r') as dnsmasqtpl:
             data = dnsmasqtpl.read()
             dnsmasqconf = Template(data).render(**self.config['dnsmasq'])
         with open(self.wd+'/out/dnsmasq/dnsmasq.conf', 'w') as dnsmasqfile:
             dnsmasqfile.write(dnsmasqconf)
 
     def configure_transmission_host(self):
-        self.config['transmission']['seed']['osdir'] = self.wd+'/oss'
-        with open(self.assets+'/tpls/transmission.json.tpl', 'r') as f:
+        self.config['transmission']['osdir'] = f"{self.wd}/oss"
+        with open(f"{self.assets}/tpls/transmission.json.tpl", 'r') as f:
             data = f.read()
             transmissionconf = Template(data).render(
-                    **self.config['transmission']['seed']
+                    **self.config['transmission']
                     )
-        with open(self.wd+'/out/transmission/settings.json', 'w') as f:
+        with open(f"{self.wd}/out/transmission/settings.json", 'w') as f:
             f.write(transmissionconf)
 
     def start_process_dnsmasq(self):
@@ -134,6 +139,23 @@ class BootTorrent:
         self.process['dnsmasq'] = process
         for line in process.stdout:
             self.output.put(f"DNSMASQ: {line}")
+
+    def start_process_hefur(self):
+        process = subprocess.Popen(
+                [
+                    "hefurd",
+                    "-torrent-dir", f"{self.wd}/out/torrents/",
+                    "-http-port", str(self.config['hefur']['port']),
+                    "-https-port", "0", # disables HTTPS
+                    "-udp-port", str(self.config['hefur']['port']),
+                    ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                )
+        self.process['hefur'] = process
+        for line in process.stdout:
+            self.output.put(f"HEFUR: {line}\n")
 
     def start_process_transmission(self):
         process = subprocess.Popen(
@@ -151,19 +173,32 @@ class BootTorrent:
             self.output.put(f"TRANSMISSION: {line}")
 
     def generate_torrents(self):
+        if self.config['hefur']['enable']:
+            hefur = True
+            try:
+                host_ip = self.config['boottorrent']['host_ip']
+                port = self.config['hefur']['port']
+            except KeyError:
+                print("Please check configuration! Missing host IP or hefur port.")
+                exit()
+        else:
+            hefur = False
         oss = self.config['boottorrent']['display_oss']
         oslist = []
         for os in oss:
             filename = f"{self.wd}/out/torrents/{os}.torrent"
+            cmd = [
+                    "transmission-create",
+                    f"{self.wd}/oss/{os}",
+                    "-o", filename,
+                    ]
+            if hefur:
+                cmd.extend(["-t", f"http://{host_ip}:{port}/announce"])
             p = subprocess.Popen(
-                    [
-                        'transmission-create',
-                        self.wd + '/oss/' + os,
-                        '-o', filename,
-                        ],
-                stdout=subprocess.PIPE,
-                stderr=subprocess.STDOUT,
-                universal_newlines=True,
+                    cmd,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.STDOUT,
+                    universal_newlines=True,
                 )
             p.wait()
             oslist.append(os)
