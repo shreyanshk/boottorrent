@@ -2,6 +2,9 @@
 BootTorrent
 ===========
 
+.. (atrent) way better now! The next thing to do is to summarize here (as an introduction) the different "usecases" (contexts&actors) so that a "would be" user may identify if and how this project can be of use for him
+
+
 .. image:: https://img.shields.io/pypi/v/boottorrent.svg
         :target: https://pypi.python.org/pypi/boottorrent
 
