@@ -35,7 +35,7 @@ This project depends on:
 
 * `Dnsmasq`_
 
-* `Hefur`_ (Optionally)
+* `Hefur`_ (Optional)
 
 .. _Transmission: https://github.com/transmission/transmission
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
@@ -44,7 +44,9 @@ This project depends on:
 
 Please check your distribution specific guide for instructions on how to install them.
 
-Next, Please install the package itself
+Next, Please install the package itself:
+
+.. code-block:: bash
 
     $ pip install -e https://github.com/shreyanshk/boottorrent
 
@@ -58,16 +60,22 @@ First, Let's create directory for keeping all the required files.
 BootTorrent can set you up with a basic config with sane values for most variables.
 For example to create a new directory with the name `proj`, execute:
 
+.. code-block:: bash
+
     $ boottorrent init proj
 
-This should initialize a new folder `proj` with the following structure
+This should initialize a new folder `proj` with the following structure:
+
+.. code-block::
 
     proj
     ├── Boottorrent.yaml
     └── oss
 
 Now, your environment is ready.
-Consider updating the Boottorrent.yaml files according to your hardware/software setup. Documentation for various parameters is included inside the file itself.
+Consider updating the Boottorrent.yaml files according to your hardware/software setup.
+Documentation for various parameters is included inside the file itself.
+
 
 Adding a Linux based OS
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -77,6 +85,8 @@ Let's say that you have a compiled kernel (vmlinuz) and corresponding initrd (in
 1. Create a new folder in the oss/ directory, let's say `testos`.
 2. Drop the files into oss/testos.
 3. Add a file oss/testos/config.yaml with content (modify according to your needs):
+
+.. code-block:: yaml
 
     dispname: TestOS # Friendly name to display
     method: kexec
@@ -94,10 +104,14 @@ To start the processes:
 1. Change to your project directory (where Boottorrent.yaml file is placed).
 2. Execute:
 
+.. code-block:: bash
+
     $ boottorrent start
 
 Note: You may have to provide root access as Dnsmasq requires direct access to the network interface.
 You can avoid giving root access if you use setcap to provide proper permission to dnsmasq binary.
+
+.. code-block:: bash
 
     $ sudo setcap CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN=+ep /usr/bin/dnsmasq
 
