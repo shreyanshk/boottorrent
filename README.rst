@@ -134,7 +134,7 @@ This project is inspired from the Academic `Thesis`_ of Andrea Trentini.
 See the videos of test run at:
 
 * `https://www.youtube.com/watch?v=3gTfrIiJf74 <https://www.youtube.com/watch?v=3gTfrIiJf74>`_
-* `https://www.youtube.com/watch?v=ihFOw8eJZzc <https://www.youtube.com/watch?v=ihFOw8eJZzc`_
+* `https://www.youtube.com/watch?v=ihFOw8eJZzc <https://www.youtube.com/watch?v=ihFOw8eJZzc>`_
 * `https://www.youtube.com/watch?v=Quj_Ztipjw8 <https://www.youtube.com/watch?v=Quj_Ztipjw8>`_
 * `https://www.youtube.com/watch?v=GZMQaSjfqKY <https://www.youtube.com/watch?v=GZMQaSjfqKY>`_
 
@@ -143,4 +143,4 @@ This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypack
 
 .. _Cookiecutter: https://github.com/audreyr/cookiecutter
 .. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-.. _`Theses`: http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en
+.. _`Thesis`: http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en
