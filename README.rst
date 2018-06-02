@@ -58,13 +58,13 @@ Prepare your environment
 
 First, Let's create directory for keeping all the required files.
 BootTorrent can set you up with a basic config with sane values for most variables.
-For example to create a new directory with the name `proj`, execute:
+For example to create a new directory with the name ``proj``, execute:
 
 .. code-block:: bash
 
     $ boottorrent init proj
 
-This should initialize a new folder `proj` with the following structure:
+This should initialize a new folder ``proj`` with the following structure:
 
 .. code-block::
 
@@ -82,7 +82,7 @@ Adding a Linux based OS
 
 Let's say that you have a compiled kernel (vmlinuz) and corresponding initrd (initramfs.img) ready with you, the process is:
 
-1. Create a new folder in the oss/ directory, let's say `testos`.
+1. Create a new folder in the oss/ directory, let's say ``testos``.
 2. Drop the files into oss/testos.
 3. Add a file oss/testos/config.yaml with content (modify according to your needs):
 
