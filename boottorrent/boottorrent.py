@@ -37,6 +37,7 @@ class BootTorrent:
         self.recreate_output_dir()
         self.configure_dnsmasq()
         self.generate_torrents()
+        self.generate_client_config()
         self.generate_initrd()
         self.configure_transmission_host()
 
@@ -86,10 +87,7 @@ class BootTorrent:
         # get X-Transmission-Session-Id; To make torrent-add request later
         text = requests.get(f"http://localhost:{port}/transmission/rpc").text
         csrftoken = text[522:570]
-        with open(self.wd + '/out/torrents/list.yaml', 'r') as f:
-            data = f.read()
-            oss = yaml.load(data)
-        for os in oss:
+        for os in self.config['boottorrent']['display_oss']:
             args = {
                     'paused': False,
                     'download-dir': f"{self.wd}/oss",
@@ -173,6 +171,9 @@ class BootTorrent:
             self.output.put(f"TRANSMISSION: {line}")
 
     def generate_torrents(self):
+        """
+        Function to generate torrents for the folders in oss/ directory.
+        """
         if self.config['hefur']['enable']:
             hefur = True
             try:
@@ -184,7 +185,6 @@ class BootTorrent:
         else:
             hefur = False
         oss = self.config['boottorrent']['display_oss']
-        oslist = []
         for os in oss:
             filename = f"{self.wd}/out/torrents/{os}.torrent"
             cmd = [
@@ -201,15 +201,26 @@ class BootTorrent:
                     universal_newlines=True,
                 )
             p.wait()
-            oslist.append(os)
-            shutil.copyfile(
-                    f"{self.wd}/oss/{os}/config.yaml",
-                    f"{self.wd}/out/torrents/{os}.yaml",
-                    )
             for line in p.stdout:
                 self.output.put(f"TRANSMISSION-CREATE: {line}\n")
-        with open(self.wd + '/out/torrents/list.yaml', 'w') as f:
-            f.write(yaml.dump(oslist))
+
+    def generate_client_config(self):
+        """
+        Generate the configuration files that are transferred to the clients.
+        These files include the Boottorrent.yaml file as is and a squashed
+        config.yaml file containing the config for all displayed OSs.
+        """
+        shutil.copyfile(
+            f"{self.wd}/Boottorrent.yaml",
+            f"{self.wd}/out/torrents/Boottorrent.yaml",
+            )
+        config = dict()
+        for os in self.config['boottorrent']['display_oss']:
+            osconfig = open(f"{self.wd}/oss/{os}/config.yaml", "r").read()
+            config[os] = yaml.load(osconfig)
+        configcontent = yaml.dump(config)
+        with open(f"{self.wd}/out/torrents/configs.yaml", "w") as f:
+            f.write(configcontent)
 
     def generate_initrd(self):
         t = subprocess.Popen([
