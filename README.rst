@@ -17,15 +17,17 @@ BootTorrent
 
 BitTorrent based distributed network booting of various Operating systems... even on diskless nodes.
 
-WARNING: STATUS - ALPHA: DO NOT USE IN PRODUCTION!
+**WARNING: STATUS - ALPHA: DO NOT USE IN PRODUCTION!**
 
 * Free software: GNU General Public License v3
 * Documentation: https://boottorrent.readthedocs.io.
+
 
 Features
 --------
 
 * TODO
+
 
 Installation
 ------------
@@ -38,23 +40,58 @@ This project depends on:
 
 * `Dnsmasq`_
 
+* `bsdtar`_ (provided by libarchive)
+
 * `Hefur`_ (Optional)
+
+* `Golang`_ (build dependency)
 
 .. _Transmission: https://github.com/transmission/transmission
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
 .. _Hefur: https://github.com/abique/hefur
 .. _Python 3.6: https://www.python.org/
+.. _bsdtar: http://www.libarchive.org/
+.. _Golang: https://golang.org/
 
 Please check your distribution specific guide for instructions on how to install them.
+
+
+Get the source code
+~~~~~~~~~~~~~~~~~~~
+
+Downloading source code with ``git`` is very straightforward.
+
+.. code-block:: bash
+
+    $ git clone git@github.com:shreyanshk/boottorrent.git
+
+
+Pre-Install: Building assets
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
+
+.. code-block:: bash
+
+    $ cd phase1bootstrap
+    $ make initrd
+
+This will create the assets and place them at proper locations in the repository.
+
+
+Install package
+~~~~~~~~~~~~~~~
 
 Next, Please install the package itself:
 
 .. code-block:: bash
 
-    $ pip install -e https://github.com/shreyanshk/boottorrent
+    $ pip install -e boottorrent
+
 
 Get Started
 -----------
+
 
 Prepare your environment
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,6 +157,7 @@ You can avoid giving root access if you use setcap to provide proper permission 
 
 Go ahead and try to network boot other machines. Look for an options with the names of added OSs and select your choice to start the booting process in clients.
 
+
 Authors
 -------
 
@@ -129,6 +167,7 @@ GSoC'18 project by `Shreyansh Khajanchi`_ under the mentorship of `Andrea Trenti
 .. _Giovanni Biscuolo: https://github.com/gbiscuolo
 .. _Shreyansh Khajanchi: https://www.shreyanshja.in/
 .. _Click here: https://wiki.debian.org/SummerOfCode2018/Projects/BootTorrent
+
 
 Credits
 -------
