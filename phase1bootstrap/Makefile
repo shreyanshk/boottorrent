@@ -6,6 +6,7 @@ initrd:
 	@mv tui diff/sbin/getty
 	@echo "(Compressed) Adding content of diff into diff.gz";
 	@bsdtar -c --format newc -f diff.gz --lzma -Cdiff .;
+	@cp diff.gz ../boottorrent/assets/ph1/diff.gz
 
 unpackorig:
 	@echo "Unpacking rootfs_orig.gz"
