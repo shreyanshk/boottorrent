@@ -1,10 +1,9 @@
-.DEFAULT_GOAL := pack
+.DEFAULT_GOAL := initrd
 
 initrd:
-	@echo "Adding content of diff into diff.gz";
-	@bsdtar -c --format newc -f diff.gz -Cdiff .;
-
-initrd_compressed:
+	@go build tui.go
+	@mkdir -p diff/sbin
+	@mv tui diff/sbin/getty
 	@echo "(Compressed) Adding content of diff into diff.gz";
 	@bsdtar -c --format newc -f diff.gz --lzma -Cdiff .;
 
