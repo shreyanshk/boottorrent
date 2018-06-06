@@ -2,6 +2,9 @@
 BootTorrent
 ===========
 
+.. (atrent) way better now! The next thing to do is to summarize here (as an introduction) the different "usecases" (contexts&actors) so that a "would be" user may identify if and how this project can be of use for him
+
+
 .. image:: https://img.shields.io/pypi/v/boottorrent.svg
         :target: https://pypi.python.org/pypi/boottorrent
 
@@ -122,7 +125,7 @@ Authors
 
 GSoC'18 project by `Shreyansh Khajanchi`_ under the mentorship of `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian. `Click here`_ to view the project on the official Debian website.
 
-.. _Andrea Trentini: https://github.com/atrent
+.. _Andrea Trentini: https://atrent.it
 .. _Giovanni Biscuolo: https://github.com/gbiscuolo
 .. _Shreyansh Khajanchi: https://www.shreyanshja.in/
 .. _Click here: https://wiki.debian.org/SummerOfCode2018/Projects/BootTorrent
@@ -130,7 +133,7 @@ GSoC'18 project by `Shreyansh Khajanchi`_ under the mentorship of `Andrea Trenti
 Credits
 -------
 
-This project is inspired from the Academic `Thesis`_ of Andrea Trentini.
+This project is inspired from the Academic `Thesis`_ of Davide Bruschi (mentored by Andrea Trentini).
 See the videos of test run at:
 
 * `https://www.youtube.com/watch?v=3gTfrIiJf74 <https://www.youtube.com/watch?v=3gTfrIiJf74>`_
