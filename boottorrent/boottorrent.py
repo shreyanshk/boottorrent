@@ -18,14 +18,38 @@ import yaml
 
 class BootTorrent:
     def __init__(self, config, wd):
-        self.assets = os.path.dirname(__file__) + "/assets"
+        """Initialize a new instance
+
+        Parameters
+        ----------
+        config : dict
+            Dictionary generated from parsing BootTorrent.yaml
+
+        wd : str
+            Working directory of the command where BootTorrent.yaml can be found
+        """
+        self.assets = os.path.dirname(__file__) + "/assets" # path to assets/ folder
         self.config = config
+        # This is the output queue where external components (transmission, dnamasq, hefur) send their stdout.
         self.output = queue.Queue()
+        # store handles to threads and processes
         self.process = dict({})
         self.threads = dict({})
         self.wd = wd
 
     def sigint_handler(self, signal, frame):
+        """Handle system signals such as Ctrl+C (SIGINT)
+        We handle only SIGINT for now
+        Check https://docs.python.org/3/library/signal.html for information
+        on the parameters passed
+
+        Parameters
+        ----------
+        signal
+            Signal as it was received
+        frame
+            Current stack frame
+        """
         print('Attempting to terminate the processes...')
         for _, process in self.process.items():
             process.terminate()
@@ -33,7 +57,10 @@ class BootTorrent:
         self.output.put(None)
 
     def start(self):
+        """Start the process from creation of out/ directory to starting the processes"""
+        # Attach signal handler
         signal.signal(signal.SIGINT, self.sigint_handler)
+        # Setup the configurations for external components
         self.recreate_output_dir()
         self.configure_dnsmasq()
         self.generate_torrents()
@@ -41,6 +68,7 @@ class BootTorrent:
         self.generate_initrd()
         self.configure_transmission_host()
 
+        # Launching the processes (in another thread so as to not block main thread)
         t_thread = threading.Thread(
                 target=self.start_process_transmission,
                 )
@@ -74,6 +102,7 @@ class BootTorrent:
             val.join()
 
     def display_output(self):
+        """Function to display the output on the user console"""
         while True:
             # Set as blocking because the function is launched as a thread.
             line = self.output.get(block=True, timeout=None)
@@ -83,8 +112,10 @@ class BootTorrent:
             self.output.task_done()
 
     def add_generated_torrents(self):
+        """Function to add the generated .torrent files to the Transmission process."""
         port = self.config['transmission']['rpc_port']
         # get X-Transmission-Session-Id; To make torrent-add request later
+        # Transmission's security mechanism to avoid CSRF
         text = requests.get(f"http://localhost:{port}/transmission/rpc").text
         csrftoken = text[522:570]
         for os in self.config['boottorrent']['display_oss']:
@@ -93,6 +124,9 @@ class BootTorrent:
                     'download-dir': f"{self.wd}/oss",
                     'filename': f"{self.wd}/out/torrents/{os}.torrent",
                     }
+            # adding torrent file now
+            # see https://trac.transmissionbt.com/browser/branches/1.7x/doc/rpc-spec.txt
+            # for API details
             req = requests.post(
                     f"http://localhost:{port}/transmission/rpc",
                     data = json.dumps({
@@ -107,17 +141,22 @@ class BootTorrent:
                 self.output.put(f"TRANSMISSION: Added torrent for {os}.\n")
 
     def configure_dnsmasq(self):
+        """Render dnsmasq.conf.tpl according to the configuration."""
+        # Lease file is used to store what IP is given to which client
         self.config['dnsmasq']['dhcp_leasefile'] = (
                 f"{self.wd}/out/dnsmasq/dnsmasq.leases"
                 )
+        # Set the location where the Phase 1 bootloader files can be found
         self.config['dnsmasq']['ph1'] = f'{self.wd}/out/dnsmasq/ph1'
         with open(f'{self.assets}/tpls/dnsmasq.conf.tpl', 'r') as dnsmasqtpl:
             data = dnsmasqtpl.read()
             dnsmasqconf = Template(data).render(**self.config['dnsmasq'])
         with open(self.wd+'/out/dnsmasq/dnsmasq.conf', 'w') as dnsmasqfile:
-            dnsmasqfile.write(dnsmasqconf)
+            dnsmasqfile.write(dnsmasqconf) # write config file
 
     def configure_transmission_host(self):
+        """Render settings.json file according to configuration"""
+        # location where the transmission process can find files
         self.config['transmission']['osdir'] = f"{self.wd}/oss"
         with open(f"{self.assets}/tpls/transmission.json.tpl", 'r') as f:
             data = f.read()
@@ -125,9 +164,10 @@ class BootTorrent:
                     **self.config['transmission']
                     )
         with open(f"{self.wd}/out/transmission/settings.json", 'w') as f:
-            f.write(transmissionconf)
+            f.write(transmissionconf) # write config
 
     def start_process_dnsmasq(self):
+        """Start the Dnsmasq process"""
         process = subprocess.Popen(
                 ['dnsmasq', '-C', f'{self.wd}/out/dnsmasq/dnsmasq.conf'],
                 stdout=subprocess.PIPE,
@@ -139,13 +179,14 @@ class BootTorrent:
             self.output.put(f"DNSMASQ: {line}")
 
     def start_process_hefur(self):
+        """Start the Hefur process"""
         process = subprocess.Popen(
                 [
                     "hefurd",
                     "-torrent-dir", f"{self.wd}/out/torrents/",
-                    "-http-port", str(self.config['hefur']['port']),
+                    "-http-port", str(self.config['hefur']['port']), # HTTP port for stats and clients
                     "-https-port", "0", # disables HTTPS
-                    "-udp-port", str(self.config['hefur']['port']),
+                    "-udp-port", str(self.config['hefur']['port']), # UDP port is for clients
                     ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
@@ -153,13 +194,15 @@ class BootTorrent:
                 )
         self.process['hefur'] = process
         for line in process.stdout:
+            # Hefur doesn't insert newlines in it's output, unlike others.
             self.output.put(f"HEFUR: {line}\n")
 
     def start_process_transmission(self):
+        """Start the Transmissio process"""
         process = subprocess.Popen(
                 [
                     'transmission-daemon',
-                    '-f', '-g',
+                    '-f', '-g', # Stay in foreground, do not fork
                     f'{self.wd}/out/transmission',
                     ],
                 stdout=subprocess.PIPE,
@@ -185,14 +228,16 @@ class BootTorrent:
         else:
             hefur = False
         oss = self.config['boottorrent']['display_oss']
+        # generating torrents now
         for os in oss:
             filename = f"{self.wd}/out/torrents/{os}.torrent"
             cmd = [
                     "transmission-create",
-                    f"{self.wd}/oss/{os}",
-                    "-o", filename,
+                    f"{self.wd}/oss/{os}", # folder for which to generate
+                    "-o", filename, # where should the files be placed
                     ]
             if hefur:
+                # add hefur as external tracker, if enabled
                 cmd.extend(["-t", f"http://{host_ip}:{port}/announce"])
             p = subprocess.Popen(
                     cmd,
@@ -223,6 +268,9 @@ class BootTorrent:
             f.write(configcontent)
 
     def generate_initrd(self):
+        """Generate torrents.gz file from the out/torrents folder
+        which is then transferred to the clients.
+        """
         t = subprocess.Popen([
             'bsdtar',
             '-c', '--format', 'newc', '--lzma',
@@ -233,7 +281,14 @@ class BootTorrent:
         t.wait()
 
     def recreate_output_dir(self):
+        """Creates the out/ directory.
+        On every invocation, out/ directory is recreated
+        because configuration may have changed and we may
+        need to update.
+        """
+        # remove stuff present already
         shutil.rmtree(self.wd + "/out", ignore_errors=True)
+        # make directory structure
         pathlib.Path.mkdir(
                 pathlib.Path(self.wd + "/out/dnsmasq"),
                 parents=True,
