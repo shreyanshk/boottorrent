@@ -28,7 +28,11 @@ If you have considerable number of independent computers at your disposal and yo
 
 The advantage of BootTorrent over standard network booting is that the bottleneck caused by a central server serving the image is reduced and BootTorrent removes the linear scaling factor in total time to bring a cluster online fully functional by utilizing Peer-to-Peer protocol. The nodes share the image data among themselves, hence, improved boot times.
 
-We have tried to identify some usecases in usecases.rst file. Consider reading it to find out how BootTorrent can be useful to you.
+.. (atrent) maybe linking to the graph on this (http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en#graphs) section of the original thesis would be even more explicative
+
+We have tried to identify some usecases in [usecases] file. Consider reading it to find out how BootTorrent can be useful to you.
+
+.. (atrent) I'm not sure about the usefulness of the usecases file for *external* users, I see it as an internal document for the development team, maybe here a brief summary of the hypothetical contexts can be described, what do you think?
 
 **WARNING: STATUS - ALPHA: DO NOT USE IN PRODUCTION!**
 
@@ -44,6 +48,8 @@ Features
 
 Installation
 ------------
+
+.. (atrent) these requirements are for the server only, correct? and not even all of them if the bootimage is already created? it may be useful to distinguish the requirements for every phase
 
 This project depends on:
 
