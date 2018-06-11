@@ -41,15 +41,16 @@ The advantage of BootTorrent over standard network booting is that the bottlenec
 * Free software: GNU General Public License v3
 * Documentation: https://boottorrent.readthedocs.io.
 
-
 Features
 --------
 
 * TODO
 
-
 Installation
 ------------
+
+Dependencies (Runtime / Server)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This project depends on:
 
@@ -70,17 +71,6 @@ This project depends on:
 .. _bsdtar: http://www.libarchive.org/
 
 Please check your distribution specific guide for instructions on how to install them.
-
-
-Get the source code
-~~~~~~~~~~~~~~~~~~~
-
-Downloading source code with ``git`` is very straightforward.
-
-.. code-block:: bash
-
-    $ git clone git@github.com:shreyanshk/boottorrent.git
-
 
 Pre-Install: Building assets
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -109,20 +99,32 @@ Then you can build.
 
 This will create the assets and place them at proper locations in the repository.
 
-
 Install package
 ~~~~~~~~~~~~~~~
 
-Next, Please install the package itself:
+First, check if you have a compatible version (>3.6) of Python.
 
 .. code-block:: bash
 
-    $ pip install -e boottorrent
+    $ python --version
+    Python 3.6.5
 
+Otherwise, you can use tools such as `virtualenv`_, `pyenv`_, or `pipenv`_ to get Python 3.6
+
+.. _`virtualenv`: https://github.com/pypa/virtualenv
+.. _`pyenv`: https://github.com/pyenv/pyenv
+.. _`pipenv`: https://github.com/pypa/pipenv
+
+After installing runtime dependencies, install the package using Pip
+
+.. code-block:: bash
+
+    $ pip install git+https://github.com/shreyanshk/boottorrent
+
+This should automatically download the files and install them.
 
 Get Started
 -----------
-
 
 Prepare your environment
 ~~~~~~~~~~~~~~~~~~~~~~~~
@@ -146,7 +148,6 @@ This should initialize a new folder ``proj`` with the following structure:
 Now, your environment is ready.
 Consider updating the Boottorrent.yaml files according to your hardware/software setup.
 Documentation for various parameters is included inside the file itself.
-
 
 Adding a Linux based OS
 ~~~~~~~~~~~~~~~~~~~~~~~
@@ -188,7 +189,6 @@ You can avoid giving root access if you use setcap to provide proper permission 
 
 Go ahead and try to network boot other machines. Look for an options with the names of added OSs and select your choice to start the booting process in clients.
 
-
 Authors
 -------
 
@@ -198,7 +198,6 @@ GSoC'18 project by `Shreyansh Khajanchi`_ under the mentorship of `Andrea Trenti
 .. _Giovanni Biscuolo: https://github.com/gbiscuolo
 .. _Shreyansh Khajanchi: https://www.shreyanshja.in/
 .. _Click here: https://wiki.debian.org/SummerOfCode2018/Projects/BootTorrent
-
 
 Credits
 -------
@@ -210,7 +209,6 @@ See the videos of test run at:
 * `https://www.youtube.com/watch?v=ihFOw8eJZzc <https://www.youtube.com/watch?v=ihFOw8eJZzc>`_
 * `https://www.youtube.com/watch?v=Quj_Ztipjw8 <https://www.youtube.com/watch?v=Quj_Ztipjw8>`_
 * `https://www.youtube.com/watch?v=GZMQaSjfqKY <https://www.youtube.com/watch?v=GZMQaSjfqKY>`_
-
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
