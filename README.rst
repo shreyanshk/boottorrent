@@ -25,7 +25,16 @@ If you have considerable number of independent computers at your disposal and yo
 
 The advantage of BootTorrent over standard network booting is that the bottleneck caused by a central server serving the image is reduced and BootTorrent removes the linear scaling factor in total time to bring a cluster online fully functional by utilizing Peer-to-Peer protocol. The nodes share the image data among themselves, hence, improved boot times.
 
-We have tried to identify some usecases in [usecases] file. Consider reading it to find out how BootTorrent can be useful to you.
+.. |img1| image:: http://sl-lab.it/dokuwiki/lib/exe/fetch.php/tesi:txmedia_paper.png
+    :width: 33%
+.. |img2| image:: http://sl-lab.it/dokuwiki/lib/exe/fetch.php/tesi:seed-ratio_paper.png
+    :width: 33%
+.. |img3| image:: http://sl-lab.it/dokuwiki/lib/exe/fetch.php/tesi:tempiboot_paper.png
+    :width: 33%
+
++------+------+------+
+||img1|||img2|||img3||
++------+------+------+
 
 **WARNING: STATUS - ALPHA: DO NOT USE IN PRODUCTION!**
 
