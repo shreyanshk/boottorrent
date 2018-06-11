@@ -54,14 +54,11 @@ This project depends on:
 
 * `Hefur`_ (Optional)
 
-* `Golang`_ (build dependency)
-
 .. _Transmission: https://github.com/transmission/transmission
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
 .. _Hefur: https://github.com/abique/hefur
 .. _Python 3.6: https://www.python.org/
 .. _bsdtar: http://www.libarchive.org/
-.. _Golang: https://golang.org/
 
 Please check your distribution specific guide for instructions on how to install them.
 
@@ -81,7 +78,13 @@ Pre-Install: Building assets
 
 **You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
 
-Some Golang dependencies are required to build, you can download them with these commands:
+Building assets requires additional software. This includes:
+
+* `Golang`_ (For the client TUI)
+
+.. _Golang: https://golang.org/
+
+Some Golang dependencies are also required to build, you can download them with these commands:
 
 .. code-block:: bash
 
