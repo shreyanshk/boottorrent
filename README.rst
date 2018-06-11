@@ -81,6 +81,15 @@ Pre-Install: Building assets
 
 **You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
 
+Some Golang dependencies are required to build, you can download them with these commands:
+
+.. code-block:: bash
+
+    $ go get github.com/jroimartin/gocui
+    $ go get gopkg.in/yaml.v2
+
+Then you can build.
+
 .. code-block:: bash
 
     $ cd phase1bootstrap
