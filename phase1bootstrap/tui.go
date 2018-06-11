@@ -9,6 +9,8 @@ import (
 	"os"
 	"os/exec"
 	"strconv"
+	"strings"
+	"time"
 )
 
 // Some useful structs
@@ -16,11 +18,17 @@ import (
 
 // configs.yaml is parsed into an array of this struct.
 type OS struct {
-	Cmdline string
+	// Common to all
 	Dispname string
+	Method string
+
+	// fields required for kexec
+	Cmdline string
 	Initrd string
 	Kernel string
-	Method string
+
+	// fields required for bin-qemu-x86_64
+	Args string
 }
 
 // Conveniently misses fields for stuff that is probably not needed on client.
@@ -96,6 +104,7 @@ func getLine(g *gocui.Gui, v *gocui.View) error {
 	var l string
 	var err error
 
+	// Read line at the location of the cursor
 	_, cy := v.Cursor()
 	if l, err = v.Line(cy); err != nil {
 		panic(err)
@@ -110,10 +119,8 @@ func getLine(g *gocui.Gui, v *gocui.View) error {
 }
 
 
-// function to launch the OS
-func start(l string) {
-	// Preparing to download the torrent
-	oskey := display_names[l]
+// function to download the files via aria2 command
+func download_files(oskey string) {
 	aria2 := exec.Command(
 		"aria2c",
 		"--enable-dht=" + strconv.FormatBool(btconfig.Aria2.Enable_dht),
@@ -130,6 +137,11 @@ func start(l string) {
 	aria2.Stdout = os.Stdout
 	aria2.Stderr = os.Stderr
 	aria2.Run()
+}
+
+// Method string: kexec
+// function handling Kexec-ing of new kernels
+func load_kexec(oskey string) {
 	runconfig := osconfig[oskey]
 	// Kexec-ing new kernel now
 	kexec := exec.Command(
@@ -149,6 +161,42 @@ func start(l string) {
 	kexec2.Run()
 }
 
+// Method string: bin-qemu-x86_64
+// function to start Qemu process under Xorg
+func load_bin_qemu_x86_64(oskey string) {
+	c := osconfig[oskey]
+	xorg := exec.Command("Xorg")
+	xorg.Stdout = os.Stdout
+	xorg.Stderr = os.Stderr
+	xorg.Start()
+	//wait for Xorg to load
+	time.Sleep(1 * time.Second)
+	qemu := exec.Command("qemu-system-x86_64")
+	qemu.Args = append(qemu.Args, strings.Fields(c.Args)...)
+	// Qemu requires this env variable
+	qemu.Env = []string{"DISPLAY=:0"}
+	qemu.Dir = "/" + oskey
+	qemu.Stdout = os.Stdout
+	qemu.Stderr = os.Stderr
+	qemu.Start()
+}
+
+
+// function to launch the OS
+func start(l string) {
+	oskey := display_names[l]
+	download_files(oskey)
+	method := osconfig[oskey].Method
+	switch method {
+	case "kexec":
+		load_kexec(oskey)
+	case "bin-qemu-x86_64":
+		load_bin_qemu_x86_64(oskey)
+	default:
+		fmt.Println("Unsupported method! Aborting.")
+	}
+}
+
 
 // function to handle Ctrl+C on the program
 func quit(g *gocui.Gui, v *gocui.View) error {
@@ -164,7 +212,7 @@ func keybindings(g *gocui.Gui) error {
 	if err := g.SetKeybinding("list", gocui.KeyArrowUp, gocui.ModNone, cursorUp); err != nil {
 		return err
 	}
-	if err := g.SetKeybinding("", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	if err := g.SetKeybinding("list", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
 		return err
 	}
 	if err := g.SetKeybinding("list", gocui.KeyEnter, gocui.ModNone, getLine); err != nil {

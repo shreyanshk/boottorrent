@@ -1,11 +1,13 @@
 .DEFAULT_GOAL := initrd
 
 initrd:
-	@go build tui.go
+	@echo "Building assets now..."
+	@env GOOS=linux GOARCH=386 go build tui.go
 	@mkdir -p diff/sbin
 	@mv tui diff/sbin/getty
-	@echo "(Compressed) Adding content of diff into diff.gz";
+	@echo "Packing assets into diff.gz";
 	@bsdtar -c --format newc -f diff.gz --lzma -Cdiff .;
+	@echo "Placing files in correct locations..."
 	@cp diff.gz ../boottorrent/assets/ph1/diff.gz
 
 unpackorig:
@@ -14,4 +16,4 @@ unpackorig:
 	@mkdir rootfs;
 	@fakeroot bsdtar -x -f rootfs_orig.gz -C ./rootfs;
 
-.PHONY: initrd initrd_compressed unpackorig
+.PHONY: initrd unpackorig
