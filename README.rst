@@ -35,6 +35,7 @@ The advantage of BootTorrent over standard network booting is that the bottlenec
 +------+------+------+
 ||img1|||img2|||img3||
 +------+------+------+
+[Images & Data courtesy of SL-Lab: http://sl-lab.it/dokuwiki/lib/exe/fetch.php/tesi:tesi_bruschi.pdf]
 
 **WARNING: STATUS - ALPHA: DO NOT USE IN PRODUCTION!**
 
