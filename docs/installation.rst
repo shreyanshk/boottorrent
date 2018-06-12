@@ -27,8 +27,31 @@ This project depends on:
 
 Please check your distribution specific guide for instructions on how to install them.
 
-Pre-Install: Building assets
-----------------------------
+From sources
+------------
+
+Get the code
+~~~~~~~~~~~~
+
+The sources for BootTorrent can be downloaded from the `Github repo`_.
+
+You can either clone the public repository:
+
+.. code-block:: console
+
+    $ git clone git://github.com/shreyanshk/boottorrent
+
+Or download the `tarball`_:
+
+.. code-block:: console
+
+    $ curl  -OL https://github.com/shreyanshk/boottorrent/tarball/dev
+
+.. _Github repo: https://github.com/shreyanshk/boottorrent
+.. _tarball: https://github.com/shreyanshk/boottorrent/tarball/dev
+
+Pre-Install: Build assets
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
 
@@ -54,8 +77,17 @@ Then you can build.
 
 This will create the assets and place them at proper locations in the repository.
 
-Install package
----------------
+Install
+~~~~~~~
+
+Once you have a copy of the source and you've build the resources, you can install it with:
+
+.. code-block:: console
+
+    $ python setup.py install
+
+From Pip
+--------
 
 First, check if you have a compatible version (>3.6) of Python.
 
@@ -76,7 +108,7 @@ After installing runtime dependencies, to install BootTorrent, run this command 
 
     $ pip install git+https://github.com/shreyanshk/boottorrent
 
-This is the preferred method to install BootTorrent, as it will always install the most recent stable release.
+This is the preferred method to install BootTorrent, as it will always install the most recent release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
