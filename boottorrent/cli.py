@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """Console script for boottorrent."""
-from boottorrent import BootTorrent
+from boottorrent import BootTorrent, __version__
 import click
 from distutils.dir_util import copy_tree
 import os
@@ -54,9 +54,16 @@ def stop(args=None):
     click.echo("I'll shutdown the services.")
 
 
+@click.command()
+def version(args=None):
+    """Display the version number"""
+    click.echo(f"BootTorrent {__version__}")
+
+
 main.add_command(init)
 main.add_command(start)
 main.add_command(stop)
+main.add_command(version)
 
 
 if __name__ == "__main__":
