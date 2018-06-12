@@ -1,0 +1,123 @@
+* BootTorrent deployment notes by Giovanni Biscuolo
+
+In this short document I write what I did to test the deployment of a new =master= and booot a (sigle) =node=, please forget me for my brevity [fn:1] since this is a technical document targeting system administrators.
+
+In my infrastructure I have a dedicated netork router/firewall [fn:2] I use as DHCP server: I'm going to use it to assign an IP address to the =master= (boottorrent server) and to instruct the =nodes= (boottorrent peers) to use the master for TFTP booting.
+
+I have a Debian Stretch machine hosting several LXC containers, some for production purposes and other for testing; the containers are attached to the host network interface using a simple bridge configuration. LXC configuration is out of scope here, if you are initerested there is a [[https://wiki.debian.org/LXC][LXC dedicated Debian Wiki page]] with some directions.
+
+** master LXC container
+
+I'm going to test the =master= deployment in a dedicated LXC container, let's call it =boottorrent= container; creating it with:
+
+#+BEGIN_SRC sh
+sudo lxc-create -n boottorrent -t download
+#+END_SRC
+
+I'm choosing a Debian Stretch amd64 as template (downloaded).
+
+I'm then configuring the networking of =boottorrent= container, assigning it a MAC address used on my infrastructure router to assign a fixed IP address.
+
+Finally I'm installing a *minimal* set of useful packages:
+
+#+BEGIN_EXAMPLE
+apt install vim less screen sudo openssh-server
+#+END_EXAMPLE
+
+*** Installing deps
+
+Following [[https://boottorrent.readthedocs.io/en/latest/readme.html#dependencies-runtime-server][Dependencies (Runtime / Server)]] I'm going to install required packages:
+
+ - [X] python 3.6 (python3.6/testing)
+ - [X] transmission (transmission-cli/stable package?)
+ - [X] dnsmasq (dnsmasq/stable)
+ - [X] libarchive (libarchive-tools/stable)
+ - [ ] hefur: not installing since it's optional
+
+**** TODO missing packages
+
+list this packages as dependencies:
+
+ - [X] python-pip (python-pip/stable): pip installer
+ - [X] git (git/stable): needed by pip install method git-https
+
+*** Pre-install
+
+skipping since assets are checked in with the repository
+
+*** Install package
+
+Installed bootorrent and all dependencies via:
+
+#+BEGIN_SRC sh
+sudo pip install git+https://github.com/shreyanshk/boottorrent
+#+END_SRC
+
+**** TODO use (list as deps) available debian packages instead of pip ones
+
+ - [ ] 'Click>=6.0': python3-click/stable
+ - [ ] 'PyYAML>=3.12': python3-yaml/stable
+ - [ ] 'Jinja2>=2.10': python3-jinja2/testing
+ - [ ] 'requests>=2.18.4': python3-requests/testing
+
+*** Setup boottorrent (Get started)
+
+Created a new =boottorrent proj= in a test folder =boottest=
+
+#+BEGIN_SRC sh
+boottorrent init boottest
+#+END_SRC
+
+I got the following error:
+
+#+BEGIN_EXAMPLE
+g@boottorrent:~$ boottorrent init boottest
+Traceback (most recent call last):
+  File "/usr/local/bin/boottorrent", line 11, in <module>
+    load_entry_point('boottorrent==0.1.0', 'console_scripts', 'boottorrent')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 561, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2631, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2291, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2297, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/usr/local/lib/python2.7/dist-packages/boottorrent/__init__.py", line 9, in <module>
+    from .boottorrent import BootTorrent
+  File "/usr/local/lib/python2.7/dist-packages/boottorrent/boottorrent.py", line 111
+    print(line, end="")
+                   ^
+SyntaxError: invalid syntax
+#+END_EXAMPLE
+
+The same error appears when using a locally installed (aka installed via "pip" and not "sudo pip") boottorrent instance:
+
+#+BEGIN_EXAMPLE
+g@boottorrent:~$ ./.local/bin/boottorrent init boottest
+Traceback (most recent call last):
+  File "./.local/bin/boottorrent", line 11, in <module>
+    load_entry_point('boottorrent==0.1.0', 'console_scripts', 'boottorrent')()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 561, in load_entry_point
+    return get_distribution(dist).load_entry_point(group, name)
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2631, in load_entry_point
+    return ep.load()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2291, in load
+    return self.resolve()
+  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2297, in resolve
+    module = __import__(self.module_name, fromlist=['__name__'], level=0)
+  File "/home/g/.local/lib/python2.7/site-packages/boottorrent/__init__.py", line 9, in <module>
+    from .boottorrent import BootTorrent
+  File "/home/g/.local/lib/python2.7/site-packages/boottorrent/boottorrent.py", line 111
+    print(line, end="")
+                   ^
+SyntaxError: invalid syntax
+#+END_EXAMPLE
+
+* Footnotes
+
+[fn:2] using OpenWRT, dnsmasq as DNS and DHCP server
+
+[fn:1] e.g. not describing how to setup an host for LXC containers deployment or a DHCP server for TFTP configurations specific to a host MAC adrress.
+
+
