@@ -38,8 +38,19 @@ Following [[https://boottorrent.readthedocs.io/en/latest/readme.html#dependencie
 
 list this packages as dependencies:
 
- - [X] python-pip (python-pip/stable): pip installer
+ - [X] python-pip (python3-pip/testing): pip installer
  - [X] git (git/stable): needed by pip install method git-https
+
+*** Setting alternatives
+
+Debian uses =alternatives= to manage different package (and virtual package) versions.
+
+I have to configure the =alternatives= subsystem in order to support the Python versions installed [fn:3]:
+
+#+BEGIN_SRC sh
+sudo update-alternatives --install /usr/bin/python python /usr/bin/python3.6 0
+sudo update-alternatives --config python
+#+END_SRC sh
 
 *** Pre-install
 
@@ -50,7 +61,7 @@ skipping since assets are checked in with the repository
 Installed bootorrent and all dependencies via:
 
 #+BEGIN_SRC sh
-sudo pip install git+https://github.com/shreyanshk/boottorrent
+sudo pip3 install git+https://github.com/shreyanshk/boottorrent
 #+END_SRC
 
 **** TODO use (list as deps) available debian packages instead of pip ones
@@ -75,49 +86,30 @@ g@boottorrent:~$ boottorrent init boottest
 Traceback (most recent call last):
   File "/usr/local/bin/boottorrent", line 11, in <module>
     load_entry_point('boottorrent==0.1.0', 'console_scripts', 'boottorrent')()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 561, in load_entry_point
-    return get_distribution(dist).load_entry_point(group, name)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2631, in load_entry_point
-    return ep.load()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2291, in load
-    return self.resolve()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2297, in resolve
-    module = __import__(self.module_name, fromlist=['__name__'], level=0)
-  File "/usr/local/lib/python2.7/dist-packages/boottorrent/__init__.py", line 9, in <module>
-    from .boottorrent import BootTorrent
-  File "/usr/local/lib/python2.7/dist-packages/boottorrent/boottorrent.py", line 111
-    print(line, end="")
-                   ^
-SyntaxError: invalid syntax
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 722, in __call__
+    return self.main(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 697, in main
+    rv = self.invoke(ctx)
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 1066, in invoke
+    return _process_result(sub_ctx.command.invoke(sub_ctx))
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 895, in invoke
+    return ctx.invoke(self.callback, **ctx.params)
+  File "/usr/local/lib/python3.6/dist-packages/click/core.py", line 535, in invoke
+    return callback(*args, **kwargs)
+  File "/usr/local/lib/python3.6/dist-packages/boottorrent/cli.py", line 24, in init
+    copy_tree(base, nfolder)
+  File "/usr/lib/python3.6/distutils/dir_util.py", line 127, in copy_tree
+    "cannot copy tree '%s': not a directory" % src)
+distutils.errors.DistutilsFileError: cannot copy tree '/usr/local/lib/python3.6/dist-packages/boottorrent/assets/skel': not a directory
 #+END_EXAMPLE
 
-The same error appears when using a locally installed (aka installed via "pip" and not "sudo pip") boottorrent instance:
+Opened [[https://github.com/shreyanshk/boottorrent/issues/15][GitHub issue #15]]
 
-#+BEGIN_EXAMPLE
-g@boottorrent:~$ ./.local/bin/boottorrent init boottest
-Traceback (most recent call last):
-  File "./.local/bin/boottorrent", line 11, in <module>
-    load_entry_point('boottorrent==0.1.0', 'console_scripts', 'boottorrent')()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 561, in load_entry_point
-    return get_distribution(dist).load_entry_point(group, name)
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2631, in load_entry_point
-    return ep.load()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2291, in load
-    return self.resolve()
-  File "/usr/lib/python2.7/dist-packages/pkg_resources/__init__.py", line 2297, in resolve
-    module = __import__(self.module_name, fromlist=['__name__'], level=0)
-  File "/home/g/.local/lib/python2.7/site-packages/boottorrent/__init__.py", line 9, in <module>
-    from .boottorrent import BootTorrent
-  File "/home/g/.local/lib/python2.7/site-packages/boottorrent/boottorrent.py", line 111
-    print(line, end="")
-                   ^
-SyntaxError: invalid syntax
-#+END_EXAMPLE
 
 * Footnotes
+
+[fn:3] python3-pip/stable installs python3.5
 
 [fn:2] using OpenWRT, dnsmasq as DNS and DHCP server
 
 [fn:1] e.g. not describing how to setup an host for LXC containers deployment or a DHCP server for TFTP configurations specific to a host MAC adrress.
-
-
