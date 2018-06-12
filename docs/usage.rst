@@ -25,3 +25,60 @@ Available commands
 
 * version
     | Show the current installed version.
+
+Initializing a BootTorrent env
+------------------------------
+
+Let's create a directory(a dedicated env for BootTorrent) for keeping all the required files together.
+BootTorrent can set you up with a basic configuration with sane values for most variables.
+For example to create a new env with the name ``proj``, execute:
+
+.. code-block:: bash
+
+    $ boottorrent init proj
+
+This should create a new folder named ``proj`` with the following structure:
+
+.. code-block::
+
+    proj
+    ├── Boottorrent.yaml
+    └── oss
+
+Now, your environment is ready.
+Consider updating the Boottorrent.yaml files according to your hardware/software setup.
+Documentation for various parameters is included inside the new env itself.
+
+Configuring BootTorrent
+-----------------------
+
+The ``Boottorrent.yaml`` file present in an env is used to configure the internal working of BootTorrent.
+Available Parameters are as follows.
+
+.. include:: ../boottorrent/assets/skel/README.rst
+
+Adding Operating Systems
+------------------------
+
+.. include:: ../boottorrent/assets/skel/oss/README.rst
+
+Start BootTorrent
+-----------------
+
+To start the processes:
+
+1. Change directory to your env (where Boottorrent.yaml file is placed).
+2. Execute:
+
+.. code-block:: console
+
+    $ boottorrent start
+
+Note: You may have to provide root access as Dnsmasq requires direct access to the network interface.
+You can avoid giving root access if you use setcap to provide proper permission to dnsmasq binary.
+
+.. code-block:: console
+
+    $ sudo setcap CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN=+ep /usr/bin/dnsmasq
+
+Go ahead and try to network boot other machines. Look for an options with the names of added OSs and select your choice to start the booting process in clients.

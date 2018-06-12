@@ -1,4 +1,4 @@
-Welcome to boottorrent's documentation!
+Welcome to BootTorrent's documentation!
 =======================================
 
 .. toctree::

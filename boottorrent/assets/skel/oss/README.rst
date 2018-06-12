@@ -1,7 +1,4 @@
-Using this folder
------------------
-
-Use this directory to store the files of the operating systems in their own sub-directories.
+Use the oss/ directory to store the files of the operating systems in their own sub-directories.
 Please add an additional config.yaml with relevant fields to all the subfolders.
 The fields allowed in the config.yaml file include:
 
