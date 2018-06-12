@@ -112,30 +112,3 @@ You can avoid giving root access if you use setcap to provide proper permission 
     $ sudo setcap CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN=+ep /usr/bin/dnsmasq
 
 Go ahead and try to network boot other machines. Look for an options with the names of added OSs and select your choice to start the booting process in clients.
-
-Authors
--------
-
-GSoC'18 project by `Shreyansh Khajanchi`_ under the mentorship of `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian. `Click here`_ to view the project on the official Debian website.
-
-.. _Andrea Trentini: https://atrent.it
-.. _Giovanni Biscuolo: https://github.com/gbiscuolo
-.. _Shreyansh Khajanchi: https://www.shreyanshja.in/
-.. _Click here: https://wiki.debian.org/SummerOfCode2018/Projects/BootTorrent
-
-Credits
--------
-
-This project is inspired from the Academic `Thesis`_ of Davide Bruschi (mentored by Andrea Trentini).
-See the videos of test run at:
-
-* `https://www.youtube.com/watch?v=3gTfrIiJf74 <https://www.youtube.com/watch?v=3gTfrIiJf74>`_
-* `https://www.youtube.com/watch?v=ihFOw8eJZzc <https://www.youtube.com/watch?v=ihFOw8eJZzc>`_
-* `https://www.youtube.com/watch?v=Quj_Ztipjw8 <https://www.youtube.com/watch?v=Quj_Ztipjw8>`_
-* `https://www.youtube.com/watch?v=GZMQaSjfqKY <https://www.youtube.com/watch?v=GZMQaSjfqKY>`_
-
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
-
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
-.. _`Thesis`: http://sl-lab.it/dokuwiki/doku.php/tesi:boottorrent_en
