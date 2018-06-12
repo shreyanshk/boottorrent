@@ -31,17 +31,17 @@ Initializing a BootTorrent env
 
 Let's create a directory(a dedicated env for BootTorrent) for keeping all the required files together.
 BootTorrent can set you up with a basic configuration with sane values for most variables.
-For example to create a new env with the name ``proj``, execute:
+For example to create a new env with the name ``test``, execute:
 
-.. code-block:: bash
+.. code-block:: console
 
-    $ boottorrent init proj
+    $ boottorrent init test
 
-This should create a new folder named ``proj`` with the following structure:
+This should create a new folder named ``test`` with the following structure:
 
-.. code-block::
+.. code-block:: console
 
-    proj
+    test
     ├── Boottorrent.yaml
     └── oss
 
