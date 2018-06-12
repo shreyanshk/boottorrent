@@ -1,11 +1,10 @@
-Welcome to BootTorrent's documentation!
-=======================================
-
 .. include:: ../README.rst
+
+Contents
+--------
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
 
    installation
    usage
@@ -15,7 +14,8 @@ Welcome to BootTorrent's documentation!
    history
 
 Indices and tables
-==================
+------------------
+
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
