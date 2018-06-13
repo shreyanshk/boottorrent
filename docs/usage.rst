@@ -52,9 +52,6 @@ Documentation for various parameters is included inside the new env itself.
 Configuring BootTorrent
 -----------------------
 
-The ``Boottorrent.yaml`` file present in an env is used to configure the internal working of BootTorrent.
-Available Parameters are as follows.
-
 .. include:: ../boottorrent/assets/skel/README.rst
 
 Adding Operating Systems

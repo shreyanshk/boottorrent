@@ -1,1 +1,110 @@
-This is a test.
+The ``Boottorrent.yaml`` file present in an environment is used to configure the internal working of BootTorrent. Available sections and parameters are as follows:
+
+**Section: boottorrent**
+This section stores configurations parameters that are related to the working of core system.
+
+* version
+    | type: int, required
+    | Handle backward/forward compatibility.
+
+* display_oss
+    | type: list of strings, required
+    | Operating Systems (OSs) choices available to clients.
+    | Populated with the name of the folders in the oss/ directory.
+
+* timeout [WIP]
+    | type: int, default 30
+    | In case of multiple OSs, wait this long (seconds) before choosing default.
+    | If this value is 0, then the default OS will be started as soon as possible.
+    | If this value is negative, then the timer is disabled.
+
+* default_os [WIP]
+    | type: string, required if timeout is set
+    | The default choice in case of no input from user.
+    | Must be a value from the display_oss list.
+
+* seed_time [WIP]
+    | type: int, default 30, required
+    | How long to seed the downloaded OS before loading it.
+
+* host_ip
+    | type: string, required
+    | IPv4 of this host as visible to the clients.
+
+**Section: dnsmasq**
+Dnsmasq is used to provide a DHCP server and TFTP server for the purpose of network boot to the clients.
+The parameters in this sections have one-to-one correlation with those of Dnsmasq. When in double, please visit it's official `documentation`_.
+
+.. _`documentation`: http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
+
+* enable_dhcp
+    | type: boolean, required
+    | Enable the build-in DHCP server
+
+* user
+    | type: string
+    | Switch to this user when dropping root privileges.
+
+* interface
+    | type: string, required, default eth0
+    | Interface on which the DHCP server should run.
+
+* bind_interfaces
+    | type: boolean, default: true
+    | Useful when the interface can go up/down or change addresses during runtime.
+
+* dhcp_range
+    | type: string, default: "192.168.1.50,192.168.1.150,12h"
+    | Range of IPs the DHCP server will provide with the lease time for each IP.
+
+* enable_tftp
+    | type: boolean, default: true
+    | Enable build-in TFTP server.
+
+**Section: hefur**
+Hefur is a standalone and lightweight BitTorrent tracker. It is used to accelerate peer/seed discovery in the network.
+Enabling Hefur requires that you set host_ip field as well.
+
+* enable
+    | type: boolean, default: true
+    | Used to enable/disable the tracker
+
+* port
+    | type: int, required if hefur is enabled, default: 10001
+    | Port on which to run the tracker.
+
+**Section: transmission**
+An instance of Transmission is launched on the host to server the OS files to the clients via torrents.
+
+* rpc_port
+    | type: int, required, default: 9091
+    | The port where Transmission will provide it's WebUI and API.
+
+* dht_enabled
+    | type: boolean, required, default: false
+    | Distributed Hash Table (DHT) can be enabled if it is not possible to enable Hefur as a tracker. Though, Hefur is recommended.
+    | Seed/Peer discovery via DHT can be slow or might not work at all.
+
+* lpd_enabled
+    | type: boolean, required, default: false
+    | Local Peer Discovery (LPD) can be enabled if it is not possible to enable Hefur as a tracker. Though, Hefur is recommended.
+    | Seed/Peer discovery via LPD can be slow or might not work at all.
+
+**Section: aria2**
+Aria2 is used on client side to download files via torrents.
+
+* bt_enable_lpd
+    | type: boolean, required, default: false
+    | Enable LPD on clients.
+
+* enable_dht
+    | type: boolean, required, default: false
+    | Enable DHT (on IPv4) on clients.
+
+* check_integrity
+    | type: boolean, default: false
+    | Additionally verify authenticity of downloaded data on the clients.
+
+* enable_peer_exchange
+    | type: boolean, required, default: true
+    | Enable Peer Exchange (PEX) protocol. Can improve download speeds if only DHT and LPD are enabled.
