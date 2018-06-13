@@ -9,6 +9,7 @@ Contents
    installation
    quickstart
    usage
+   internals
    faq
    modules
    contributing
