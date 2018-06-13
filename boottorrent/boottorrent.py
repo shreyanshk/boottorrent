@@ -26,11 +26,13 @@ class BootTorrent:
             Dictionary generated from parsing BootTorrent.yaml
 
         wd : str
-            Working directory of the command where BootTorrent.yaml can be found
+            Working directory of the command where BootTorrent.yaml is found
         """
-        self.assets = os.path.dirname(__file__) + "/assets" # path to assets/ folder
+        # path to assets/ folder
+        self.assets = os.path.dirname(__file__) + "/assets"
         self.config = config
-        # This is the output queue where external components (transmission, dnamasq, hefur) send their stdout.
+        # This is the output queue where external
+        # components (transmission, dnamasq, hefur) send their stdout.
         self.output = queue.Queue()
         # store handles to threads and processes
         self.process = dict({})
@@ -40,8 +42,8 @@ class BootTorrent:
     def sigint_handler(self, signal, frame):
         """Handle system signals such as Ctrl+C (SIGINT)
         We handle only SIGINT for now
-        Check https://docs.python.org/3/library/signal.html for information
-        on the parameters passed
+        Check https://docs.python.org/3/library/signal.html
+        for information on the parameters passed
 
         Parameters
         ----------
@@ -57,7 +59,10 @@ class BootTorrent:
         self.output.put(None)
 
     def start(self):
-        """Start the process from creation of out/ directory to starting the processes"""
+        """
+        Start the process from creation of out/ directory to
+        starting the processes
+        """
         # Attach signal handler
         signal.signal(signal.SIGINT, self.sigint_handler)
         # Setup the configurations for external components
@@ -68,7 +73,8 @@ class BootTorrent:
         self.generate_initrd()
         self.configure_transmission_host()
 
-        # Launching the processes (in another thread so as to not block main thread)
+        # Launching the processes
+        # (in another thread so as to not block main thread)
         t_thread = threading.Thread(
                 target=self.start_process_transmission,
                 )
@@ -112,28 +118,31 @@ class BootTorrent:
             self.output.task_done()
 
     def add_generated_torrents(self):
-        """Function to add the generated .torrent files to the Transmission process."""
+        """
+        Function to add the generated .torrent files
+        to the Transmission process.
+        """
         port = self.config['transmission']['rpc_port']
         # get X-Transmission-Session-Id; To make torrent-add request later
         # Transmission's security mechanism to avoid CSRF
         text = requests.get(f"http://localhost:{port}/transmission/rpc").text
         csrftoken = text[522:570]
-        for os in self.config['boottorrent']['display_oss']:
+        for os in self.config['boottorrent']['display_oss']:  # noqa
             args = {
                     'paused': False,
                     'download-dir': f"{self.wd}/oss",
                     'filename': f"{self.wd}/out/torrents/{os}.torrent",
                     }
-            # adding torrent file now
-            # see https://trac.transmissionbt.com/browser/branches/1.7x/doc/rpc-spec.txt
+            # adding torrent file now, see
+            # https://trac.transmissionbt.com/browser/branches/1.7x/doc/rpc-spec.txt
             # for API details
             req = requests.post(
                     f"http://localhost:{port}/transmission/rpc",
-                    data = json.dumps({
+                    data=json.dumps({
                         "method": "torrent-add",
                         "arguments": args,
                         }),
-                    headers = {
+                    headers={
                         'X-Transmission-Session-Id': csrftoken,
                         }
                     )
@@ -152,7 +161,7 @@ class BootTorrent:
             data = dnsmasqtpl.read()
             dnsmasqconf = Template(data).render(**self.config['dnsmasq'])
         with open(self.wd+'/out/dnsmasq/dnsmasq.conf', 'w') as dnsmasqfile:
-            dnsmasqfile.write(dnsmasqconf) # write config file
+            dnsmasqfile.write(dnsmasqconf)  # write config file
 
     def configure_transmission_host(self):
         """Render settings.json file according to configuration"""
@@ -164,7 +173,7 @@ class BootTorrent:
                     **self.config['transmission']
                     )
         with open(f"{self.wd}/out/transmission/settings.json", 'w') as f:
-            f.write(transmissionconf) # write config
+            f.write(transmissionconf)  # write config
 
     def start_process_dnsmasq(self):
         """Start the Dnsmasq process"""
@@ -184,9 +193,11 @@ class BootTorrent:
                 [
                     "hefurd",
                     "-torrent-dir", f"{self.wd}/out/torrents/",
-                    "-http-port", str(self.config['hefur']['port']), # HTTP port for stats and clients
-                    "-https-port", "0", # disables HTTPS
-                    "-udp-port", str(self.config['hefur']['port']), # UDP port is for clients
+                    # HTTP port for stats and clients
+                    "-http-port", str(self.config['hefur']['port']),
+                    "-https-port", "0",  # disables HTTPS
+                    # UDP port is for clients
+                    "-udp-port", str(self.config['hefur']['port']),
                     ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
@@ -202,7 +213,7 @@ class BootTorrent:
         process = subprocess.Popen(
                 [
                     'transmission-daemon',
-                    '-f', '-g', # Stay in foreground, do not fork
+                    '-f', '-g',  # Stay in foreground, do not fork
                     f'{self.wd}/out/transmission',
                     ],
                 stdout=subprocess.PIPE,
@@ -223,18 +234,19 @@ class BootTorrent:
                 host_ip = self.config['boottorrent']['host_ip']
                 port = self.config['hefur']['port']
             except KeyError:
-                print("Please check configuration! Missing host IP or hefur port.")
+                print("Please check configuration!")
+                print("Missing host IP or hefur port.")
                 exit()
         else:
             hefur = False
         oss = self.config['boottorrent']['display_oss']
         # generating torrents now
-        for os in oss:
+        for os in oss:  # noqa
             filename = f"{self.wd}/out/torrents/{os}.torrent"
             cmd = [
                     "transmission-create",
-                    f"{self.wd}/oss/{os}", # folder for which to generate
-                    "-o", filename, # where should the files be placed
+                    f"{self.wd}/oss/{os}",  # folder for which to generate
+                    "-o", filename,  # where should the files be placed
                     ]
             if hefur:
                 # add hefur as external tracker, if enabled
@@ -260,7 +272,7 @@ class BootTorrent:
             f"{self.wd}/out/torrents/Boottorrent.yaml",
             )
         config = dict()
-        for os in self.config['boottorrent']['display_oss']:
+        for os in self.config['boottorrent']['display_oss']:  # noqa
             osconfig = open(f"{self.wd}/oss/{os}/config.yaml", "r").read()
             config[os] = yaml.load(osconfig)
         configcontent = yaml.dump(config)

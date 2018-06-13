@@ -42,7 +42,7 @@ def start():
         bt = BootTorrent(cfg, wd)
         bt.start()
     else:
-        click.echo("Error: can't find suitable configuration file in this directory.")
+        click.echo("Error: can't find Boottorrent.yaml in this directory.")
         click.echo("Are you in the right directory?")
         click.echo("Supported filename is: Boottorrent.yaml")
         exit()
