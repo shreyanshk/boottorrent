@@ -47,11 +47,13 @@ Now, you need to add details about how to boot with these files. So, launch your
 Next, you need to explicitly tell BootTorrent to enable this OS.
 
 .. code-block:: yaml
-    :emphasize-lines: 2
+    :emphasize-lines: 3
+    :caption: Boottorrent.yaml
 
-    ...
-    display_oss: linuxos
-    ...
+    boottorrent:
+        ...
+        display_oss: linuxos
+        ...
 
 That's it about the configuration.
 
