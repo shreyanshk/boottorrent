@@ -4,8 +4,8 @@
 Installation
 ============
 
-Dependencies (Runtime / Server)
--------------------------------
+Dependencies
+------------
 
 This project depends on:
 
@@ -25,7 +25,7 @@ This project depends on:
 .. _Python 3.6: https://www.python.org/
 .. _bsdtar: http://www.libarchive.org/
 
-Please check your distribution specific guide for instructions on how to install them.
+These dependencies are only for the host running BootTorrent. Please check your distribution specific guide for instructions on how to install them. For building BootTorrent and the list of build dependencies, please refer `build dependencies`_.
 
 From sources
 ------------
@@ -54,6 +54,8 @@ Pre-Install: Build assets
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
 **You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
+
+.. _`build dependencies`:
 
 Building assets requires additional software. This includes:
 
