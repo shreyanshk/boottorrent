@@ -1,6 +1,7 @@
 The ``Boottorrent.yaml`` file present in an environment is used to configure the internal working of BootTorrent. Available sections and parameters are as follows:
 
 **Section: boottorrent**
+
 This section stores configurations parameters that are related to the working of core system.
 
 * version
@@ -32,6 +33,7 @@ This section stores configurations parameters that are related to the working of
     | IPv4 of this host as visible to the clients.
 
 **Section: dnsmasq**
+
 Dnsmasq is used to provide a DHCP server and TFTP server for the purpose of network boot to the clients.
 The parameters in this sections have one-to-one correlation with those of Dnsmasq. When in double, please visit it's official `documentation`_.
 
@@ -62,6 +64,7 @@ The parameters in this sections have one-to-one correlation with those of Dnsmas
     | Enable build-in TFTP server.
 
 **Section: hefur**
+
 Hefur is a standalone and lightweight BitTorrent tracker. It is used to accelerate peer/seed discovery in the network.
 Enabling Hefur requires that you set host_ip field as well.
 
@@ -74,6 +77,7 @@ Enabling Hefur requires that you set host_ip field as well.
     | Port on which to run the tracker.
 
 **Section: transmission**
+
 An instance of Transmission is launched on the host to server the OS files to the clients via torrents.
 
 * rpc_port
@@ -91,6 +95,7 @@ An instance of Transmission is launched on the host to server the OS files to th
     | Seed/Peer discovery via LPD can be slow or might not work at all.
 
 **Section: aria2**
+
 Aria2 is used on client side to download files via torrents.
 
 * bt_enable_lpd
