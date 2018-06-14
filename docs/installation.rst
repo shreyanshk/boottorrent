@@ -7,7 +7,7 @@ Installation
 Dependencies
 ------------
 
-This project depends on:
+Components this project depends on include:
 
 * `Python 3.6`_
 
@@ -24,6 +24,16 @@ This project depends on:
 .. _Hefur: https://github.com/abique/hefur
 .. _Python 3.6: https://www.python.org/
 .. _bsdtar: http://www.libarchive.org/
+
+The package itself depends on a few Python libraries which are installed automatically by Pip package manager. These libraries are:
+
+* `Click <http://click.pocoo.org/>`_
+
+* `PyYAML <https://github.com/yaml/pyyaml>`_
+
+* `Jinja2 <http://jinja.pocoo.org/>`_
+
+* `Requests <http://docs.python-requests.org/en/master/`_
 
 These dependencies are only for the host running BootTorrent. Please check your distribution specific guide for instructions on how to install them. For building BootTorrent and the list of build dependencies, please refer `build dependencies`_.
 
@@ -59,9 +69,12 @@ Pre-Install: Build assets
 
 Building assets requires additional software. This includes:
 
-* `Golang`_ (For the client TUI)
+* `Golang <https://golang.org/>`_ (For the client TUI)
 
-.. _Golang: https://golang.org/
+* `SliTaz`_ LiveCD/installation with `Tazlito`_ (For the client Phase 1 linux system)
+
+.. _SliTaz: http://slitaz.org/en/
+.. _Tazlito: http://doc.slitaz.org/en:handbook:genlivecd
 
 Some Golang dependencies are also required to build, you can download them with these commands:
 
@@ -70,7 +83,18 @@ Some Golang dependencies are also required to build, you can download them with 
     $ go get github.com/jroimartin/gocui
     $ go get gopkg.in/yaml.v2
 
-Then you can build.
+To build the SliTaz live image that is run on the client, copy the phase1bootstrap/slitaz/ directory to a Virtual Machine or computer running SliTaz with `Tazlito <http://doc.slitaz.org/en:handbook:genlivecd>`_ installed. Then, open a console and execute:
+
+.. code-block:: console
+
+    $ cd <path to copied directory>
+    $ sudo tazlito gen-distro
+
+It will ask if you want to 'Repack packages from rootfs?', please press 'n' and then enter. This will download SliTaz packages from the internet and make a custom live distribution usable with BootTorrent.
+
+We only need the final Kernel image and the initrd file which are generated in this process. These files are rootcd/boot/bzImage and rootcd/boot/rootfs.gz, please copy these files from this Virtual Machine or computer and place them inside boottorrent/assets/ph1 directory.
+
+To build the client TUI, execute:
 
 .. code-block:: console
 

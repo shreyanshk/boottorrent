@@ -27,4 +27,9 @@ What can I do if I don't have any control over the present DHCP server?
 
 In such a case, unfortunately, you may not be able to run BootTorrent. Because BootTorrent depends on using the DHCP protocol to prepare the clients for booting it needs to be the exclusive DHCP server on the network and the present DHCP server may conflict.
 
+I have exotic hardware and BootTorrent doesn't include it's drivers/software/firmware etc. What can I do to make it work?
+-------------------------------------------------------------------------------------------------------------------------
 
+BootTorrent's Phase 1 Linux system is an easy to modify/extend customized SliTaz distribution. All the files required to generate this distribution are placed in phase1bootstrap/slitaz/ directory inside source repository and can be generated with `Tazlito <http://doc.slitaz.org/en:handbook:genlivecd>`_.
+The file ``distro-packages.list`` lists all the packages that are installed in the generated live image and more SliTaz packages can be added if desired.
+You can modify these files according to your needs and then place the generated files at their correct location as specified in the `Build documentation <https://boottorrent.readthedocs.io/en/latest/installation.html#from-sources>`_. You can also read the SliTaz's `hacking guide <http://doc.slitaz.org/en:handbook:hacklivecd>`_ for information on how you can further modify the live image.
