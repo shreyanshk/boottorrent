@@ -106,6 +106,14 @@ This will create the assets and place them at proper locations in the repository
 Install
 ~~~~~~~
 
+Please make sure that you have Python Setuptools installed on your computer.
+You can verify that by executing this command and checking the output, which should display a version number.
+
+.. code-block:: console
+
+    $ python -c "import setuptools; print(setuptools.__version__)"
+    39.2.0
+
 Once you have a copy of the source and you've build the resources, you can install it with:
 
 .. code-block:: console
