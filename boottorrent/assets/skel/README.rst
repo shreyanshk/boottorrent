@@ -35,7 +35,7 @@ This section stores configurations parameters that are related to the working of
 **Section: dnsmasq**
 
 Dnsmasq is used to provide a DHCP server and TFTP server for the purpose of network boot to the clients.
-The parameters in this sections have one-to-one correlation with those of Dnsmasq. When in double, please visit it's official `documentation`_.
+The parameters in this sections have one-to-one correlation with those of Dnsmasq. When in doubt, please visit it's official `documentation`_.
 
 .. _`documentation`: http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html
 
