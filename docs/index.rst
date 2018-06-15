@@ -9,6 +9,7 @@ Contents
    installation
    quickstart
    usage
+   architecture
    internals
    faq
    modules
