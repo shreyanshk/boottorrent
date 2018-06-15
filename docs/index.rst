@@ -9,6 +9,7 @@ Contents
    installation
    quickstart
    usage
+   usecases
    architecture
    internals
    faq
