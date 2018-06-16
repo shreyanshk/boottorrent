@@ -344,3 +344,21 @@ The below diagram illustrates how the booting process on client takes place.
         client.Ph1 -> client.TUI [label = "Init launches TUI"]
     }
 
+The nodes in this chart are as follows:
+
++---------------+-----------------------------------------------+
+|Name           |Description                                    |
++---------------+-----------------------------------------------+
+|host.DHCP      |DHCP server running on the host.               |
++---------------+-----------------------------------------------+
+|client.PXE     |Portable execution environment on the client.  |
++---------------+-----------------------------------------------+
+|host.TFTP      |TFTP server running on the host                |
++---------------+-----------------------------------------------+
+|client.LL      |PXE Linux loader running on the client         |
++---------------+-----------------------------------------------+
+|client.Ph1     |Phase 1 Linux system running on client         |
++---------------+-----------------------------------------------+
+|client.TUI     |BootTorrent Terminal user interface            |
++---------------+-----------------------------------------------+
+
