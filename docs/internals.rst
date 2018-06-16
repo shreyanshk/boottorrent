@@ -80,7 +80,7 @@ Note: SliTaz kernel only accepts archives in this format. With custom kernel com
 **Provides**
 
 * Client parameters
-* Metadate (P2P)
+* Metadata (P2P)
 
 Initial data provider interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -343,6 +343,8 @@ The below diagram illustrates how the booting process on client takes place.
         client.LL -> client.Ph1 [label = "Execute Phase-1 Kernel", leftnote = "Linux loader exits"]
         client.Ph1 -> client.TUI [label = "Init launches TUI"]
     }
+
+[If you're having trouble read the image, view it at full resolution by right clicking it and opening it in another tab.]
 
 The nodes in this chart are as follows:
 
