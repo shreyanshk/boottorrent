@@ -2,6 +2,171 @@
 Internals
 =========
 
+This documents focuses on the implementation details of BootTorrent. General details about the architecture and design can be found `here <https://boottorrent.readthedocs.io/en/latest/architecture.html>`_.
+
+Interface implementation
+------------------------
+
+Client configuration interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Approach used**
+
+At power-on, the clients are limited in nature and the only supported protocols are DHCP, TFTP and PXE. So, client boot configuration is provided via DHCP, TFTP and PXE.
+
+**Alternative approaches**
+
+None, our choices are limited by hardware.
+
+Dnsmasq
+*******
+
+Dnsmasq implements various protocols such as DHCP, BOOTP, PXE and TFTP support. It also includes support via Lua scripting language. Three protocols, DHCP, PXE and TFTP are currently being used in BootTorrent.
+
+**Rationale**
+
+* Implements support for DHCP, PXE and TFTP in a single package.
+* Is widely available on most distributions.
+* It has low requirements for system resources.
+
+**Alternatives software**
+
+* ISC DHCP: Heavy, more suitable for large deployments.
+* Kea DHCP: Considered experimental.
+* udhcpd: Doesn't support PXE or BOOTP
+
+Note: None of the alternatives support TFTP. Choosing any other option means that other external software is required for TFTP.
+
+**Provides**
+
+* Client parameters
+
+bsdtar
+******
+
+bsdtar is a command line tool for reading and writing archives.
+
+**Approach used**
+
+bsdtar is used to create an ``SVR4 with no CRC (newc)`` type of archive containing additional client parameters and torrent metadata files. The archive created by bsdtar is directly mounted by kernel on the client computer as a standard initrd image.
+
+Note: SliTaz kernel only accepts archives in this format. With custom kernel compilation is possible to support other formats (which are supported by GNU tar) but that is a large compromise in: manageability, build creation times, approachability of project etc.
+
+**Alternative approaches**
+
+1. HTTP server to serve metadata and configuration.
+    | Another server process is needed.
+    | More system resource usage.
+    | Additional logic is required to handle on clients.
+2. Network broadcast to serve the metadata and configuration.
+    | Require another process on server and client both.
+    | Known for using high bandwidth sometimes. See `Broadcast storm <https://en.wikipedia.org/wiki/Broadcast_storm>`_.
+    | Are sometimes blocked by network admins, see above.
+    | Sometimes the computers are isolated in their own VLANs.
+3. mkinitcpio/mkinitramfs etc
+    | Needs extra configuration files to work that is avoidable on other approaches.
+    | Are geared towards creation of full initrd images. We only need to pack a folder.
+
+**Rationale**
+
+* Archives are usable by clients without any additional software/logic.
+* No extra process is created either on server or client.
+* No configuration files needed.
+
+**Alternative software**
+
+* GNU cpio
+
+**Provides**
+
+* Client parameters
+* Metadate (P2P)
+
+Initial data provider interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Approach used**
+
+Choices limited to BitTorrent.
+
+**Alternative approaches**
+
+None
+
+Transmission
+************
+
+Transmission is a BitTorrent client.
+
+**Rationale**
+
+* Popular and available in most distributions.
+* Includes both torrent creation and seeding tools.
+* Programmable via API.
+
+**Alternative software**
+
+Many choices available: see `Comparison of BitTorrent clients <https://en.wikipedia.org/wiki/Comparison_of_BitTorrent_clients>`_.
+
+Client data sharing interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Approach used**
+
+Choices limited to BitTorrent.
+
+**Alternative approaches**
+
+None
+
+Aria2
+*****
+
+Aria2 is a BitTorrent client.
+
+**Rationale**
+
+* Available as a package in SliTaz distribution.
+* Fully configurable via commandline.
+* Fully configurable programmatically.
+
+**Alternative software**
+
+* transmission
+* ctorrent-dnh
+* qbittorrent
+* rtorrent
+
+Operating system loading interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Approach used**
+
+The executable /sbin/getty on client's RAM disk is replaced. The new binary is loaded from initrd during boot process. The binary /sbin/getty (previously: Login manager, now: BootTorrent TUI) is invoked for every console by the init system and has root access.
+
+**Alternative approaches**
+
+* Replace with init
+    | System will not load other drivers/software etc. (since init system has been removed)
+* Launch with init system.
+    | Changes needed to be made in the base image are numerous.
+
+Golang Terminal User Interface (TUI)
+************************************
+
+Golang is a programming language developed by Google. It can easily create cross platform, portable, static binary executable files.
+
+**Rationale**
+
+* System will load other drivers/software etc because proper init system is present.
+* Less invasive. Single file need to be replaced on the base image.
+* Avoids dependency management as the binary is static.
+
+**Notes**
+
+* Used `GoCUI framework <https://github.com/jroimartin/gocui>`_ for the creating of CUI.
+* Used `YAML v2 library <https://gopkg.in/yaml.v2>`_ to read configuration files which are in YAML.
+
 Host Package
 ------------
 
@@ -15,7 +180,7 @@ External components that run on the host include:
 
 * **bsdtar**
     | Because client computers can unpack RAM disks in their early phase of boot, the torrents metadata is packed into a RAM disk on the host and is unpacked by the client computers on booting the Phase-1 Linux system.
-    | bsdtar is programatically used to pack the client configuration and torrent metadata into a RAM disk.
+    | bsdtar is programmatically used to pack the client configuration and torrent metadata into a RAM disk.
 
 * **Dnsmasq**
     | Dnsmasq provides both a DHCP server and a TFTP server.
