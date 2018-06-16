@@ -27,13 +27,18 @@ Components this project depends on include:
 
 The package itself depends on a few Python libraries which are installed automatically by Pip package manager. These libraries are:
 
-* `Click <http://click.pocoo.org/>`_
+* `Click`_
 
-* `PyYAML <https://github.com/yaml/pyyaml>`_
+* `PyYAML`_
 
-* `Jinja2 <http://jinja.pocoo.org/>`_
+* `Jinja2`_
 
-* `Requests <http://docs.python-requests.org/en/master/`_
+* `Requests`_
+
+.. _Click: http://click.pocoo.org/
+.. _PyYAML: https://github.com/yaml/pyyaml
+.. _Jinja2: http://jinja.pocoo.org/
+.. _Requests: http://docs.python-requests.org/en/master/
 
 These dependencies are only for the host running BootTorrent. Please check your distribution specific guide for instructions on how to install them. For building BootTorrent and the list of build dependencies, please refer `build dependencies`_.
 
@@ -69,10 +74,11 @@ Pre-Install: Build assets
 
 Building assets requires additional software. This includes:
 
-* `Golang <https://golang.org/>`_ (For the client TUI)
+* `Golang`_ (For the client TUI)
 
 * `SliTaz`_ LiveCD/installation with `Tazlito`_ (For the client Phase 1 linux system)
 
+.. _Golang: https://golang.org/
 .. _SliTaz: http://slitaz.org/en/
 .. _Tazlito: http://doc.slitaz.org/en:handbook:genlivecd
 
@@ -83,7 +89,7 @@ Some Golang dependencies are also required to build, you can download them with 
     $ go get github.com/jroimartin/gocui
     $ go get gopkg.in/yaml.v2
 
-To build the SliTaz live image that is run on the client, copy the phase1bootstrap/slitaz/ directory to a Virtual Machine or computer running SliTaz with `Tazlito <http://doc.slitaz.org/en:handbook:genlivecd>`_ installed. Then, open a console and execute:
+To build the SliTaz live image that is run on the client, copy the phase1bootstrap/slitaz/ directory to a Virtual Machine or computer running SliTaz with `Tazlito`_ installed. Then, open a console and execute:
 
 .. code-block:: console
 
@@ -106,19 +112,38 @@ This will create the assets and place them at proper locations in the repository
 Install
 ~~~~~~~
 
-Please make sure that you have Python Setuptools installed on your computer.
-You can verify that by executing this command and checking the output, which should display a version number.
+First, check if you have a compatible version (>3.6) of Python.
 
 .. code-block:: console
 
-    $ python -c "import setuptools; print(setuptools.__version__)"
-    39.2.0
+    $ python --version
+    Python 3.6.5
 
-Once you have a copy of the source and you've build the resources, you can install it with:
+Otherwise, look at your distribution's documentation to install it or use tools such as `pyenv`_.
+
+.. _`pyenv`: https://github.com/pyenv/pyenv
+
+You can install it just for your account (this doesn't require sudo) with pip:
 
 .. code-block:: console
 
-    $ python setup.py install
+    $ pip install --user <repository path>
+
+You can also do a global install with pip:
+
+.. code-block:: console
+
+    $ sudo pip install <repository path>
+
+If BootTorrent conflicts with your previously installed packages. You can use `virtualenv`_ to setup a virtual environment and install it:
+
+.. code-block:: console
+
+    $ virtualenv -p python3.6 venv
+    $ source venv/bin/activate
+    $ pip install <repository path>
+
+.. _virtualenv: https://github.com/pypa/virtualenv
 
 From Pip
 --------
@@ -130,19 +155,33 @@ First, check if you have a compatible version (>3.6) of Python.
     $ python --version
     Python 3.6.5
 
-Otherwise, you can use tools such as `virtualenv`_, `pyenv`_, or `pipenv`_ to get Python 3.6
+Otherwise, look at your distribution's documentation to install it or use tools such as `pyenv`_ to get Python 3.6
 
-.. _`virtualenv`: https://github.com/pypa/virtualenv
 .. _`pyenv`: https://github.com/pyenv/pyenv
-.. _`pipenv`: https://github.com/pypa/pipenv
 
-After installing runtime dependencies, to install BootTorrent, run this command in your terminal:
+After installing runtime dependencies, to install BootTorrent, you can install it just for your account (this doesn't require sudo) with pip:
 
 .. code-block:: console
 
+    $ pip install --user git+https://github.com/shreyanshk/boottorrent
+
+You can also do a global install with pip:
+
+.. code-block:: console
+
+    $ sudo pip install git+https://github.com/shreyanshk/boottorrent
+
+If BootTorrent conflicts with your previously installed packages. You can use `virtualenv`_ to setup a virtual environment and install it:
+
+.. code-block:: console
+
+    $ virtualenv -p python3.6 venv
+    $ source venv/bin/activate
     $ pip install git+https://github.com/shreyanshk/boottorrent
 
-This is the preferred method to install BootTorrent, as it will always install the most recent release.
+.. _virtualenv: https://github.com/pypa/virtualenv
+
+These are the preferred methods to install BootTorrent, as they will always install the most recent release.
 
 If you don't have `pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
