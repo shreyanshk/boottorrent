@@ -1,6 +1,6 @@
-===================================
-BootTorrent: Architectural document
-===================================
+======================
+Architectural document
+======================
 
 Version: 0, Revision: 0
 
@@ -133,7 +133,7 @@ The general overview of the architecture is as follows:
 
 ::
 
-    Structure of components:
+    Fig 2: Placement and structure of components:
 
       Server                   Client                        Peer(s)
     +------------------+     +----------------------+     +----------------------+
@@ -227,6 +227,83 @@ Operating system loader
 * **Notes**
     | Runs on the client.
     | Tools such as Kexec, Qemu can be used to load.
+
+Process overview
+~~~~~~~~~~~~~~~~
+
+1. Initialization of Client configuration interface
+***************************************************
+
+The client configuration interface is on the server. During the bring-up of this interface, the server computes the following details:
+
+* Host parameters such as Network interface, IP addresses, Operating systems images available etc.
+* Client parameters such as information on Operating systems, list of protocols to use etc.
+* Metadata about the files and folders that need to be distributed via BitTorrent P2P protocols.
+
+After the computation of these details, the Client configuration interface is activated in the system and is on standby to respond to any requests by BIOS/UEFI network boot interface.
+
+Additionally, it exports the following information for consumption by other interfaces:
+
+* Host parameters
+* Client parameters
+* Metadata (P2P)
+
+2. Initialization of Initial data provider interface
+****************************************************
+
+Requires: Client configuration interface (Host parameters, Metadata (P2P))
+
+The initial data provider interface is on the server. During the bring-up of this interface, the server does the following:
+
+* Using the host parameters, the server becomes the part of P2P network as discribed in the parameters.
+* Using the metadata, the server will start sharing first-hand copy of the files and becomes available to respond to any sharing requests.
+
+The Initial data provider interface now goes standby and responds to any requests from Client data sharing interface.
+
+**Note: at this point, the server is ready with all it's components**
+
+3. Initialization of BIOS/UEFI network boot interface
+*****************************************************
+
+Requires: Client configuration interface (Client parameters, Metadata (P2P))
+
+This interface is available pre-programmed inside the ROM on the client computers. After power is applied to client computers, client initialize this interface automatically.
+
+After initialization, it copies Client parameters and Metadata (P2P) from the server via Client configuration interface and loads Client data sharing interface.
+
+It provides the following for consumption by other interfaces:
+
+* Suitable environment for Client data sharing interface.
+
+4. Initialization of Client data sharing interface
+**************************************************
+
+Requires: BIOS/UEFI network boot interface (Suitable environment)
+
+This interface is loaded on clients by BIOS/UEFI network boot interface. During the bring-up of this interface the server does the following:
+
+* Initialize networking stack on the client.
+* Load P2P networking support software on the client.
+* Download Operating system image files from the network to local memory.
+
+After the above tasks are finished it calls Operating system loading interface.
+
+It provides the following for consumption by other interfaces:
+
+* Operating system image files.
+
+5. Initialization of Operating system loading interface
+*******************************************************
+
+Requires: Client data sharing interface (Operating system image files)
+
+This interface is loaded on clients by Client data sharing interface. During the bring-up of this interface the server does the following:
+
+* Read operating system image files.
+* Decide appropriate method to load the Operating system.
+* Launch the Operating system.
+
+After loading the operating system, BootTorrent exits from the client.
 
 Mechanisms
 ----------
