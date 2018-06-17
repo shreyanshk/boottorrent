@@ -11,14 +11,16 @@ You can verify the installation by checking for the installed version inside you
     $ boottorrent version
     BootTorrent 0.1.0
 
-Please make sure that you've activated the environment and/or Python version where you've installed BootTorrent.
+Please make sure that you've activated the virtualenv and/or Python version where you've installed BootTorrent.
 
 Available commands
 ------------------
 
 * init
     | Initializes a new BootTorrent project.
-    | Check the 'Get Started' guide for instructions on how to work with a BootTorrent project.
+    | Check the `Quick start`_ guide for instructions on how to work with BootTorrent.
+
+.. _Quick start: https://boottorrent.readthedocs.io/en/latest/quickstart.html
 
 * start
     | Starts the BootTorrent process.
@@ -29,8 +31,9 @@ Available commands
 Initializing a BootTorrent env
 ------------------------------
 
-Let's create a directory(a dedicated env for BootTorrent) for keeping all the required files together.
+Let's create a directory (a dedicated env for BootTorrent) for keeping all the required files together.
 BootTorrent can set you up with a basic configuration with sane values for most variables.
+
 For example to create a new env with the name ``test``, execute:
 
 .. code-block:: console
@@ -47,7 +50,7 @@ This should create a new folder named ``test`` with the following structure:
 
 Now, your environment is ready.
 Consider updating the Boottorrent.yaml files according to your hardware/software setup.
-Documentation for various parameters is included inside the new env itself.
+Documentation for various parameters is included further in this document and inside the env.
 
 Configuring BootTorrent
 -----------------------
@@ -72,10 +75,15 @@ To start the processes:
     $ boottorrent start
 
 Note: You may have to provide root access as Dnsmasq requires direct access to the network interface.
-You can avoid giving root access if you use setcap to provide proper permission to dnsmasq binary.
+
+You can avoid giving root access if you use setcap to provide proper permissions to dnsmasq binary.
 
 .. code-block:: console
 
     $ sudo setcap CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN=+ep /usr/bin/dnsmasq
+
+You can learn more details about the permissions on `Capabilities man page`_.
+
+.. _Capabilities man page: https://linux.die.net/man/7/capabilities
 
 Go ahead and try to network boot other machines. Look for an options with the names of added OSs and select your choice to start the booting process in clients.

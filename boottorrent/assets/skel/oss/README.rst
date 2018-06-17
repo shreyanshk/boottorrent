@@ -55,7 +55,7 @@ With a compiled kernel (vmlinuz) and corresponding initrd (initramfs.img), the p
 Example: Adding an OS that runs on Qemu
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-With a floppy image (test.img) that needs to be used with Qemu, the process is:
+If you want to use a floppy disk image (test.img) with Qemu, the process is:
 
 1. Create a new directory.
 2. Drop OS related files into the directory.
@@ -66,4 +66,3 @@ With a floppy image (test.img) that needs to be used with Qemu, the process is:
     dispname: TestOnQemu # Friendly name to display
     method: bin-qemu-x86_64
     args: "-fda test.img" # Arguments to pass to Qemu
-

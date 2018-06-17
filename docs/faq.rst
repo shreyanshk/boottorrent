@@ -25,13 +25,20 @@ Because BootTorrent runs it's own DHCP server, it may conflict with the external
 What can I do if I don't have any control over the present DHCP server?
 -----------------------------------------------------------------------
 
-In such a case, unfortunately, you may not be able to run BootTorrent. Because BootTorrent depends on using the DHCP protocol to prepare the clients for booting it needs to be the exclusive DHCP server on the network and the present DHCP server may conflict.
+Your network administrator will have to manually set the DHCP server to point to BootTorrent server. Please discuss with your network administrator on what can be done.
 
-Ask your network administrator to either turn off the active DHCP server [WIP: or reconfigure it's settings to reflect parameters as displayed by BootTorrent when starting up.]
+I have exotic hardware and BootTorrent doesn't include it's software. What can I do to make it work?
+----------------------------------------------------------------------------------------------------
 
-I have exotic hardware and BootTorrent doesn't include it's drivers/software/firmware etc. What can I do to make it work?
--------------------------------------------------------------------------------------------------------------------------
+BootTorrent's Phase 1 Linux system is an easy to modify/extend customized SliTaz distribution. All the files required to generate this distribution are placed in phase1bootstrap/slitaz/ directory inside source repository and can be generated with `Tazlito`_. The file ``distro-packages.list`` lists all the packages that are installed in the generated live image and more SliTaz packages can be added if desired.
 
-BootTorrent's Phase 1 Linux system is an easy to modify/extend customized SliTaz distribution. All the files required to generate this distribution are placed in phase1bootstrap/slitaz/ directory inside source repository and can be generated with `Tazlito <http://doc.slitaz.org/en:handbook:genlivecd>`_. The file ``distro-packages.list`` lists all the packages that are installed in the generated live image and more SliTaz packages can be added if desired.
+You can modify these files according to your needs and then place the generated files at their correct location as specified in the `build documentation`_. You can also read the SliTaz's `hacking guide`_ for information on how you can further modify the live image.
 
-You can modify these files according to your needs and then place the generated files at their correct location as specified in the `Build documentation <https://boottorrent.readthedocs.io/en/latest/installation.html#from-sources>`_. You can also read the SliTaz's `hacking guide <http://doc.slitaz.org/en:handbook:hacklivecd>`_ for information on how you can further modify the live image.
+.. _Tazlito: http://doc.slitaz.org/en:handbook:genlivecd
+.. _build documentation: https://boottorrent.readthedocs.io/en/latest/installation.html#from-sources
+.. _hacking guide: http://doc.slitaz.org/en:handbook:hacklivecd
+
+How can I add support for more architectures to BootTorrent?
+------------------------------------------------------------
+
+You can start with porting the runtime and build dependencies to the new architecture. Then you can proceed to port the client package to the new architecture. This include the files in the boottorrent/assets/ph1 directory: PXE Linux loader and Phase 1 Linux system. If you've made it this far, please consider creating a pull request. :-)

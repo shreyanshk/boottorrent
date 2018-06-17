@@ -74,9 +74,9 @@ Pre-Install: Build assets
 
 Building assets requires additional software. This includes:
 
-* `Golang`_ (For the client TUI)
+* `Golang`_
 
-* `SliTaz`_ LiveCD/installation with `Tazlito`_ (For the client Phase 1 linux system)
+* `SliTaz`_ LiveCD/installation with `Tazlito`_
 
 .. _Golang: https://golang.org/
 .. _SliTaz: http://slitaz.org/en/
@@ -123,7 +123,7 @@ Otherwise, look at your distribution's documentation to install it or use tools 
 
 .. _`pyenv`: https://github.com/pyenv/pyenv
 
-You can install it just for your account (this doesn't require sudo) with pip:
+You can install BootTorrent just for your account (this doesn't require sudo) with pip:
 
 .. code-block:: console
 
@@ -135,7 +135,7 @@ You can also do a global install with pip:
 
     $ sudo pip install <repository path>
 
-If BootTorrent conflicts with your previously installed packages. You can use `virtualenv`_ to setup a virtual environment and install it:
+If BootTorrent conflicts with your previously installed packages. You can use `virtualenv`_ to setup a virtual environment and install inside it:
 
 .. code-block:: console
 
@@ -155,7 +155,7 @@ First, check if you have a compatible version (>3.6) of Python.
     $ python --version
     Python 3.6.5
 
-Otherwise, look at your distribution's documentation to install it or use tools such as `pyenv`_ to get Python 3.6
+Otherwise, look at your distribution's documentation to install it or use tools such as `pyenv`_.
 
 .. _`pyenv`: https://github.com/pyenv/pyenv
 
@@ -171,7 +171,7 @@ You can also do a global install with pip:
 
     $ sudo pip install git+https://github.com/shreyanshk/boottorrent
 
-If BootTorrent conflicts with your previously installed packages. You can use `virtualenv`_ to setup a virtual environment and install it:
+If BootTorrent conflicts with your previously installed packages. You can use `virtualenv`_ to setup a virtual environment and install inside it:
 
 .. code-block:: console
 

@@ -10,14 +10,14 @@ This section stores configurations parameters that are related to the working of
 
 * display_oss
     | type: list of strings, required
-    | Operating Systems (OSs) choices available to clients.
+    | Operating Systems choices available to clients.
     | Populated with the name of the folders in the oss/ directory.
 
 * timeout [WIP]
     | type: int, default 30
-    | In case of multiple OSs, wait this long (seconds) before choosing default.
+    | In case of multiple OSs, BootTorrent waits this long (seconds) for user input before booting default OS.
     | If this value is 0, then the default OS will be started as soon as possible.
-    | If this value is negative, then the timer is disabled.
+    | If this value is negative, then the timer is disabled and BootTorrent will wait forever for user input.
 
 * default_os [WIP]
     | type: string, required if timeout is set
@@ -26,15 +26,17 @@ This section stores configurations parameters that are related to the working of
 
 * seed_time [WIP]
     | type: int, default 30, required
-    | How long to seed the downloaded OS before loading it.
+    | BootTorrent seeds downloaded OS for at least this long (seconds) before loading.
+    | Ideal value: (image size / client interface speed) + BootTorrent boot time on client.
+    | If this value is 0 or negative, BootTorrent will load the OS as soon as possible.
 
 * host_ip
     | type: string, required
-    | IPv4 of this host as visible to the clients.
+    | IPv4 of the host as visible to the clients.
 
 **Section: dnsmasq**
 
-Dnsmasq is used to provide a DHCP server and TFTP server for the purpose of network boot to the clients.
+Dnsmasq is used to provide a DHCP server and a TFTP server for the purpose of network boot to the clients.
 The parameters in this sections have one-to-one correlation with those of Dnsmasq. When in doubt, please visit it's official `documentation`_.
 
 .. _`documentation`: http://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html

@@ -33,7 +33,7 @@ You need to place the kernel and initrd.gz file inside a sub-directory inside th
     $ cp <path: bzImage> oss/linuxos/bzImage
     $ cp <path: initrd.gz> oss/linuxos/initrd.gz
 
-Now, you need to add details about how to boot with these files. So, launch your favourite text editor and a file with this content.
+Now, you need to add details about how to boot with these files. So, launch your favourite text editor and add a file with this content.
 
 .. code-block:: yaml
     :caption: oss/linuxos/config.yaml
@@ -47,12 +47,28 @@ Now, you need to add details about how to boot with these files. So, launch your
 Next, you need to explicitly tell BootTorrent to enable this OS.
 
 .. code-block:: yaml
-    :emphasize-lines: 3
+    :emphasize-lines: 3,4
     :caption: Boottorrent.yaml
 
     boottorrent:
         ...
         display_oss: linuxos
+        default_os: linuxos
+        ...
+
+Finally, you need to update some fields to appropriate values to match with your setup.
+
+.. code-block:: yaml
+    :emphasize-lines: 3,7
+    :caption: Boottorrent.yaml
+
+    boottorrent:
+        ...
+        host_ip: <your computer's IP as visible to the clients>
+        ...
+    dnsmasq:
+        ...
+        interface: <interface you want to use>
         ...
 
 That's it about the configuration.
@@ -62,7 +78,7 @@ Booting the Kernel
 
 Enable PXE on your computers. Please look for your computer's BIOS documentation for instructions.
 
-Execute this command on your computer:
+Then, execute this command on your computer (in the same env):
 
 .. code-block:: console
 
