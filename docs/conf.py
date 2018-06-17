@@ -159,5 +159,4 @@ texinfo_documents = [
      'Miscellaneous'),
 ]
 
-
-
+seqdiag_transparency = False
