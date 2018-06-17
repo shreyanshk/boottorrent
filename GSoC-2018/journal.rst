@@ -1,3 +1,15 @@
+2018/06/15
+~~~~~~~~~~
+
+* Took a dive in the SliTaz ecosystem and learned how to properly
+generate custom live images. Previously I was hacking away their base
+image.
+* Figured out how to setup Xorg and load Qemu on the custom image.
+* Activated readthedocs.org to publish documentation. It is live at:
+https://boottorrent.readthedocs.io
+* Added Quick start guide, architecture, internals, frequently asked
+questions sections and similar slew of updates.
+
 2018/06/09
 ~~~~~~~~~~
 
