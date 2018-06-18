@@ -1,8 +1,8 @@
-BootTorrent - Identified use cases
-==================================
+BootTorrent - Use cases
+=======================
 
 1. Kexec-ing Diskless clustered distributed computers (unattended)
---------------------------------------------------------
+------------------------------------------------------------------
 
 A group of clustered distributed nodes can have no permanent storage space and only a processor, RAM and network connectivity if the data to process can be readily obtained via the connected network and can be completely stored in the RAM. This scenario is present when the ratio of computation done to memory required is high. Such cases can be subset of Big data processing and Machine Learning on distributed computers.
 In this case, one computer on the network is arbitrarily designated as ‘master’ node and other nodes as ‘nodes’. It’s not necessary that these two types of nodes have similar hardware.
@@ -45,7 +45,7 @@ Actions available:
 
 
 2. Kexec-ing Diskless clustered computers (with human input/attended)
------------------------------------------------------------
+---------------------------------------------------------------------
 
 A university laboratory can have multiple computers with students wishing to run different distributions/versions of operating systems. They will provide sufficient input to the program executing in the bootstrap image and the program will initiate the download of correct torrent and kexec the downloaded kernel.
 Another reason could be that the Lab supervisor want to centrally manage the operating systems. The person can modify the base OS images on his computer and those changes will be reflected to the other computers on their reboot.
@@ -102,6 +102,8 @@ Actions available:
 
 In certain cases there is a need to start a VM instance on the clients, such as to run Operating Systems that cannot load via Kexec-ing. For example: DOS, Windows etc. In such cases the client will download the files and launch the Hypervisor like Qemu.
 
+.. (atrent) explain advantage, i.e., keeping the seeding active
+
 Actors
 ~~~~~~
 **Node**
@@ -150,6 +152,10 @@ Actions available:
 ----------------------------
 
 Similar to case 3, a slight change would be to automatically load the OS chosen by the Maintainer.
+
+
+.. (atrent) explain advantage, i.e., keeping the seeding active
+
 
 Actors
 ~~~~~~
@@ -200,3 +206,6 @@ Actions available:
     -----------------------------------
 
     In the "diskless" usecases above a VM implementation may be developed, i.e., insetad of 'kexec'-ing into the new O.S. the bootstrap kernel may be kept running, WITH the bittorrent daemon active, so that the torrenting may be sped up since all the booted nodes are also seeders...
+
+
+.. (atrent) see my comments in section 3 and 4
