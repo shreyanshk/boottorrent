@@ -18,8 +18,10 @@ At power-on, the clients are limited in nature and the only supported protocols 
 
 None, our choices are limited by hardware.
 
-Dnsmasq
-*******
+`Dnsmasq`_
+**********
+
+.. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
 
 Dnsmasq implements various protocols such as DHCP, BOOTP, PXE and TFTP support. It also includes support via Lua scripting language. Three protocols, DHCP, PXE and TFTP are currently being used in BootTorrent.
 
@@ -41,8 +43,10 @@ Note: None of the alternatives support TFTP. Choosing any other option means tha
 
 * Client parameters
 
-bsdtar
-******
+`bsdtar`_
+*********
+
+.. _bsdtar: https://github.com/libarchive/libarchive
 
 bsdtar is a command line tool for reading and writing archives.
 
@@ -93,8 +97,10 @@ Choices limited to BitTorrent.
 
 None
 
-Transmission
-************
+`Transmission`_
+***************
+
+.. _Transmission: https://transmissionbt.com/
 
 Transmission is a BitTorrent client.
 
@@ -119,8 +125,10 @@ Choices limited to BitTorrent.
 
 None
 
-Aria2
-*****
+`Aria2`_
+********
+
+.. _Aria2: https://github.com/aria2/aria2
 
 Aria2 is a BitTorrent client.
 
@@ -151,8 +159,10 @@ The executable /sbin/getty on client's RAM disk is replaced. The new binary is l
 * Launch with init system.
     | Changes needed to be made in the base image are numerous.
 
-Golang Terminal User Interface (TUI)
-************************************
+`Golang`_ Terminal User Interface (TUI)
+***************************************
+
+.. _Golang: https://golang.org/
 
 Golang is a programming language developed by Google. It can easily create cross platform, portable, static binary executable files.
 
@@ -172,6 +182,17 @@ Host Package
 
 This component runs on the computer that will serve the DHCP requests and act as a seed for the client computers in the network. The software parses the configuration files in the environment and then renders the final configuration file for various components from the parsed values and the template configuration files present in the package's assets/tpls directory. These parsed configuration files are then written to the out/ directory inside the environment. The software also generates torrent metadata for all the folders present in the oss/ directory.
 
+An overview of the BootTorrent starting process is as follows:
+
+1. Parse environment configuration files.
+2. Write configuration files for external components into out/ directory.
+3. Generate and pack the torrent metadata.
+4. Start the external components with final configuration settings.
+5. Standby and serve requests as they come.
+
+Core components
+~~~~~~~~~~~~~~~
+
 External components that run on the host include:
 
 * **Transmission**
@@ -187,38 +208,95 @@ External components that run on the host include:
     | The DHCP server capability is used to prepare the client computers to start downloading the Phase-1 Linux system and torrent metadata from the TFTP server.
     | The TFTP server serves the Phase-1 Linux system on the TFTP protocol widely used by most PXE implementations.
 
-* **Hefur**
-    | Both DHT and LPD are prone to slow start or may not work at all.
-    | Hefur is a simple RAM-only torrent tracker which is used to accelerate the discovery of seeds/peers on the network.
+Support components
+~~~~~~~~~~~~~~~~~~
 
-The package also uses a few Python libraries, which are:
+`Hefur`_
+********
 
-* **Click**
-    | It is used to implement the CLI for BootTorrent.
+.. _Hefur: https://github.com/abique/hefur
 
-* **PyYAML**
-    | It is used to work with YAML files.
+Hefur is an in-memory, standalone BitTorrent tracker.
 
-* **Jinja2**
-    | It is a templating engine used to render final configuration files from template configuration files.
+**Rationale**
 
-* **Requests**
-    | It is a HTTP library and is used to interact with transmission-daemon process via it's HTTP API.
+* It allows fast discovery of other seeds/peers in the network. (Compared to LPD & DHT)
+* It doesn't need a database or configuration file.
+* Integrated web interface to display statistics for the torrents being served.
 
-An overview of the BootTorrent starting process is as follows:
+**Alternative software**
 
-1. Parse environment configuration files.
-2. Write configuration files for external components into out/ directory.
-3. Generate and pack the torrent metadata.
-4. Start the external components with final configuration settings.
-5. Standby and serve requests as they come.
+* Opentracker
+    | No integrated web interface
+* Chihaya
+    | Written in Golang, no web inteface
+
+`Python-Click`_
+***************
+
+.. _Python-Click: http://click.pocoo.org/5/
+
+Click is a Python package for creating command line interfaces in a composable way with little code.
+
+**Rationale**
+
+* It is used to implement the CLI in the package.
+* Code and it's documentation are placed together. Avoiding changing at multiple places on code changes.
+* It automatically generates CLI documentation from code and it's comments.
+
+**Alternate package**
+
+* docopt
+* argparse
+
+`Python-PyYAML`_
+****************
+
+.. _Python-PyYAML: https://github.com/yaml/pyyaml
+
+It is a YAML parser and emitter for Python.
+
+**Rationale**
+
+* It is used to parse an BootTorrent environment's YAML files.
+
+`Python-Jinja2`_
+****************
+
+.. _Python-Jinja2: http://jinja.pocoo.org/
+
+Jinja2 is a templating engine / processor in Python.
+
+**Rationale**
+
+* External components use configuration files. Jinja2 is used to generate configuration files from templates and data models (such as passed variables, maps etc).
+
+**Alternate packages**
+
+Numerous: Visit `Python's templating documentation <https://wiki.python.org/moin/Templating>`_ for information.
+
+`Python-Requests`_
+******************
+
+.. _Python-Requests: http://docs.python-requests.org/en/master/
+
+Requests is an HTTP library for Python.
+
+**Rationale**
+
+* It is used to interact with Transmission's HTTP API to add torrents to it's daemon process.
+
+**Alternate packages**
+
+* Python-urllib3
 
 Client Package
 --------------
 
 This component (also called Phase-1 Linux system), which is downloaded via TFTP and runs on the client computers, is a 32-bit x86 OS and is based on SliTaz Linux distribution. Bitness of 32-bit was chosen to maximize compatibility with older hardware that may not be able to run 64-bit x86_64/AMD64 binaries.
 
-The included packages are:
+Core components
+~~~~~~~~~~~~~~~
 
 * **Aria2**
     | It is used to download the actual files from the torrent metadata.
@@ -245,6 +323,23 @@ An overview of client's process is as follows:
 6. OS to load is chosed either via user input or configuration.
 7. Download of the OS is initiated and saved to RAM.
 8. OS is loaded via appropriate method.
+
+Support components
+~~~~~~~~~~~~~~~~~~
+
+`GoCUI`_
+********
+
+.. _GoCUI: https://github.com/jroimartin/gocui
+
+It is a minimalist Go package for creating console user interfaces.
+
+`Go YAML`_
+**********
+
+.. _Go YAML: https://github.com/go-yaml/yaml
+
+It is a YAML parser and emitter for Golang.
 
 Host process at a glance
 ------------------------
