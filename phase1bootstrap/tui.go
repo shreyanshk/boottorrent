@@ -14,7 +14,8 @@ import (
 )
 
 // Some useful structs
-// Variables starts with capital so that goyaml can parse them
+// Exportable/Public variables in Golang start with capitals.
+// Variables starts with capitals so that goyaml can parse them.
 
 // configs.yaml is parsed into an array of this struct.
 type OS struct {
@@ -99,7 +100,8 @@ func cursorUp(g *gocui.Gui, v *gocui.View) error {
 }
 
 
-// function to read the line in the OS list.
+// function to read the line in the OS list
+// and start it's corresponding OS.
 func getLine(g *gocui.Gui, v *gocui.View) error {
 	var l string
 	var err error
