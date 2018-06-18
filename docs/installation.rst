@@ -27,6 +27,8 @@ Components this project depends on include:
 
 The package itself depends on a few Python libraries which are installed automatically by Pip package manager. These libraries are:
 
+.. (atrent) so 'pip' is a dependency, right?
+
 * `Click`_
 
 * `PyYAML`_
