@@ -26,6 +26,7 @@ What can I do if I don't have any control over the present DHCP server?
 -----------------------------------------------------------------------
 
 Your network administrator will have to manually set the DHCP server to point to BootTorrent server. Please discuss with your network administrator on what can be done.
+.. (atrent) maybe some hint on how to do it would be useful
 
 I have exotic hardware and BootTorrent doesn't include it's software. What can I do to make it work?
 ----------------------------------------------------------------------------------------------------
@@ -42,3 +43,8 @@ How can I add support for more architectures to BootTorrent?
 ------------------------------------------------------------
 
 You can start with porting the runtime and build dependencies to the new architecture. Then you can proceed to port the client package to the new architecture. This include the files in the boottorrent/assets/ph1 directory: PXE Linux loader and Phase 1 Linux system. If you've made it this far, please consider creating a pull request. :-)
+
+
+What are the differences between BootTorrent and the original 'boottorrent' UniMi project?
+------------------------------------------------------------------------------------------
+.. (atrent) a summary of the improvements ;)
