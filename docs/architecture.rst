@@ -18,6 +18,7 @@ This document details the architecture for the project BootTorrent submitted to 
 The purpose of this document is to share details of the needs and requirements of the project from a single authoritative place.
 
 The audience for this document is, first and foremost, `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian (See the project on the `official Debian website`_), and any open source contributor who wishes to learn more about the project and contribute.
+.. (atrent) not only us! also any user or would-be maintainer!
 
 .. _Andrea Trentini: https://atrent.it
 .. _Giovanni Biscuolo: https://github.com/gbiscuolo
@@ -46,13 +47,15 @@ Currently, the standard network boot process for computers is as follows:
 
 * Other computers (clients) download from this central server and then start the operating system.
 
-The inclusion of this 'central server' creates problems identified below:
+The 'central server' creates problems identified below:
 
 * The performance of the server becomes a bottleneck.
+.. (atrent) cpu and network card "power" are upper bounded
 
 * Centralized nature of this server mean that it may not be able to scale to large clusters.
+.. (atrent) not clear, be more specific, otherwise it's the same as the first item
 
-BootTorrent is intended to help solve this problem with the help of distributed P2P data sharing technologies such as BitTorrent. It explores the idea of using these techniques to program clients to share data among themselves, reducing the need of a single server providing all the data. This, in effect makes the clients a provider of the data as well. In other words, the clients become 'peers' to each other in a large cluster of computers.
+BootTorrent is intended to help solve this problem with the help of distributed P2P data sharing technologies such as BitTorrent. It explores the idea of using these techniques to program clients to share data among themselves, reducing the need of a single server providing all the data to every node. This, in effect, promote the clients to data providers. In other words, the clients become 'peers' to each other in a large cluster of computers.
 
 ::
 
@@ -74,8 +77,18 @@ BootTorrent is intended to help solve this problem with the help of distributed 
 
     Fig 1: Interaction of computers sharing data together.
 
+.. (atrent) this scheme is not perfect, client and peer shoudl be the same unless you want to distinguish between a "simple" client and a "peer" client, I would have sketched all the "client" nodes at the same level under the server and just marking some of them as "peer"
+
 The ideal use case of BootTorrent is when a considerably large operating system (measured in bytes) is required to be run on the clients via network booting and the server providing the data is not performant enough to serve all the client on its own in constrained time requirements.
 
+
+
+.. (atrent) a FUNDAMENTAL connection is still missing *here*, a paragraph explaining the idea in slightly more detail, such as: "The idea is to divide the boot process in two phases, instead of just the traditional one (PXE load of target OS, then boot it), the intermediate phase (PXE load of 'pivotal' OS, boot pivotal, run bittorrent, peer download target OS, boot target OS) serves the purpose of activating the peer data sharing prior to final target boot"
+
+
+
+
+.. (atrent) the following section should belong elsewhere, you fall again into technical...
 BootTorrent interface
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -108,6 +121,8 @@ In addition to that, client computer include pre-programmed:
     | It has various names: PXE, Network Boot, Ethernet boot ROM... etc.
     | It needs to be enabled on the clients.
 
+
+.. (atrent) ditto
 Non-functional requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -123,6 +138,9 @@ Non-functional requirements
 
     - Use small base system so that constraints can be satisfied.
 
+
+
+.. (atrent) this section is good!
 Structure
 ---------
 
@@ -167,6 +185,9 @@ The server's Client configuration interface programs client's network boot inter
 
 Once the download is finished, the client data sharing interface will call Operating system loading interface to load the Operating system with the correct method.
 
+
+
+.. (atrent) maybe this one could be moved to "internals" but I'm not sure, leave it here for now
 Components
 ~~~~~~~~~~
 
@@ -228,6 +249,11 @@ Operating system loader
     | Runs on the client.
     | Tools such as Kexec, Qemu can be used to load.
 
+
+
+
+
+.. (atrent) maybe this one could be moved to "internals" but I'm not sure, leave it here for now
 Process overview
 ~~~~~~~~~~~~~~~~
 
