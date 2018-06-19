@@ -48,11 +48,9 @@ Currently, the standard network boot process for computers is as follows:
 
 The 'central server' creates problems identified below:
 
-* The performance of the server becomes a bottleneck.
-.. (atrent) cpu and network card "power" are upper bounded
+* The performance of the server becomes a bottleneck as the CPU speed and the network interface's bandwidth have a maximum upper limit.
 
-* Centralized nature of this server mean that it may not be able to scale to large clusters.
-.. (atrent) not clear, be more specific, otherwise it's the same as the first item
+* Centralized nature of this server mean that it may not be able to scale to large clusters. As the need for bandwidth increases linearly with the number of computers but the bandwidth remains constant.
 
 BootTorrent is intended to help solve this problem with the help of distributed P2P data sharing technologies such as BitTorrent. It explores the idea of using these techniques to program clients to share data among themselves, reducing the need of a single server providing all the data to every node. This, in effect, promote the clients to data providers. In other words, the clients become 'peers' to each other in a large cluster of computers.
 
