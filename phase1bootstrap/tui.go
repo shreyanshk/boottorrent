@@ -1,8 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"fmt"
 	"github.com/jroimartin/gocui"
+	"golang.org/x/sys/unix"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
 	"log"
@@ -12,6 +14,7 @@ import (
 	"strings"
 	"time"
 )
+
 
 // Some useful structs
 // Exportable/Public variables in Golang start with capitals.
@@ -32,6 +35,7 @@ type OS struct {
 	Args string
 }
 
+
 // Conveniently misses fields for stuff that is probably not needed on client.
 type Conf struct {
 	Boottorrent struct {
@@ -50,6 +54,7 @@ type Conf struct {
 		Enable_peer_exchange bool
 	}
 }
+
 
 // Globals to load and store only configuration
 // 'btconfig' stores unmarshalled Boottorrent.yaml
@@ -132,6 +137,7 @@ func download_files(oskey string) {
 		"--seed-time=" + strconv.Itoa(btconfig.Boottorrent.Seed_time/60),
 		"--file-allocation=prealloc",
 		"--allow-overwrite=true",
+		"--continue",
 		"--dir=/",
 		"-j5",
 		"/torrents/"+oskey+".torrent",
@@ -140,6 +146,7 @@ func download_files(oskey string) {
 	aria2.Stderr = os.Stderr
 	aria2.Run()
 }
+
 
 // Method string: kexec
 // function handling Kexec-ing of new kernels
@@ -163,17 +170,18 @@ func load_kexec(oskey string) {
 	kexec2.Run()
 }
 
+
 // Method string: bin-qemu-x86_64
 // function to start Qemu process under Xorg
 func load_bin_qemu_x86_64(oskey string) {
 	c := osconfig[oskey]
-	xorg := exec.Command("Xorg")
+	xorg := exec.Command("/usr/bin/Xorg")
 	xorg.Stdout = os.Stdout
 	xorg.Stderr = os.Stderr
 	xorg.Start()
-	//wait for Xorg to load
+	// wait for Xorg to load
 	time.Sleep(1 * time.Second)
-	qemu := exec.Command("qemu-system-x86_64")
+	qemu := exec.Command("/usr/bin/qemu-system-x86_64")
 	qemu.Args = append(qemu.Args, strings.Fields(c.Args)...)
 	// Qemu requires this env variable
 	qemu.Env = []string{"DISPLAY=:0"}
@@ -181,6 +189,9 @@ func load_bin_qemu_x86_64(oskey string) {
 	qemu.Stdout = os.Stdout
 	qemu.Stderr = os.Stderr
 	qemu.Start()
+	// Ctrl+Alt+Backspace terminates Xorg
+	// Added wait so that logs can be checked
+	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
 
 
@@ -202,6 +213,11 @@ func start(l string) {
 
 // function to handle Ctrl+C on the program
 func quit(g *gocui.Gui, v *gocui.View) error {
+	g.Close()
+	err := unix.Exec("/bin/busybox", []string{"-ash"}, os.Environ())
+	if err != nil {
+		panic("Failed to launch shell.")
+	}
 	return gocui.ErrQuit
 }
 
@@ -244,6 +260,14 @@ func layout(g *gocui.Gui) error {
 	toplefty := (vh/2) - len(display_names)/2 - 2
 	bottomrightx := (vw/2) + maxlen/2 + 1
 	bottomrighty := (vh/2) + len(display_names)/2 + 2
+	// display information
+	if v, err := g.SetView(
+		"info", 1, vh-3, vw, vh,
+	); err != nil {
+		v.Highlight = false
+		v.Frame = false
+		fmt.Fprintln(v, "Ctrl+C: Launch shell")
+	}
 	// display the list
 	if v, err := g.SetView(
 		"list",
@@ -252,9 +276,6 @@ func layout(g *gocui.Gui) error {
 		bottomrightx,
 		bottomrighty,
 	); err != nil {
-		if err != gocui.ErrUnknownView {
-			return err
-		}
 		v.Highlight = true
 		v.Frame = false
 		v.SelBgColor = gocui.ColorGreen

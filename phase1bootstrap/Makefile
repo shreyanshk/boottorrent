@@ -9,6 +9,7 @@ initrd:
 	@bsdtar -c --format newc -f diff.gz --lzma -Cdiff .;
 	@echo "Placing files in correct locations..."
 	@cp diff.gz ../boottorrent/assets/ph1/diff.gz
+	@cp diff.gz ../venv/bt_dummy/out/dnsmasq/ph1/diff.gz 2>/dev/null || :
 
 unpackorig:
 	@echo "Unpacking rootfs_orig.gz"

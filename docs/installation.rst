@@ -90,6 +90,7 @@ Some Golang dependencies are also required to build, you can download them with 
 
     $ go get github.com/jroimartin/gocui
     $ go get gopkg.in/yaml.v2
+    $ go get golang.org/x/sys/unix
 
 To build the SliTaz live image that is run on the client, copy the phase1bootstrap/slitaz/ directory to a Virtual Machine or computer running SliTaz with `Tazlito`_ installed. Then, open a console and execute:
 

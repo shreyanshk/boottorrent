@@ -1,3 +1,7 @@
+phase1bootstrap/diff
+phase1bootstrap/diff.gz
+
+#
 # folders
 dummyproject/
 venv/
