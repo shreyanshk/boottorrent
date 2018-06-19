@@ -95,14 +95,12 @@ Actions available:
 * Power On/Off the node
 * Select the OS
 
-.. (atrent) I'm adding some usecase I can think of
 
 3. Booting a VM (with human input/attended)
 -------------------------------------------
 
 In certain cases there is a need to start a VM instance on the clients, such as to run Operating Systems that cannot load via Kexec-ing. For example: DOS, Windows etc. In such cases the client will download the files and launch the Hypervisor like Qemu.
-
-.. (atrent) explain advantage, i.e., keeping the seeding active
+Another advantage of loading a VM rather than Kexec-ing is that it becomes possible to silently seed the downloaded OS to other computers on the network indefinitely in the background as long as electricity is supplied. This means that other computers on the network that are booting in future will have the option to download the OS from multiple sources together which can give significantly faster download speeds.
 
 Actors
 ~~~~~~
@@ -152,9 +150,7 @@ Actions available:
 ----------------------------
 
 Similar to case 3, a slight change would be to automatically load the OS chosen by the Maintainer.
-
-
-.. (atrent) explain advantage, i.e., keeping the seeding active
+Another advantage of loading a VM rather than Kexec-ing is that it becomes possible to silently seed the downloaded OS to other computers on the network indefinitely in the background as long as electricity is supplied. This means that other computers on the network that are booting in future will have the option to download the OS from multiple sources together which can give significantly faster download speeds.
 
 
 Actors
