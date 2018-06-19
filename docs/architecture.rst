@@ -79,11 +79,20 @@ BootTorrent is intended to help solve this problem with the help of distributed 
 
 The ideal use case of BootTorrent is when a considerably large operating system (measured in bytes) is required to be run on the clients via network booting and the server providing the data is not performant enough to serve all the client on its own in constrained time requirements.
 
+The traditional network boot process is as follows:
 
+1. Load a PXE binary capable of loading the target OS.
+2. PXE binary will downloads the OS via TFTP protocol and then loads it.
 
-.. (atrent) a FUNDAMENTAL connection is still missing *here*, a paragraph explaining the idea in slightly more detail, such as: "The idea is to divide the boot process in two phases, instead of just the traditional one (PXE load of target OS, then boot it), the intermediate phase (PXE load of 'pivotal' OS, boot pivotal, run bittorrent, peer download target OS, boot target OS) serves the purpose of activating the peer data sharing prior to final target boot"
+The idea of BootTorrent is that, compared to traditional network boot process, the booting process is split into two phases with the first phase of the process setting the ideal environment to download the target OS via P2P methods by enabling appropriate protocols and network stack features. The second phase builds up on the environment provided by the first phase and utilizes it to actually downloads the target OS via P2P file sharing protocols and then loads it.
 
+Under BootTorrent, the process would look like this:
 
+1. Load a PXE binary capable of loading BootTorrent on target hardware via traditional methods.
+2. PXE binary will download and load BootTorrent's pivotal OS.
+3. The pivotal OS enables P2P protocols on the hardware.
+4. The target OS is downloaded via P2P protocols.
+5. The target OS is then loaded.
 
 
 .. (atrent) the following section should belong elsewhere, you fall again into technical...
