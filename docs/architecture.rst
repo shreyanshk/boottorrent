@@ -339,3 +339,7 @@ Loading client data sharing interface
 
 BIOS/UEFI network boot interface has very limited functionality but this limited functionality is flexible enough that it allows loading a small Operating System. This Operating system will be pre-programmed to be able to fully use any form of distributed P2P data sharing technology such as BitTorrent or anything else that may be desired.
 
+Loading of Client configuration and Initial data provider interface
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+An executable or script could be placed on the server that could serve as a central point to start or manage the process. It would glue all the components together and load them in proper order when this script is invoked.
