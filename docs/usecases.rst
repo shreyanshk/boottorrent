@@ -1,6 +1,10 @@
 BootTorrent - Use cases
 =======================
 
+.. (atrent) ok, let's summarize: the options are: attended/unattended and VM/bare. So we may collapse everything into one usecase with options, would it be more readable?
+
+
+
 1. Kexec-ing Diskless clustered distributed computers (unattended)
 ------------------------------------------------------------------
 
