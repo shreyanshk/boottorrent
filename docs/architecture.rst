@@ -17,7 +17,8 @@ This document details the architecture for the project BootTorrent submitted to 
 
 The purpose of this document is to share details of the needs and requirements of the project from a single authoritative place.
 
-The audience for this document is: `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian (See the project on the `official Debian website`_), the project maintainers in the future, any open source contributor who wishes to learn more about the project and contribute, and any user who desires to understand more about the design of this project.
+The audience for this document is: candidate maintainers, any open source developer who wishes to learn more about this project and contribute, users who desire to understand more about the design of this project and, for the duration of the GSoC 2018, `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian (See the project on the `official Debian website`_).
+
 
 .. _Andrea Trentini: https://atrent.it
 .. _Giovanni Biscuolo: https://github.com/gbiscuolo
@@ -48,9 +49,9 @@ Currently, the standard network boot process for computers is as follows:
 
 The 'central server' creates problems identified below:
 
-* The performance of the server becomes a bottleneck as the CPU speed and the network interface's bandwidth have a maximum upper limit.
+* server performance becomes a bottleneck as the CPU speed and the network interface's bandwidth have a maximum upper limit.
 
-* Centralized nature of this server mean that it may not be able to scale to large clusters. As the need for bandwidth increases linearly with the number of computers but the bandwidth remains constant.
+* the server centralized nature means that it may not be able to scale to large clusters. As the need for bandwidth increases linearly with the number of computers but the bandwidth remains constant.
 
 BootTorrent is intended to help solve this problem with the help of distributed P2P data sharing technologies such as BitTorrent. It explores the idea of using these techniques to program clients to share data among themselves, reducing the need of a single server providing all the data to every node. This, in effect, promote the clients to data providers. In other words, the clients become 'peers' to each other in a large cluster of computers.
 
@@ -77,6 +78,9 @@ BootTorrent is intended to help solve this problem with the help of distributed 
     Fig 1: Interaction of computers sharing data together
             inside a network.
 
+.. (atrent) better figure than before, did you try using .dot or something else? (as suggested by Giovanni)
+
+
 The ideal use case of BootTorrent is when a considerably large operating system (measured in bytes) is required to be run on the clients via network booting and the server providing the data is not performant enough to serve all the client on its own in constrained time requirements.
 
 The traditional network boot process is as follows:
@@ -85,6 +89,7 @@ The traditional network boot process is as follows:
 2. PXE binary will downloads the OS via TFTP protocol and then loads it.
 
 The idea of BootTorrent is that, compared to traditional network boot process, the booting process is split into two phases with the first phase of the process setting the ideal environment to download the target OS via P2P methods by enabling appropriate protocols and network stack features. The second phase builds up on the environment provided by the first phase and utilizes it to actually downloads the target OS via P2P file sharing protocols and then loads it.
+.. (atrent) better, maybe also a scheme could be good, such as the one on page 40 (figure 7) of http://sl-lab.it/dokuwiki/lib/exe/fetch.php/tesi:tesi_bruschi.pdf
 
 Under BootTorrent, the process would look like this:
 
