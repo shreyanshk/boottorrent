@@ -56,25 +56,26 @@ BootTorrent is intended to help solve this problem with the help of distributed 
 
 ::
 
-    +--------+                  +------------------------------+
-    |        |   Share data     |                              |
-    | client | <--------------- |   +------+        +------+   |
-    |        | + configuration  |   | peer |        | peer |   |
-    +--------+                  |   +------+        +------+   |
-        ^                       |                              |
-        |                       |                              |
-        | Provides data         |                              |
-        | + configuration       |   +------+        +------+   |
-        |                       |   | peer |        | peer |   |
-    +--------+                  |   +------+        +------+   |
-    |        | Provides data    |                              |
-    | server | ---------------> |                              |
-    |        | + configuration  +------------------------------+
-    +--------+                     cluster of clients / peers
+    +-----------------------------------------------------+
+    |   +---------------------------------------------+   |
+    |   |   +------+                      +------+    |   |
+    |   |   | peer |<--------| |--------->| peer |    |   |
+    |   |   +------+      +--------+      +------+    |   |
+    |   |                 | client |                  |   |
+    |   |                 +--------+                  |   |
+    |   |  +--------+         ^          +--------+   |   |
+    |   |  | client |<--------|--------->| client |   |   |
+    |   |  +--------+         |          +--------+   |   |
+    |   +---------------------|-----------------------+   |
+    |                         |                           |
+    |              share data | + configuration           |
+    |   +---------------------------------------------+   |
+    |   |                   Server                    |   |
+    |   +---------------------------------------------+   |
+    +-----------------------------------------------------+
 
-    Fig 1: Interaction of computers sharing data together.
-
-.. (atrent) this scheme is not perfect, client and peer shoudl be the same unless you want to distinguish between a "simple" client and a "peer" client, I would have sketched all the "client" nodes at the same level under the server and just marking some of them as "peer"
+    Fig 1: Interaction of computers sharing data together
+            inside a network.
 
 The ideal use case of BootTorrent is when a considerably large operating system (measured in bytes) is required to be run on the clients via network booting and the server providing the data is not performant enough to serve all the client on its own in constrained time requirements.
 
