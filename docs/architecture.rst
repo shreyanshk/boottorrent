@@ -17,8 +17,7 @@ This document details the architecture for the project BootTorrent submitted to 
 
 The purpose of this document is to share details of the needs and requirements of the project from a single authoritative place.
 
-The audience for this document is, first and foremost, `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian (See the project on the `official Debian website`_), and any open source contributor who wishes to learn more about the project and contribute.
-.. (atrent) not only us! also any user or would-be maintainer!
+The audience for this document is: `Andrea Trentini`_ and `Giovanni Biscuolo`_ for Debian (See the project on the `official Debian website`_), the project maintainers in the future, any open source contributor who wishes to learn more about the project and contribute, and any user who desires to understand more about the design of this project.
 
 .. _Andrea Trentini: https://atrent.it
 .. _Giovanni Biscuolo: https://github.com/gbiscuolo
