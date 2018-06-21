@@ -25,8 +25,7 @@ Because BootTorrent runs it's own DHCP server, it may conflict with the external
 What can I do if I don't have any control over the present DHCP server?
 -----------------------------------------------------------------------
 
-Your network administrator will have to manually set the DHCP server to point to BootTorrent server. Please discuss with your network administrator on what can be done.
-.. (atrent) maybe some hint on how to do it would be useful
+Your network administrator will have to manually set the DHCP server to point to BootTorrent server. Please disable DHCP server provided by BootTorrent and ask your network administrator to set PXE boot file to "<IP of BootTorrent server>/pxelinux.0" and DHCP option 209 to "<IP of BootTorrent server>/pxelinux.cfg" (https://tools.ietf.org/html/rfc5071) in the active DHCP server. Please refer to your DHCP server's documentation for instructions on how to set these options.
 
 I have exotic hardware and BootTorrent doesn't include it's software. What can I do to make it work?
 ----------------------------------------------------------------------------------------------------
@@ -44,7 +43,12 @@ How can I add support for more architectures to BootTorrent?
 
 You can start with porting the runtime and build dependencies to the new architecture. Then you can proceed to port the client package to the new architecture. This include the files in the boottorrent/assets/ph1 directory: PXE Linux loader and Phase 1 Linux system. If you've made it this far, please consider creating a pull request. :-)
 
-
 What are the differences between BootTorrent and the original 'boottorrent' UniMi project?
 ------------------------------------------------------------------------------------------
-.. (atrent) a summary of the improvements ;)
+
+The improvements over the 'boottorrent' UniMi project includes:
+
+1. No need to fiddle with any cpio or lzma archives.
+2. Allows you to run Qemu images as well.
+3. You can choose between multiple OS to boot at runtime.
+4. Eliminate the need for an HTTP server.
