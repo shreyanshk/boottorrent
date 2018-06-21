@@ -89,7 +89,6 @@ The traditional network boot process is as follows:
 2. PXE binary will downloads the OS via TFTP protocol and then loads it.
 
 The idea of BootTorrent is that, compared to traditional network boot process, the booting process is split into two phases with the first phase of the process setting the ideal environment to download the target OS via P2P methods by enabling appropriate protocols and network stack features. The second phase builds up on the environment provided by the first phase and utilizes it to actually downloads the target OS via P2P file sharing protocols and then loads it.
-.. (atrent) better, maybe also a scheme could be good, such as the one on page 40 (figure 7) of http://sl-lab.it/dokuwiki/lib/exe/fetch.php/tesi:tesi_bruschi.pdf
 
 Under BootTorrent, the process would look like this:
 
@@ -99,8 +98,19 @@ Under BootTorrent, the process would look like this:
 4. The target OS is downloaded via P2P protocols.
 5. The target OS is then loaded.
 
+.. blockdiag::
+
+    blockdiag {
+        POST -> DHCP
+        DHCP -> "TFTP Download"
+        'TFTP Download' -> 'Phase 1 Load'
+        'Phase 1 Load' -> 'Target OS download' [folded]
+        'Target OS download' -> 'Load Target OS'
+        'Load Target OS' -> 'BootTorrent exits'
+    }
 
 .. (atrent) the following section should belong elsewhere, you fall again into technical...
+
 BootTorrent interface
 ~~~~~~~~~~~~~~~~~~~~~
 
