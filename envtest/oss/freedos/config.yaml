@@ -1,0 +1,3 @@
+dispname: FreeDOS
+method: bin-qemu-x86_64
+args: "-fda odin1440.img"

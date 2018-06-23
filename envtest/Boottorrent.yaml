@@ -1,0 +1,31 @@
+boottorrent:
+  version: 0
+  timeout: 30
+  seed_time: 0
+  default_os: testos
+  host_ip: 192.168.1.1
+  display_oss:
+      - testos
+      - freedos
+
+dnsmasq:
+  enable_dhcp: True
+  enable_tftp: True
+  interface: vboxnet0
+  bind_interfaces: False
+  dhcp_range: "192.168.1.50,192.168.1.150,12h"
+  user: shreyansh
+
+hefur:
+    enable: True
+    port: 10001
+
+transmission:
+  rpc_port: 9091
+
+aria2:
+    bt_enable_lpd: True
+    check_integrity: True
+    enable_dht: False
+    enable_dht6: False
+    enable_peer_exchange: True

@@ -1,0 +1,5 @@
+dispname: TestOS
+method: kexec
+kernel: vmlinuz-linux-lts
+initrd: initramfs-linux-lts.img
+cmdline: break

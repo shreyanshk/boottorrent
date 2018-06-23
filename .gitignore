@@ -1,4 +1,6 @@
 phase1bootstrap/diff.gz
+phase1bootstrap/diff/sbin/
+envtest/out/
 
 #
 # folders
