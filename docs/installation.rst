@@ -191,3 +191,29 @@ you through the process.
 
 .. _pip: https://pip.pypa.io
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
+
+Updating/Reinstalling
+---------------------
+
+First, please uninstall the previous version with these commands:
+
+If you've installed BootTorrent locally only for the current user:
+
+.. code-block:: console
+
+    $ pip uninstall boottorrent
+
+If you've installed BootTorrent globally (installed with sudo):
+
+.. code-block:: console
+
+    $ sudo pip uninstall boottorrent
+
+Or, If you've used virtualenv:
+
+.. code-block:: console
+
+    $ source <path to virtualenv>/bin/activate
+    $ pip uninstall boottorrent
+
+Then, you can install BootTorrent back by any of the above methods.
