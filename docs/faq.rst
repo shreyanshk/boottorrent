@@ -52,3 +52,8 @@ The improvements over the 'boottorrent' UniMi project includes:
 2. Allows you to run Qemu images as well.
 3. You can choose between multiple OS to boot at runtime.
 4. Eliminate the need for an HTTP server.
+
+
+
+Where are the logs and how can I configure them? (verbosity, target file/daemon, etc.)
+--------------------------------------------------------------------------------------
