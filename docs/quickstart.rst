@@ -44,10 +44,10 @@ Now, you need to add details about how to boot with these files. So, launch your
     initrd: initrd.gz
     cmdline: <cmdline>
 
-Next, you need to explicitly tell BootTorrent to enable this OS.
+Next, you need to explicitly tell BootTorrent to enable this OS and update default network ports of various components to make sure they don't conflict with other applications already running on your computer.
 
 .. code-block:: yaml
-    :emphasize-lines: 3,4
+    :emphasize-lines: 3,4,8,12
     :caption: Boottorrent.yaml
 
     boottorrent:
@@ -55,6 +55,16 @@ Next, you need to explicitly tell BootTorrent to enable this OS.
         display_oss: [linuxos]
         default_os: linuxos
         ...
+    hefur:
+        ...
+        port: <available port number>
+        ...
+    transmission:
+        ...
+        rpc_port: <available port number>
+        ...
+
+Hint: you can use any port number between 1024 to 65535 (inclusive).
 
 Finally, you need to update some fields to appropriate values to match with your setup.
 
