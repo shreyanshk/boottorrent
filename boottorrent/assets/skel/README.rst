@@ -13,13 +13,13 @@ This section stores configurations parameters that are related to the working of
     | Operating Systems choices available to clients.
     | Populated with the name of the folders in the oss/ directory.
 
-* timeout [WIP]
+* timeout
     | type: int, default 30
     | In case of multiple OSs, BootTorrent waits this long (seconds) for user input before booting default OS.
     | If this value is 0, then the default OS will be started as soon as possible.
     | If this value is negative, then the timer is disabled and BootTorrent will wait forever for user input.
 
-* default_os [WIP]
+* default_os
     | type: string, required if timeout is set
     | The default choice in case of no input from user.
     | Must be a value from the display_oss list.

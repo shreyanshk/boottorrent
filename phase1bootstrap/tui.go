@@ -7,7 +7,6 @@ import (
 	"golang.org/x/sys/unix"
 	"gopkg.in/yaml.v2"
 	"io/ioutil"
-	"log"
 	"os"
 	"os/exec"
 	"strconv"
@@ -60,9 +59,11 @@ type Conf struct {
 // 'btconfig' stores unmarshalled Boottorrent.yaml
 // 'osconfig' stores unmarshalled configs.yaml
 // 'display' is a map of friendly name to it's key in osconfig
+// 'bool_t' is used to control timer
 var btconfig = Conf{}
 var osconfig = make(map[string]OS)
 var display_names = make(map[string]string)
+var bool_t bool
 
 
 // function to launch the OS
@@ -74,6 +75,9 @@ func start(oskey string) {
 		load_kexec(oskey)
 	case "bin-qemu-x86_64":
 		load_bin_qemu_x86_64(oskey)
+		// Ctrl+Alt+Backspace terminates Xorg
+		// Added wait so that logs can be checked
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	default:
 		fmt.Println("Unsupported method! Aborting.")
 	}
@@ -143,9 +147,6 @@ func load_bin_qemu_x86_64(oskey string) {
 	qemu.Stdout = os.Stdout
 	qemu.Stderr = os.Stderr
 	qemu.Start()
-	// Ctrl+Alt+Backspace terminates Xorg
-	// Added wait so that logs can be checked
-	bufio.NewReader(os.Stdin).ReadBytes('\n')
 }
 
 
@@ -200,13 +201,24 @@ func getLine(g *gocui.Gui, v *gocui.View) error {
 	if l, err = v.Line(cy); err != nil {
 		panic(err)
 	}
-	g.Close()
 	if len(l) == 0 {
 		panic("The line has zero length! This should not happen. Aborting!")
 	}
-	fmt.Println("About to start the process...")
+	disableTimer(g, v)
+	g.Close()
 	oskey := display_names[l]
 	start(oskey)
+	return nil
+}
+
+
+// function to disable timer
+func disableTimer(g *gocui.Gui, v *gocui.View) error {
+	bool_t = false
+	err := g.DeleteView("timer")
+	if err != nil && err != gocui.ErrUnknownView {
+		panic(err)
+	}
 	return nil
 }
 
@@ -230,7 +242,10 @@ func keybindings(g *gocui.Gui) error {
 	if err := g.SetKeybinding("list", gocui.KeyArrowUp, gocui.ModNone, cursorUp); err != nil {
 		return err
 	}
-	if err := g.SetKeybinding("list", gocui.KeyCtrlC, gocui.ModNone, quit); err != nil {
+	if err := g.SetKeybinding("list", gocui.KeyCtrlS, gocui.ModNone, quit); err != nil {
+		return err
+	}
+	if err := g.SetKeybinding("list", gocui.KeyCtrlC, gocui.ModNone, disableTimer); err != nil {
 		return err
 	}
 	if err := g.SetKeybinding("list", gocui.KeyEnter, gocui.ModNone, getLine); err != nil {
@@ -254,20 +269,29 @@ func layout(g *gocui.Gui) error {
 			maxlen = l
 		}
 	}
+	// set field to display timer
+	if bool_t {
+		if v, err := g.SetView(
+			"timer", 1, 0, vw-1, 3,
+		); err != nil {
+			v.Highlight = false
+			v.Frame = false
+		}
+	}
+	// display information
+	if v, err := g.SetView(
+		"info", 1, vh-3, vw-1, vh,
+	); err != nil {
+		v.Highlight = false
+		v.Frame = false
+		fmt.Fprintln(v, "Ctrl+S: Launch shell | Ctrl+C: disable timer")
+	}
 	// Calculating the coordinates of a centered rectangle in which
 	// options will be displayed on screen.
 	topleftx := (vw/2) - maxlen/2 - 1
 	toplefty := (vh/2) - len(display_names)/2 - 2
 	bottomrightx := (vw/2) + maxlen/2 + 1
 	bottomrighty := (vh/2) + len(display_names)/2 + 2
-	// display information
-	if v, err := g.SetView(
-		"info", 1, vh-3, vw, vh,
-	); err != nil {
-		v.Highlight = false
-		v.Frame = false
-		fmt.Fprintln(v, "Ctrl+C: Launch shell")
-	}
 	// display the list
 	if v, err := g.SetView(
 		"list",
@@ -314,19 +338,65 @@ func main() {
 		panic(err)
 	}
 
-	// This block starts the TUI
+	timeout := btconfig.Boottorrent.Timeout
+
+	if timeout == 0 {
+		start(btconfig.Boottorrent.Default_os)
+	}
+
+	// This block sets up the TUI
 	g, err := gocui.NewGui(gocui.OutputNormal)
 	if err != nil {
-		log.Panicln(err)
+		panic(err)
 	}
 
 	g.SetManagerFunc(layout)
 
 	if err := keybindings(g); err != nil {
-		log.Panicln(err)
+		panic(err)
 	}
 
+	// this block handles the timer
+	if timeout < 0 {
+		bool_t = false
+	} else {
+		bool_t = true
+		ticker := time.NewTicker(1 * time.Second)
+		go func() {
+			// iterate timeout times to wait for user input
+			for i := timeout; i > 0; i-- {
+				// check if ticker was disabled from interface
+				if !bool_t {
+					ticker.Stop()
+					return
+				}
+				// schedule an update to the interface
+				updfunc := func(g *gocui.Gui) error {
+					v, err := g.View("timer")
+					if err == nil {
+						v.Clear()
+						fmt.Fprintln(
+							v,
+							"Booting default OS in "+strconv.Itoa(i)+" seconds...",
+						)
+					}
+					return nil
+				}
+				g.Update(updfunc)
+				// wait for next tick
+				<-ticker.C
+			}
+			// timeout passed... now loading OS
+			bool_t = false
+			ticker.Stop()
+			g.Close()
+			start(btconfig.Boottorrent.Default_os)
+			os.Exit(0)
+		}()
+	}
+
+	// this block starts the main event loop
 	if err := g.MainLoop(); err != nil && err != gocui.ErrQuit {
-		log.Panicln(err)
+		panic(err)
 	}
 }
