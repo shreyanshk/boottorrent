@@ -17,4 +17,9 @@ unpackorig:
 	@mkdir rootfs;
 	@fakeroot bsdtar -x -f rootfs_orig.gz -C ./rootfs;
 
-.PHONY: initrd unpackorig
+dldeps:
+	@go get github.com/jroimartin/gocui
+	@go get gopkg.in/yaml.v2
+	@go get golang.org/x/sys/unix
+
+.PHONY: dldeps initrd unpackorig
