@@ -1,3 +1,11 @@
+2018/06/23
+~~~~~~~~~~
+
+* Added an option to launch a shell on the client
+* Implemented a timer to load default OS on no user input
+* Clean up of some code in the client
+* updates to the documentation according to the suggestions of mentors and developments in the code
+
 2018/06/15
 ~~~~~~~~~~
 
