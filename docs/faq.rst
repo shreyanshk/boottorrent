@@ -57,3 +57,5 @@ The improvements over the 'boottorrent' UniMi project includes:
 
 Where are the logs and how can I configure them? (verbosity, target file/daemon, etc.)
 --------------------------------------------------------------------------------------
+
+The logs for Dnsmasq and Transmission are currenly prepended with 'DNSMASQ:' and 'TRANSMISSION:' and are displayed on the terminal screen. You can use shell redirection to write the logs to any file. Currently, there are no options to control the verbosity of the logs.
