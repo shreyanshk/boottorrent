@@ -9,7 +9,7 @@ Dependencies
 
 Components this project depends on include:
 
-* `Python 3.6`_
+* `Python 3.6`_ with `Pip`_
 
 * `Transmission`_
 
@@ -23,6 +23,7 @@ Components this project depends on include:
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
 .. _Hefur: https://github.com/abique/hefur
 .. _Python 3.6: https://www.python.org/
+.. _Pip: https://pip.pypa.io/en/stable/
 .. _bsdtar: http://www.libarchive.org/
 
 The package itself depends on a few Python libraries which are installed automatically by Pip package manager. These libraries are:

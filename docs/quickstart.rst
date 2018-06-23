@@ -52,7 +52,7 @@ Next, you need to explicitly tell BootTorrent to enable this OS.
 
     boottorrent:
         ...
-        display_oss: linuxos
+        display_oss: [linuxos]
         default_os: linuxos
         ...
 
