@@ -92,7 +92,7 @@ func download_files(oskey string) {
 		"--file-allocation=prealloc",
 		"--allow-overwrite=true",
 		"--continue",
-		"--dir=/",
+		"--dir=/torrents/",
 		"-j5",
 		"/torrents/"+oskey+".torrent",
 	)
@@ -109,9 +109,9 @@ func load_kexec(oskey string) {
 	// Kexec-ing new kernel now
 	kexec := exec.Command(
 		"kexec",
-		"-l", "/"+oskey+"/"+runconfig.Kernel,
+		"-l", "/torrents/"+oskey+"/"+runconfig.Kernel,
 		"--append=\""+runconfig.Cmdline+"\"",
-		"--initrd", "/"+oskey+"/"+runconfig.Initrd,
+		"--initrd", "/torrents/"+oskey+"/"+runconfig.Initrd,
 	)
 	kexec.Stdout = os.Stdout
 	kexec.Stderr = os.Stderr
@@ -139,7 +139,7 @@ func load_bin_qemu_x86_64(oskey string) {
 	qemu.Args = append(qemu.Args, strings.Fields(c.Args)...)
 	// Qemu requires this env variable
 	qemu.Env = []string{"DISPLAY=:0"}
-	qemu.Dir = "/" + oskey
+	qemu.Dir = "/torrents/" + oskey
 	qemu.Stdout = os.Stdout
 	qemu.Stderr = os.Stderr
 	qemu.Start()
