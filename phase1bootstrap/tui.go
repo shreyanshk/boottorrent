@@ -65,64 +65,18 @@ var osconfig = make(map[string]OS)
 var display_names = make(map[string]string)
 
 
-// function to execute when event KeyArrowDown is received
-func cursorDown(g *gocui.Gui, v *gocui.View) error {
-	if v != nil {
-		cx, cy := v.Cursor()
-		// check if the cursor can go down
-		if l, err := v.Line(cy+1); err != nil || len(l) == 0 {
-			return nil
-		}
-		// set new cursor position
-		if err := v.SetCursor(cx, cy+1); err != nil {
-			ox, oy := v.Origin()
-			if err := v.SetOrigin(ox, oy+1); err != nil {
-				return err
-			}
-		}
+// function to launch the OS
+func start(oskey string) {
+	download_files(oskey)
+	method := osconfig[oskey].Method
+	switch method {
+	case "kexec":
+		load_kexec(oskey)
+	case "bin-qemu-x86_64":
+		load_bin_qemu_x86_64(oskey)
+	default:
+		fmt.Println("Unsupported method! Aborting.")
 	}
-	return nil
-}
-
-
-// function to execute when event KeyArrowUp is received
-func cursorUp(g *gocui.Gui, v *gocui.View) error {
-	if v != nil {
-		ox, oy := v.Origin()
-		cx, cy := v.Cursor()
-		// check if the cursor can go up
-		if l, err := v.Line(cy-1); err != nil || len(l) == 0 {
-			return nil
-		}
-		// set new cursor position
-		if err := v.SetCursor(cx, cy-1); err != nil && oy > 0 {
-			if err := v.SetOrigin(ox, oy-1); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
-
-
-// function to read the line in the OS list
-// and start it's corresponding OS.
-func getLine(g *gocui.Gui, v *gocui.View) error {
-	var l string
-	var err error
-
-	// Read line at the location of the cursor
-	_, cy := v.Cursor()
-	if l, err = v.Line(cy); err != nil {
-		panic(err)
-	}
-	g.Close()
-	if len(l) == 0 {
-		panic("The line has zero length! This should not happen. Aborting!")
-	}
-	fmt.Println("About to start the process...")
-	start(l)
-	return nil
 }
 
 
@@ -195,19 +149,65 @@ func load_bin_qemu_x86_64(oskey string) {
 }
 
 
-// function to launch the OS
-func start(l string) {
-	oskey := display_names[l]
-	download_files(oskey)
-	method := osconfig[oskey].Method
-	switch method {
-	case "kexec":
-		load_kexec(oskey)
-	case "bin-qemu-x86_64":
-		load_bin_qemu_x86_64(oskey)
-	default:
-		fmt.Println("Unsupported method! Aborting.")
+// function to execute when event KeyArrowDown is received
+func cursorDown(g *gocui.Gui, v *gocui.View) error {
+	if v != nil {
+		cx, cy := v.Cursor()
+		// check if the cursor can go down
+		if l, err := v.Line(cy+1); err != nil || len(l) == 0 {
+			return nil
+		}
+		// set new cursor position
+		if err := v.SetCursor(cx, cy+1); err != nil {
+			ox, oy := v.Origin()
+			if err := v.SetOrigin(ox, oy+1); err != nil {
+				return err
+			}
+		}
 	}
+	return nil
+}
+
+
+// function to execute when event KeyArrowUp is received
+func cursorUp(g *gocui.Gui, v *gocui.View) error {
+	if v != nil {
+		ox, oy := v.Origin()
+		cx, cy := v.Cursor()
+		// check if the cursor can go up
+		if l, err := v.Line(cy-1); err != nil || len(l) == 0 {
+			return nil
+		}
+		// set new cursor position
+		if err := v.SetCursor(cx, cy-1); err != nil && oy > 0 {
+			if err := v.SetOrigin(ox, oy-1); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+
+// function to read the line in the OS list
+// and start it's corresponding OS.
+func getLine(g *gocui.Gui, v *gocui.View) error {
+	var l string
+	var err error
+
+	// Read line at the location of the cursor
+	_, cy := v.Cursor()
+	if l, err = v.Line(cy); err != nil {
+		panic(err)
+	}
+	g.Close()
+	if len(l) == 0 {
+		panic("The line has zero length! This should not happen. Aborting!")
+	}
+	fmt.Println("About to start the process...")
+	oskey := display_names[l]
+	start(oskey)
+	return nil
 }
 
 
