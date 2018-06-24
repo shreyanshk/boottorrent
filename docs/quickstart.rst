@@ -90,7 +90,7 @@ Enable PXE on your computers. Please look for your computer's BIOS documentation
 
 Note: Please make sure that the interface you've selected is already configured statically as DHCP protocol needs this to works properly.
 
-Then, execute this command on your computer (in the same env):
+Then, activate the Python version or virtualenv that you've used to install BootTorrent and execute this command on your computer (in the same env):
 
 .. code-block:: console
 
