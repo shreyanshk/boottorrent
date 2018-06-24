@@ -79,7 +79,10 @@ Finally, you need to update some fields to appropriate values to match with your
     dnsmasq:
         ...
         interface: <interface you want to use>
+        dhcp_range: <IPs ranges in same subnet as host_ip>
         ...
+
+Note: Please make sure that the interface you've selected is already configured statically as DHCP protocol needs this to works properly and the statically configured address belongs to the same subnet as configured in the dhcp_range field in ``Boottorrent.yaml``.
 
 That's it about the configuration.
 
@@ -88,7 +91,7 @@ Booting the Kernel
 
 Enable PXE on your computers. Please look for your computer's BIOS documentation for instructions.
 
-Note: Please make sure that the interface you've selected is already configured statically as DHCP protocol needs this to works properly.
+Note: Please make sure that other DHCP servers and/or TFTP servers are not running on your computer/network as they may conflict with those provided by BootTorrent. Also make sure that you've either selected non-conflicting ports (see above) or closed conflicting applications.
 
 Then, activate the Python version or virtualenv that you've used to install BootTorrent and execute this command on your computer (in the same env):
 
