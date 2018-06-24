@@ -32,6 +32,9 @@ type OS struct {
 
 	// fields required for bin-qemu-x86_64
 	Args string
+
+	// fields required for qemu-iso
+	Isofile string
 }
 
 
@@ -78,8 +81,14 @@ func start(oskey string) {
 		// Ctrl+Alt+Backspace terminates Xorg
 		// Added wait so that logs can be checked
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
+	case "qemu-iso":
+		load_qemu_iso(oskey)
+		// Ctrl+Alt+Backspace terminates Xorg
+		// Added wait so that logs can be checked
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	default:
 		fmt.Println("Unsupported method! Aborting.")
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	}
 }
 
@@ -96,7 +105,7 @@ func download_files(oskey string) {
 		"--file-allocation=prealloc",
 		"--allow-overwrite=true",
 		"--continue",
-		"--dir=/torrents/",
+		"--dir=/torrents",
 		"-j5",
 		"/torrents/"+oskey+".torrent",
 	)
@@ -141,6 +150,28 @@ func load_bin_qemu_x86_64(oskey string) {
 	time.Sleep(1 * time.Second)
 	qemu := exec.Command("/usr/bin/qemu-system-x86_64")
 	qemu.Args = append(qemu.Args, strings.Fields(c.Args)...)
+	// Qemu requires this env variable
+	qemu.Env = []string{"DISPLAY=:0"}
+	qemu.Dir = "/torrents/" + oskey
+	qemu.Stdout = os.Stdout
+	qemu.Stderr = os.Stderr
+	qemu.Start()
+}
+
+
+// Method string: qemu-iso
+// function to start Qemu process with ISO file under Xorg
+func load_qemu_iso(oskey string) {
+	c := osconfig[oskey]
+	xorg := exec.Command("/usr/bin/Xorg")
+	xorg.Stdout = os.Stdout
+	xorg.Stderr = os.Stderr
+	xorg.Start()
+	// wait for Xorg to load
+	time.Sleep(1 * time.Second)
+	qemu := exec.Command("/usr/bin/qemu-system-x86_64")
+	fields := "-cdrom " + c.Isofile
+	qemu.Args = append(qemu.Args, strings.Fields(fields)...)
 	// Qemu requires this env variable
 	qemu.Env = []string{"DISPLAY=:0"}
 	qemu.Dir = "/torrents/" + oskey

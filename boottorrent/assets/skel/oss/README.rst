@@ -11,7 +11,7 @@ The fields allowed in the config.yaml file include:
 * method
     | type: string, required
     | The method via which the OS is to be loaded.
-    | Valid values include: [kexec bin-qemu-x86_64]
+    | Valid values include: [kexec bin-qemu-x86_64 qemu-iso]
 
 **Fields for Linux/Kexec**
 
@@ -32,6 +32,13 @@ The fields allowed in the config.yaml file include:
 * args
     | type: string, required
     | This string is directly passed to the Qemu binary as an argument and can include all the parameters accepted by Qemu.
+
+**Fields for running from ISO files**
+
+* isofile
+    | type: string, required
+    | The name of the ISO file that is to be run.
+
 
 Once you add an OS here, please also update your Boottorrent.yaml file to include it.
 
@@ -66,3 +73,18 @@ If you want to use a floppy disk image (test.img) with Qemu, the process is:
     dispname: TestOnQemu # Friendly name to display
     method: bin-qemu-x86_64
     args: "-fda test.img" # Arguments to pass to Qemu
+
+Example: Adding an ISO file to BootTorrent
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+If you want to boot a guest OS from an ISO file (disc.iso), the process is:
+
+1. Create a new directory.
+2. Drop the ISO file into the directory.
+3. Add a file config.yaml with content (modify according to your needs):
+
+.. code-block:: yaml
+
+    dispname: ISOFile
+    method: qemu-iso
+    isofile: disc.iso

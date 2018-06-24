@@ -57,3 +57,15 @@ Where are the logs and how can I configure them? (verbosity, target file/daemon,
 --------------------------------------------------------------------------------------
 
 The logs for Dnsmasq and Transmission are currenly prepended with 'DNSMASQ:' and 'TRANSMISSION:' and are displayed on the terminal screen. You can use shell redirection to write the logs to any file. Currently, there are no options to control the verbosity of the logs.
+
+Where are the downloaded OS files saved on the client?
+------------------------------------------------------
+
+The images are saved to the RAM on download. Which means their execution is very fast but it also means that Qemu based methods (such as qemu-iso) may have usable RAM that is less than total available RAM and is roughly equal to (total RAM - image size - size of Phase 1 Linux system).
+
+Kexec based method can use full RAM because the new OS is loaded in-place and is given complete ownership of all the underlying hardware.
+
+What mode is used to run Qemu in BootTorrent?
+---------------------------------------------
+
+Currently, Qemu is run in system emulation mode. That is, a complete computer is emulated/virtualized by Qemu.
