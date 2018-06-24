@@ -78,7 +78,9 @@ BootTorrent is intended to help solve this problem with the help of distributed 
     Fig 1: Interaction of computers sharing data together
             inside a network.
 
+
 .. (atrent) better figure than before, did you try using .dot or something else? (as suggested by Giovanni)
+.. TODO above answered in commit 9f46fcbe8b0fa0b2c077fd24edd6832d3cc5e6f0 discussion
 
 
 The ideal use case of BootTorrent is when a considerably large operating system (measured in bytes) is required to be run on the clients via network booting and the server providing the data is not performant enough to serve all the client on its own in constrained time requirements.
