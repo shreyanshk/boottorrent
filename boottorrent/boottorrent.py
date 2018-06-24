@@ -32,7 +32,7 @@ class BootTorrent:
         self.assets = os.path.dirname(__file__) + "/assets"
         self.config = config
         # This is the output queue where external
-        # components (transmission, dnamasq, hefur) send their stdout.
+        # components (transmission, dnamasq, opentracker) send their stdout.
         self.output = queue.Queue()
         # store handles to threads and processes
         self.process = dict({})
@@ -84,11 +84,11 @@ class BootTorrent:
                 )
         self.threads['dnsmasq'] = d_thread
 
-        if self.config['hefur']['enable']:
+        if self.config['opentracker']['enable']:
             h_thread = threading.Thread(
-                    target=self.start_process_hefur,
+                    target=self.start_process_opentracker,
                     )
-            self.threads['hefur'] = h_thread
+            self.threads['opentracker'] = h_thread
 
         o_thread = threading.Thread(
                 target=self.display_output,
@@ -187,26 +187,20 @@ class BootTorrent:
         for line in process.stdout:
             self.output.put(f"DNSMASQ: {line}")
 
-    def start_process_hefur(self):
-        """Start the Hefur process"""
+    def start_process_opentracker(self):
+        """Start the Opentracker process"""
         process = subprocess.Popen(
                 [
-                    "hefurd",
-                    "-torrent-dir", f"{self.wd}/out/torrents/",
-                    # HTTP port for stats and clients
-                    "-http-port", str(self.config['hefur']['port']),
-                    "-https-port", "0",  # disables HTTPS
-                    # UDP port is for clients
-                    "-udp-port", str(self.config['hefur']['port']),
+                    "opentracker",
+                    "-p", str(self.config['opentracker']['port']),
                     ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
                 )
-        self.process['hefur'] = process
+        self.process['opentracker'] = process
         for line in process.stdout:
-            # Hefur doesn't insert newlines in it's output, unlike others.
-            self.output.put(f"HEFUR: {line}\n")
+            self.output.put(f"OPENTRACKER: {line}")
 
     def start_process_transmission(self):
         """Start the Transmissio process"""
@@ -228,17 +222,17 @@ class BootTorrent:
         """
         Function to generate torrents for the folders in oss/ directory.
         """
-        if self.config['hefur']['enable']:
-            hefur = True
+        if self.config['opentracker']['enable']:
+            opentracker = True
             try:
                 host_ip = self.config['boottorrent']['host_ip']
-                port = self.config['hefur']['port']
+                port = self.config['opentracker']['port']
             except KeyError:
                 print("Please check configuration!")
-                print("Missing host IP or hefur port.")
+                print("Missing host IP or Opentracker port.")
                 exit()
         else:
-            hefur = False
+            opentracker = False
         oss = self.config['boottorrent']['display_oss']
         # generating torrents now
         for os in oss:  # noqa
@@ -248,8 +242,8 @@ class BootTorrent:
                     f"{self.wd}/oss/{os}",  # folder for which to generate
                     "-o", filename,  # where should the files be placed
                     ]
-            if hefur:
-                # add hefur as external tracker, if enabled
+            if opentracker:
+                # add Opentracker as external tracker, if enabled
                 cmd.extend(["-t", f"http://{host_ip}:{port}/announce"])
             p = subprocess.Popen(
                     cmd,

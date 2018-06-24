@@ -222,12 +222,12 @@ External components that run on the host include:
 Support components
 ~~~~~~~~~~~~~~~~~~
 
-`Hefur`_
+`Opentracker`_
 ********
 
-.. _Hefur: https://github.com/abique/hefur
+.. _Opentracker: http://erdgeist.org/arts/software/opentracker/
 
-Hefur is an in-memory, standalone BitTorrent tracker.
+Opentracker is an in-memory, standalone BitTorrent tracker.
 
 **Rationale**
 
@@ -237,12 +237,12 @@ Hefur is an in-memory, standalone BitTorrent tracker.
 
 **Alternative software**
 
-* `Opentracker`_
-    | No integrated web interface
+* `Hefur`_
+    | Installation can be bit troublesome
 * `Chihaya`_
     | Written in Golang, no web inteface
 
-.. _Opentracker: http://erdgeist.org/arts/software/opentracker/
+.. _Hefur: https://github.com/abique/hefur
 .. _Chihaya: https://github.com/chihaya/chihaya
 
 `Python-Click`_
@@ -379,7 +379,7 @@ The BootTorrent executable uses env's out/ directory as it's working directory. 
 
 3. Generation of torrents.
     | For all the OSs present in the boottorrent.display_oss field, torrent file for individual OS is generated via transmission-create binary and placed into env's out/torrents directory.
-    | If Hefur is enabled, it is added as external tracker to the torrents generated.
+    | If Opentracker is enabled, it is added as external tracker to the torrents generated.
 
 4. Write configuration for the client TUI.
     | TUI configuration is composed of two YAML files. These two files are parsed on the client to either display a TUI or load an OS.
@@ -395,7 +395,7 @@ The BootTorrent executable uses env's out/ directory as it's working directory. 
     | 'transmission' section of the 'config' and assets/tpls/transmission.json.tpl are send to Jinja2 to get final configuration file for Transmission which is then written to env's out/transmission/settings.json file.
 
 At this point, configuration for these components is present in the out/ directory and these processes are ready to be launched.
-Note: Hefur doesn't require configuration file and its CLI is simple. So, it's not written.
+Note: Opentracker doesn't require configuration file and its CLI is simple. So, it's not written.
 
 7. Launch external components on the host.
     | After the configuration(s) is written for components, they are launched and passed the path to their respective configuration.
@@ -407,7 +407,7 @@ At this point:
 
 * Dnsmasq is ready to serve any DHCP/TFTP requests.
 * Transmission is seeding the torrents.
-* Hefur tracker (if enabled) is ready to serve the clients.
+* Opentracker tracker (if enabled) is ready to serve the clients.
 
 So, BootTorrent goes standby and waits for requests to come.
 

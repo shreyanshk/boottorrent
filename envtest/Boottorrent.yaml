@@ -16,7 +16,7 @@ dnsmasq:
   dhcp_range: "192.168.1.50,192.168.1.150,12h"
   user: shreyansh
 
-hefur:
+opentracker:
     enable: True
     port: 10001
 

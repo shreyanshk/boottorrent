@@ -17,11 +17,11 @@ Components this project depends on include:
 
 * `bsdtar`_ (provided by libarchive)
 
-* `Hefur`_ (Optional)
+* `Opentracker`_ (Optional)
 
 .. _Transmission: https://github.com/transmission/transmission
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
-.. _Hefur: https://github.com/abique/hefur
+.. _Opentracker: http://erdgeist.org/arts/software/opentracker/
 .. _Python 3.6: https://www.python.org/
 .. _Pip: https://pip.pypa.io/en/stable/
 .. _bsdtar: http://www.libarchive.org/

@@ -65,17 +65,17 @@ The parameters in this sections have one-to-one correlation with those of Dnsmas
     | type: boolean, default: true
     | Enable build-in TFTP server.
 
-**Section: hefur**
+**Section: opentracker**
 
-Hefur is a standalone and lightweight BitTorrent tracker. It is used to accelerate peer/seed discovery in the network.
-Enabling Hefur requires that you set host_ip field as well.
+Opentracker is a BitTorrent peer tracker that is designed to be fast and low on resource usage. It is used to accelerate peer/seed discovery in the network.
+Enabling Opentracker requires that you set host_ip field as well.
 
 * enable
     | type: boolean, default: true
     | Used to enable/disable the tracker
 
 * port
-    | type: int, required if hefur is enabled, default: 10001
+    | type: int, required if Opentracker is enabled, default: 10001
     | Port on which to run the tracker.
 
 **Section: transmission**
@@ -88,12 +88,12 @@ An instance of Transmission is launched on the host to server the OS files to th
 
 * dht_enabled
     | type: boolean, required, default: false
-    | Distributed Hash Table (DHT) can be enabled if it is not possible to enable Hefur as a tracker. Though, Hefur is recommended.
+    | Distributed Hash Table (DHT) can be enabled if it is not possible to enable Opentracker as a tracker. Though, Opentracker is recommended.
     | Seed/Peer discovery via DHT can be slow or might not work at all.
 
 * lpd_enabled
     | type: boolean, required, default: false
-    | Local Peer Discovery (LPD) can be enabled if it is not possible to enable Hefur as a tracker. Though, Hefur is recommended.
+    | Local Peer Discovery (LPD) can be enabled if it is not possible to enable Opentracker as a tracker. Though, Opentracker is recommended.
     | Seed/Peer discovery via LPD can be slow or might not work at all.
 
 **Section: aria2**
