@@ -88,6 +88,8 @@ Booting the Kernel
 
 Enable PXE on your computers. Please look for your computer's BIOS documentation for instructions.
 
+Note: Please make sure that the interface you've selected is already configured statically as DHCP protocol needs this to works properly.
+
 Then, execute this command on your computer (in the same env):
 
 .. code-block:: console
