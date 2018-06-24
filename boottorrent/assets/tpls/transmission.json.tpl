@@ -11,7 +11,7 @@
     "blocklist-enabled": false,
     "blocklist-url": "http://www.example.com/blocklist",
     "cache-size-mb": 4,
-    "dht-enabled": {% if dht_enabled %}true{% else %}false{% endif %},
+    "dht-enabled": false,
     "download-dir": "{{ osdir }}",
     "download-queue-enabled": false,
     "download-queue-size": 5,

@@ -26,6 +26,4 @@ transmission:
 aria2:
     bt_enable_lpd: True
     check_integrity: True
-    enable_dht: False
-    enable_dht6: False
     enable_peer_exchange: True

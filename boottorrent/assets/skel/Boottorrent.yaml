@@ -20,11 +20,9 @@ opentracker:
 
 transmission:
     rpc_port: 9091
-    dht_enabled: False
     lpd_enabled: False
 
 aria2:
     bt_enable_lpd: False
-    enable_dht: False
     check_integrity: False
     enable_peer_exchange: True

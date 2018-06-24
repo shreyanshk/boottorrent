@@ -231,7 +231,7 @@ Opentracker is an in-memory, standalone BitTorrent tracker.
 
 **Rationale**
 
-* It allows fast discovery of other seeds/peers in the network. (Compared to LPD & DHT)
+* It allows fast discovery of other seeds/peers in the network. (Compared to LPD)
 * It doesn't need a database or configuration file.
 * Integrated web interface to display statistics for the torrents being served.
 

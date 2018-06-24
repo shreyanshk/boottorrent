@@ -86,11 +86,6 @@ An instance of Transmission is launched on the host to server the OS files to th
     | type: int, required, default: 9091
     | The port where Transmission will provide it's WebUI and API.
 
-* dht_enabled
-    | type: boolean, required, default: false
-    | Distributed Hash Table (DHT) can be enabled if it is not possible to enable Opentracker as a tracker. Though, Opentracker is recommended.
-    | Seed/Peer discovery via DHT can be slow or might not work at all.
-
 * lpd_enabled
     | type: boolean, required, default: false
     | Local Peer Discovery (LPD) can be enabled if it is not possible to enable Opentracker as a tracker. Though, Opentracker is recommended.
@@ -104,14 +99,10 @@ Aria2 is used on client side to download files via torrents.
     | type: boolean, required, default: false
     | Enable LPD on clients.
 
-* enable_dht
-    | type: boolean, required, default: false
-    | Enable DHT (on IPv4) on clients.
-
 * check_integrity
     | type: boolean, default: false
     | Additionally verify authenticity of downloaded data on the clients.
 
 * enable_peer_exchange
     | type: boolean, required, default: true
-    | Enable Peer Exchange (PEX) protocol. Can improve download speeds if only DHT and LPD are enabled.
+    | Enable Peer Exchange (PEX) protocol. Can improve download speeds if only LPD is enabled.

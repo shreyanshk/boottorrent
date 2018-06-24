@@ -51,8 +51,6 @@ type Conf struct {
 	Aria2 struct {
 		Bt_enable_lpd bool
 		Check_integrity bool
-		Enable_dht bool
-		Enable_dht6 bool
 		Enable_peer_exchange bool
 	}
 }
@@ -97,8 +95,8 @@ func start(oskey string) {
 func download_files(oskey string) {
 	aria2 := exec.Command(
 		"aria2c",
-		"--enable-dht=" + strconv.FormatBool(btconfig.Aria2.Enable_dht),
-		"--enable-dht6=" + strconv.FormatBool(btconfig.Aria2.Enable_dht6),
+		"--enable-dht=false",
+		"--enable-dht6=false",
 		"--bt-enable-lpd=" + strconv.FormatBool(btconfig.Aria2.Bt_enable_lpd),
 		"--disable-ipv6=true",
 		"--seed-time=" + strconv.Itoa(btconfig.Boottorrent.Seed_time/60),
