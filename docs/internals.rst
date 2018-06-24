@@ -33,6 +33,8 @@ Dnsmasq implements various protocols such as DHCP, BOOTP, PXE and TFTP support. 
 
 **Alternatives software**
 
+.. (atrent) give links to the alternatives
+
 * ISC DHCP: Heavy, more suitable for large deployments.
 * Kea DHCP: Considered experimental.
 * udhcpd: Doesn't support PXE or BOOTP
@@ -78,6 +80,8 @@ Note: SliTaz kernel only accepts archives in this format. With custom kernel com
 * No configuration files needed.
 
 **Alternative software**
+
+.. (atrent) give links to the alternatives
 
 * GNU cpio
 
@@ -139,6 +143,8 @@ Aria2 is a BitTorrent client.
 * Fully configurable programmatically.
 
 **Alternative software**
+
+.. (atrent) give links to the alternatives
 
 * transmission
 * ctorrent-dnh
@@ -226,6 +232,8 @@ Hefur is an in-memory, standalone BitTorrent tracker.
 
 **Alternative software**
 
+.. (atrent) give links to the alternatives
+
 * Opentracker
     | No integrated web interface
 * Chihaya
@@ -288,6 +296,8 @@ Requests is an HTTP library for Python.
 
 **Alternate packages**
 
+.. (atrent) give links to the alternatives
+
 * Python-urllib3
 
 Client Package
@@ -297,6 +307,8 @@ This component (also called Phase-1 Linux system), which is downloaded via TFTP 
 
 Core components
 ~~~~~~~~~~~~~~~
+
+.. (atrent) give links to these components' projects
 
 * **Aria2**
     | It is used to download the actual files from the torrent metadata.
