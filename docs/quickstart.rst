@@ -92,12 +92,10 @@ Booting the Kernel
 Enable PXE on your computers. Please look for your computer's BIOS documentation for instructions.
 
 Note: Please make sure that the interface you've selected is already configured statically as DHCP protocol needs this to works properly.
-.. (atrent) in accord to IP addresses in Boottorrent.yaml
 
 Note: Please make sure that other DHCP servers and/or TFTP servers are not running on your computer/network as they may conflict with those provided by BootTorrent. Also make sure that you've either selected non-conflicting ports (see above) or closed conflicting applications.
 
-Then, activate the Python version or virtualenv that you've used to install BootTorrent and execute this command on your computer (in the same env):
-.. (atrent) add a note about 'sudo' (that opens a different shell in another environment)
+Then, activate the Python version or virtualenv (note that using sudo in a virtualenv may start the process outside the virtualenv) that you've used to install BootTorrent and execute this command on your computer (in the same env):
 
 .. code-block:: console
 
