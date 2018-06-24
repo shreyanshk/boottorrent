@@ -4,8 +4,6 @@ Usage
 
 After installation, a new binary named ``boottorrent`` should be available in your console. This program is your entry point and the way to interact with the system.
 
-.. (atrent) somewhere ("soon", say in the architecture doc) you should explicitly state that this "executable" mus reside on the "server" of the booting network and that it manages DHCP/etc. (I know that in the doc this information is present, but not soon enough)
-
 You can verify the installation by checking for the installed version inside your console.
 
 .. code-block:: console
