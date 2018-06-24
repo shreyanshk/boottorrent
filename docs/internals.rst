@@ -33,13 +33,16 @@ Dnsmasq implements various protocols such as DHCP, BOOTP, PXE and TFTP support. 
 
 **Alternatives software**
 
-.. (atrent) give links to the alternatives
-
-* ISC DHCP: Heavy, more suitable for large deployments.
-* Kea DHCP: Considered experimental.
-* udhcpd: Doesn't support PXE or BOOTP
+* `ISC DHCP`_: Heavy, more suitable for large deployments.
+* `Kea DHCP`_: Considered experimental.
+* `udhcpd`_: Doesn't support PXE or BOOTP, part of BusyBox.
 
 Note: None of the alternatives support TFTP. Choosing any other option means that other external software is required for TFTP.
+
+.. _ISC DHCP: https://www.isc.org/downloads/dhcp/
+.. _Kea DHCP: https://kea.isc.org/wiki
+.. _udhcpd: https://busybox.net/
+
 
 **Provides**
 
@@ -81,9 +84,9 @@ Note: SliTaz kernel only accepts archives in this format. With custom kernel com
 
 **Alternative software**
 
-.. (atrent) give links to the alternatives
+* `GNU cpio`_
 
-* GNU cpio
+.. _GNU cpio: https://www.gnu.org/software/cpio/
 
 **Provides**
 
@@ -144,12 +147,14 @@ Aria2 is a BitTorrent client.
 
 **Alternative software**
 
-.. (atrent) give links to the alternatives
+* `Transmission`_
+* `ctorrent-dnh`_
+* `qbittorrent`_
+* `rtorrent`_
 
-* transmission
-* ctorrent-dnh
-* qbittorrent
-* rtorrent
+.. _ctorrent-dnh: http://www.rahul.net/dholmes/ctorrent/
+.. _qbittorrent: https://www.qbittorrent.org/
+.. _rtorrent: https://github.com/rakshasa/rtorrent
 
 Operating system loading interface
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -232,12 +237,13 @@ Hefur is an in-memory, standalone BitTorrent tracker.
 
 **Alternative software**
 
-.. (atrent) give links to the alternatives
-
-* Opentracker
+* `Opentracker`_
     | No integrated web interface
-* Chihaya
+* `Chihaya`_
     | Written in Golang, no web inteface
+
+.. _Opentracker: http://erdgeist.org/arts/software/opentracker/
+.. _Chihaya: https://github.com/chihaya/chihaya
 
 `Python-Click`_
 ***************
@@ -254,8 +260,11 @@ Click is a Python package for creating command line interfaces in a composable w
 
 **Alternate package**
 
-* docopt
-* argparse
+* `docopt`_
+* `argparse`_
+
+.. _docopt: http://docopt.org/
+.. _argparse: https://docs.python.org/3/library/argparse.html
 
 `Python-PyYAML`_
 ****************
@@ -296,9 +305,9 @@ Requests is an HTTP library for Python.
 
 **Alternate packages**
 
-.. (atrent) give links to the alternatives
+* `Python-urllib3`_
 
-* Python-urllib3
+.. _Python-urllib3: http://urllib3.readthedocs.io/en/latest/
 
 Client Package
 --------------
@@ -308,21 +317,19 @@ This component (also called Phase-1 Linux system), which is downloaded via TFTP 
 Core components
 ~~~~~~~~~~~~~~~
 
-.. (atrent) give links to these components' projects
-
-* **Aria2**
+* `Aria2`_
     | It is used to download the actual files from the torrent metadata.
 
-* **Kexec-tools**
+* `Kexec-tools`_
     | It is used to load any Linux based OS via kexec process.
 
-* **Qemu-x86_64**
+* `Qemu-x86_64`_
     | It is a hypervisor to run user provided non-Linux OS.
 
-* **Xorg**
+* `Xorg`_
     | It is used to provide Graphical display capabilities needed by Qemu.
 
-* **BootTorrent TUI**
+* BootTorrent TUI
     | It is used to either accept user input and/or read client configuration and programatically calls above tools as necessary.
 
 An overview of client's process is as follows:
@@ -335,6 +342,11 @@ An overview of client's process is as follows:
 6. OS to load is chosed either via user input or configuration.
 7. Download of the OS is initiated and saved to RAM.
 8. OS is loaded via appropriate method.
+
+.. _Aria2: https://aria2.github.io/
+.. _Kexec-tools: https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kexec/
+.. _Qemu-x86_64: https://www.qemu.org/
+.. _Xorg: https://www.x.org/wiki/
 
 Support components
 ~~~~~~~~~~~~~~~~~~
