@@ -5,6 +5,7 @@ initrd:
 	@env GOOS=linux GOARCH=386 go build tui.go
 	@mkdir -p diff/sbin
 	@mv tui diff/sbin/bttui
+	@rm -rf diff/sbin/getty
 	@echo "Packing assets into diff.gz";
 	@bsdtar -c --format newc -f diff.gz --lzma -Cdiff .;
 	@echo "Placing files in correct locations..."
