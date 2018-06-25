@@ -111,6 +111,25 @@ func download_files(oskey string) {
 }
 
 
+// function to seed the downloaded files
+func seed_files(oskey string) *exec.Cmd {
+	aria2 := exec.Command(
+		"/usr/bin/aria2c",
+		"--check-integrity",
+		"--enable-dht=false",
+		"--enable-dht6=false",
+		"--disable-ipv6=true",
+		"--bt-enable-lpd=" + strconv.FormatBool(btconfig.Aria2.Bt_enable_lpd),
+		"--seed-ratio=0.0",
+		"--file-allocation=prealloc",
+		"--dir=/torrents",
+		"/torrents/"+oskey+".torrent",
+	)
+	aria2.Run()
+	return aria2
+}
+
+
 // Method string: kexec
 // function handling Kexec-ing of new kernels
 func load_kexec(oskey string) {
@@ -152,6 +171,11 @@ func load_bin_qemu_x86_64(oskey string) {
 	qemu.Stdout = os.Stdout
 	qemu.Stderr = os.Stderr
 	qemu.Start()
+	// now start seeding
+	seedp := seed_files(oskey)
+	xorg.Wait()
+	qemu.Process.Kill()
+	seedp.Process.Kill()
 }
 
 
@@ -174,6 +198,11 @@ func load_qemu_iso(oskey string) {
 	qemu.Stdout = os.Stdout
 	qemu.Stderr = os.Stderr
 	qemu.Start()
+	// now start seeding
+	seedp := seed_files(oskey)
+	xorg.Wait()
+	qemu.Process.Kill()
+	seedp.Process.Kill()
 }
 
 
