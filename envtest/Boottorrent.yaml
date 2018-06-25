@@ -2,7 +2,7 @@ boottorrent:
   version: 0
   timeout: 30
   seed_time: 0
-  default_os: testos
+  default_os: freedos
   host_ip: 192.168.1.1
   display_oss:
       - testos
@@ -25,5 +25,4 @@ transmission:
 
 aria2:
     bt_enable_lpd: True
-    check_integrity: True
     enable_peer_exchange: True

@@ -50,7 +50,6 @@ type Conf struct {
 	}
 	Aria2 struct {
 		Bt_enable_lpd bool
-		Check_integrity bool
 		Enable_peer_exchange bool
 	}
 }
@@ -94,17 +93,16 @@ func start(oskey string) {
 // function to download the files via aria2 command
 func download_files(oskey string) {
 	aria2 := exec.Command(
-		"aria2c",
+		"/usr/bin/aria2c",
+		"--check-integrity",
+		"--allow-overwrite=true",
 		"--enable-dht=false",
 		"--enable-dht6=false",
-		"--bt-enable-lpd=" + strconv.FormatBool(btconfig.Aria2.Bt_enable_lpd),
 		"--disable-ipv6=true",
+		"--bt-enable-lpd=" + strconv.FormatBool(btconfig.Aria2.Bt_enable_lpd),
 		"--seed-time=" + strconv.Itoa(btconfig.Boottorrent.Seed_time/60),
 		"--file-allocation=prealloc",
-		"--allow-overwrite=true",
-		"--continue",
 		"--dir=/torrents",
-		"-j5",
 		"/torrents/"+oskey+".torrent",
 	)
 	aria2.Stdout = os.Stdout
@@ -119,7 +117,7 @@ func load_kexec(oskey string) {
 	runconfig := osconfig[oskey]
 	// Kexec-ing new kernel now
 	kexec := exec.Command(
-		"kexec",
+		"/usr/sbin/kexec",
 		"-l", "/torrents/"+oskey+"/"+runconfig.Kernel,
 		"--append=\""+runconfig.Cmdline+"\"",
 		"--initrd", "/torrents/"+oskey+"/"+runconfig.Initrd,
@@ -129,7 +127,7 @@ func load_kexec(oskey string) {
 	kexec.Run()
 	// Clear terminal
 	fmt.Println("\033[H\033[2J")
-	kexec2 := exec.Command("kexec", "-e")
+	kexec2 := exec.Command("/usr/sbin/kexec", "-e")
 	kexec2.Stdout = os.Stdout
 	kexec2.Stderr = os.Stderr
 	kexec2.Run()

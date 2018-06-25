@@ -24,5 +24,4 @@ transmission:
 
 aria2:
     bt_enable_lpd: False
-    check_integrity: False
     enable_peer_exchange: True

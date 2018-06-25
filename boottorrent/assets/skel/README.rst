@@ -99,10 +99,6 @@ Aria2 is used on client side to download files via torrents.
     | type: boolean, required, default: false
     | Enable LPD on clients.
 
-* check_integrity
-    | type: boolean, default: false
-    | Additionally verify authenticity of downloaded data on the clients.
-
 * enable_peer_exchange
     | type: boolean, required, default: true
     | Enable Peer Exchange (PEX) protocol. Can improve download speeds if only LPD is enabled.
