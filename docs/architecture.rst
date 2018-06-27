@@ -55,32 +55,18 @@ The 'central server' creates problems identified below:
 
 BootTorrent is intended to help solve this problem with the help of distributed P2P data sharing technologies such as BitTorrent. It explores the idea of using these techniques to program clients to share data among themselves, reducing the need of a single server providing all the data to every node. This, in effect, promote the clients to data providers. In other words, the clients become 'peers' to each other in a large cluster of computers.
 
-::
+.. blockdiag::
 
-    +-----------------------------------------------------+
-    |   +---------------------------------------------+   |
-    |   |   +------+                      +------+    |   |
-    |   |   | peer |<--------| |--------->| peer |    |   |
-    |   |   +------+      +--------+      +------+    |   |
-    |   |                 | client |                  |   |
-    |   |                 +--------+                  |   |
-    |   |  +--------+         ^          +--------+   |   |
-    |   |  | client |<--------|--------->| client |   |   |
-    |   |  +--------+         |          +--------+   |   |
-    |   +---------------------|-----------------------+   |
-    |                         |                           |
-    |              share data | + configuration           |
-    |   +---------------------------------------------+   |
-    |   |                   Server                    |   |
-    |   +---------------------------------------------+   |
-    +-----------------------------------------------------+
+    blockdiag {
+        Server -> Client1, Client2, Client3
+        Client2 -> Peer1, Peer2
+            Peer1 <-> Peer2
 
-    Fig 1: Interaction of computers sharing data together
-            inside a network.
-
-
-.. (atrent) better figure than before, did you try using .dot or something else? (as suggested by Giovanni)
-.. TODO above answered in commit 9f46fcbe8b0fa0b2c077fd24edd6832d3cc5e6f0 discussion
+        group {
+                    label = "Client nodes"
+            Client1; Client2; Client3; Peer1; Peer2
+        }
+    }
 
 
 The ideal use case of BootTorrent is when a considerably large operating system (measured in bytes) is required to be run on the clients via network booting and the server providing the data is not performant enough to serve all the client on its own in constrained time requirements.
