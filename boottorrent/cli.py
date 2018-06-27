@@ -6,6 +6,7 @@ import click
 from distutils.dir_util import copy_tree
 import os
 import pathlib
+import shutil
 import sys
 import yaml
 
@@ -131,6 +132,9 @@ def verify_config_v0(cfg):
             err("Invalid host IP.", "correct it's value.")
     # check dnsmasq section
     dm = cfg['dnsmasq']
+    dm_exists = shutil.which("dnsmasq")
+    if not dm_exists:
+        err("dnsmasq is not installed.", "install dnsmasq.")
     dhcp = dm.get("enable_dhcp", "")
     if not dhcp:
         inf("DHCP server is disabled.")
@@ -159,6 +163,10 @@ def verify_config_v0(cfg):
     if type(ote) is not bool:
         err("Invalid value for opentracker.enable",
             "set it to a bool value.")
+    ot_exists = shutil.which("opentracker")
+    if ote and not ot_exists:
+        err("Opentracker enabled but not found.",
+            "install Opentracker or update configuration.")
     otp = ot.get("port", "")
     if ote and not otp:
         err("Tracker port not configured.", "configure it's value")
@@ -170,6 +178,9 @@ def verify_config_v0(cfg):
     except ValueError:
         err("Invalid value for Opentracker port.", "correct it's value.")
     # check transmission section
+    tr_exists = shutil.which("transmission-daemon")
+    if not tr_exists:
+        err("Transmission is not installed.", "install Transmission.")
     tr = cfg['transmission']
     trp = tr.get("rpc_port", "")
     if not trp:
