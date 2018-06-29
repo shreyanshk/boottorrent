@@ -38,7 +38,7 @@ def start():
                     "Hence, cannot continue."
                     )
             exit()
-        with open(cfgfilepath, 'r') as cfgfile:
+        with open(cfgfilepath, 'r', encoding='utf-8') as cfgfile:
             cfg = yaml.load(cfgfile)
             valid = verify_config_v0(cfg)
             if not valid:

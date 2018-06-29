@@ -157,22 +157,34 @@ class BootTorrent:
                 )
         # Set the location where the Phase 1 bootloader files can be found
         self.config['dnsmasq']['ph1'] = f'{self.wd}/out/dnsmasq/ph1'
-        with open(f'{self.assets}/tpls/dnsmasq.conf.tpl', 'r') as dnsmasqtpl:
+        with open(
+                f'{self.assets}/tpls/dnsmasq.conf.tpl',
+                'r', encoding='utf-8'
+                ) as dnsmasqtpl:
             data = dnsmasqtpl.read()
             dnsmasqconf = Template(data).render(**self.config['dnsmasq'])
-        with open(self.wd+'/out/dnsmasq/dnsmasq.conf', 'w') as dnsmasqfile:
+        with open(
+                self.wd+'/out/dnsmasq/dnsmasq.conf',
+                'w', encoding='utf-8'
+                ) as dnsmasqfile:
             dnsmasqfile.write(dnsmasqconf)  # write config file
 
     def configure_transmission_host(self):
         """Render settings.json file according to configuration"""
         # location where the transmission process can find files
         self.config['transmission']['osdir'] = f"{self.wd}/oss"
-        with open(f"{self.assets}/tpls/transmission.json.tpl", 'r') as f:
+        with open(
+                f"{self.assets}/tpls/transmission.json.tpl",
+                'r', encoding='utf-8'
+                ) as f:
             data = f.read()
             transmissionconf = Template(data).render(
                     **self.config['transmission']
                     )
-        with open(f"{self.wd}/out/transmission/settings.json", 'w') as f:
+        with open(
+                f"{self.wd}/out/transmission/settings.json",
+                'w', encoding='utf-8'
+                ) as f:
             f.write(transmissionconf)  # write config
 
     def start_process_dnsmasq(self):
@@ -267,10 +279,16 @@ class BootTorrent:
             )
         config = dict()
         for os in self.config['boottorrent']['display_oss']:  # noqa
-            osconfig = open(f"{self.wd}/oss/{os}/config.yaml", "r").read()
+            osconfig = open(
+                    f"{self.wd}/oss/{os}/config.yaml",
+                    "r", encoding='utf-8'
+                    ).read()
             config[os] = yaml.load(osconfig)
         configcontent = yaml.dump(config)
-        with open(f"{self.wd}/out/torrents/configs.yaml", "w") as f:
+        with open(
+                f"{self.wd}/out/torrents/configs.yaml",
+                "w", encoding='utf-8'
+                ) as f:
             f.write(configcontent)
 
     def generate_initrd(self):
