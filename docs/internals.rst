@@ -223,7 +223,7 @@ Support components
 ~~~~~~~~~~~~~~~~~~
 
 `Opentracker`_
-********
+**************
 
 .. _Opentracker: http://erdgeist.org/arts/software/opentracker/
 
@@ -343,7 +343,6 @@ An overview of client's process is as follows:
 7. Download of the OS is initiated and saved to RAM.
 8. OS is loaded via appropriate method.
 
-.. _Aria2: https://aria2.github.io/
 .. _Kexec-tools: https://mirrors.edge.kernel.org/pub/linux/utils/kernel/kexec/
 .. _Qemu-x86_64: https://www.qemu.org/
 .. _Xorg: https://www.x.org/wiki/

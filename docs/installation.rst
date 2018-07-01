@@ -184,10 +184,9 @@ If BootTorrent conflicts with your previously installed packages. You can use `v
 
 These are the preferred methods to install BootTorrent, as they will always install the most recent release.
 
-If you don't have `pip`_ installed, this `Python installation guide`_ can guide
+If you don't have `Pip`_ installed, this `Python installation guide`_ can guide
 you through the process.
 
-.. _pip: https://pip.pypa.io
 .. _Python installation guide: http://docs.python-guide.org/en/latest/starting/installation/
 
 Updating/Reinstalling

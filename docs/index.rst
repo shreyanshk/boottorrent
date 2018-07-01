@@ -13,7 +13,6 @@ Contents
    architecture
    internals
    faq
-   modules
    contributing
    authors
    history

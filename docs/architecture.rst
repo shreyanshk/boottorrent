@@ -132,7 +132,6 @@ In addition to that, client computer include pre-programmed:
     | It needs to be enabled on the clients.
 
 
-.. (atrent) ditto
 Non-functional requirements
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -150,7 +149,6 @@ Non-functional requirements
 
 
 
-.. (atrent) this section is good!
 Structure
 ---------
 
@@ -195,9 +193,6 @@ The server's Client configuration interface programs client's network boot inter
 
 Once the download is finished, the client data sharing interface will call Operating system loading interface to load the Operating system with the correct method.
 
-
-
-.. (atrent) maybe this one could be moved to "internals" but I'm not sure, leave it here for now
 Components
 ~~~~~~~~~~
 
@@ -259,11 +254,6 @@ Operating system loader
     | Runs on the client.
     | Tools such as Kexec, Qemu can be used to load.
 
-
-
-
-
-.. (atrent) maybe this one could be moved to "internals" but I'm not sure, leave it here for now
 Process overview
 ~~~~~~~~~~~~~~~~
 
