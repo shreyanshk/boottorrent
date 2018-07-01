@@ -11,11 +11,8 @@ with open('README.rst', encoding='utf-8') as readme_file:
 with open('HISTORY.rst', encoding='utf-8') as history_file:
     history = history_file.read()
 
-requirements = ['Click>=6.0', 'PyYAML>=3.12', 'Jinja2>=2.10', 'requests>=2.18.4', ]
-
-setup_requirements = ['pytest-runner', ]
-
-test_requirements = ['pytest', ]
+with open('requirements.txt', encoding='utf-8') as req_file:
+    requirements = [i for i in req_file.read().split('\n') if i]
 
 setup(
     author="Shreyansh Khajanchi",
@@ -41,9 +38,6 @@ setup(
     keywords='boottorrent',
     name='boottorrent',
     packages=find_packages(include=['boottorrent']),
-    setup_requires=setup_requirements,
-    test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/shreyanshk/boottorrent',
     version='0.1.0',
     zip_safe=False,

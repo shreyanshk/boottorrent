@@ -1,0 +1,4 @@
+Click>=6.0
+PyYAML>=3.12
+Jinja2>=2.10
+requests>=2.18.4
