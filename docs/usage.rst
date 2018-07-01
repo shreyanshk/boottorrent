@@ -65,22 +65,46 @@ Adding Operating Systems
 Start BootTorrent
 -----------------
 
-To start the processes:
+Note:
 
-1. Change directory to your env (where Boottorrent.yaml file is placed).
-2. Execute:
+* Please be sure that other DHCP servers and/or TFTP servers are not running on your computer/network as they may conflict with BootTorrent.
+* Please make sure that the chosen ports are not being used by other applications.
+
+BootTorrent requires superuser access to bind to DHCP+TFTP ports (because they are low-ports). You can provide proper permission by either of two methods:
+
+With elevated shell
+~~~~~~~~~~~~~~~~~~~
+
+You can start a root shell (i.e ``sudo bash``) and activate Python/Virtualenv in that shell.
+
+Then, execute these commands on your computer:
 
 .. code-block:: console
 
+    $ whoami
+    root
+    $ source <virtualenv>/bin/activate # if you're using virtualenv
     $ boottorrent start
 
-Note: You may have to provide root access as Dnsmasq requires direct access to the network interface.
+With setcap
+~~~~~~~~~~~
 
-You can avoid giving root access if you use setcap to provide proper permissions to dnsmasq binary.
+``setcap`` can be used to persistently set correct permissions to the dnsmasq binary like this:
 
 .. code-block:: console
 
     $ sudo setcap CAP_NET_BIND_SERVICE,CAP_NET_RAW,CAP_NET_ADMIN=+ep /usr/bin/dnsmasq
+
+Then, you can activate Python/Virtualenv in a console and execute these commands:
+
+.. code-block:: console
+
+    $ whoami
+    user
+    $ source <virtualenv>/bin/activate # if you're using virtualenv
+    $ boottorrent start
+
+Note: You need not use ``sudo`` here as it will start the BootTorrent process inside another environment.
 
 You can learn more details about the permissions on `Capabilities man page`_.
 
