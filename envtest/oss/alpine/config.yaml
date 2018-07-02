@@ -1,0 +1,3 @@
+dispname: Alpine 3.8.0
+method: bin-qemu-x86_64
+args: "-cdrom alpine-virt-3.8.0-x86.iso"

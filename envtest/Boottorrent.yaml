@@ -7,6 +7,7 @@ boottorrent:
   display_oss:
       - testos
       - freedos
+      - alpine
 
 dnsmasq:
   enable_dhcp: True
@@ -22,7 +23,8 @@ opentracker:
 
 transmission:
   rpc_port: 9091
+  lpd_enabled: False
 
 aria2:
-    bt_enable_lpd: True
+    bt_enable_lpd: False
     enable_peer_exchange: True
