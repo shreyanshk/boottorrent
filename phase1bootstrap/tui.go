@@ -73,10 +73,6 @@ func start(oskey string) {
 		load_bin_qemu_x86_64(oskey)
 		// added pause so that logs can be read.
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
-	case "qemu-iso":
-		load_qemu_iso(oskey)
-		// added pause so that logs can be read.
-		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	default:
 		fmt.Println("Unsupported method! Aborting.")
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
@@ -165,50 +161,6 @@ func load_bin_qemu_x86_64(oskey string) {
 	c_qemu := make(chan bool)
 	qemu := exec.Command("/usr/bin/qemu-system-x86_64") // TODO check more thoroughly if this command works also on i386
 	qemu.Args = append(qemu.Args, strings.Fields(c.Args)...)
-	// Qemu requires this env variable
-	qemu.Env = []string{"DISPLAY=:0"}
-	qemu.Dir = "/torrents/" + oskey
-	qemu.Stdout = os.Stdout
-	qemu.Stderr = os.Stderr
-	go func() {
-		qemu.Run()
-		c_qemu <- true
-	}()
-	// now start seeding
-	ch := make(chan bool)
-	go seed_files(oskey, ch)
-	select {
-	case <-c_xorg:
-		qemu.Process.Kill()
-		qemu.Wait()
-		<-c_qemu
-	case <-c_qemu:
-		xorg.Process.Kill()
-		xorg.Wait()
-		<-c_xorg
-	}
-	ch <- true
-	return
-}
-
-// Method string: qemu-iso
-// function to start Qemu process with ISO file under Xorg
-func load_qemu_iso(oskey string) {
-	c_xorg := make(chan bool)
-	xorg := exec.Command("/usr/bin/Xorg")
-	xorg.Stdout = os.Stdout
-	xorg.Stderr = os.Stderr
-	go func() {
-		xorg.Run()
-		c_xorg <- true
-	}()
-	// wait for Xorg to load
-	time.Sleep(1 * time.Second)
-	c := osconfig[oskey]
-	c_qemu := make(chan bool)
-	qemu := exec.Command("/usr/bin/qemu-system-x86_64") // TODO check more thoroughly if this command works also on i386
-	fields := "-cdrom " + c.Isofile
-	qemu.Args = append(qemu.Args, strings.Fields(fields)...)
 	// Qemu requires this env variable
 	qemu.Env = []string{"DISPLAY=:0"}
 	qemu.Dir = "/torrents/" + oskey

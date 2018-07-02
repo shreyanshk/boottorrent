@@ -85,6 +85,6 @@ If you want to boot a guest OS from an ISO file (disc.iso), the process is:
 
 .. code-block:: yaml
 
-    dispname: ISOFile
-    method: qemu-iso
-    isofile: disc.iso
+    dispname: ISOFile # Friendly name to display
+    method: bin-qemu-x86_64
+    args: "-cdrom disc.iso" # Arguments to pass to Qemu
