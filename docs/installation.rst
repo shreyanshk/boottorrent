@@ -26,6 +26,13 @@ Components this project depends on include:
 .. _Pip: https://pip.pypa.io/en/stable/
 .. _bsdtar: http://www.libarchive.org/
 
+After installation, please make sure that binary files are available in your ``PATH`` variable. You can check it with this command (example for ``dnsmasq``):
+
+.. code-block:: console
+
+    $ which dnsmasq
+    /usr/sbin/dnsmasq
+
 The package itself depends on a few Python libraries which are installed automatically by Pip package manager. These libraries are:
 
 * `Click`_
