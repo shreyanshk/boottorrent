@@ -88,3 +88,7 @@ If you want to boot a guest OS from an ISO file (disc.iso), the process is:
     dispname: ISOFile # Friendly name to display
     method: bin-qemu-x86_64
     args: "-cdrom disc.iso" # Arguments to pass to Qemu
+
+Hint: You might want to enable KVM ("-accel kvm") if you're using Qemu as this will give you better performance. You can read full `Qemu documentation`_ for more information.
+
+.. _Qemu documentation: https://qemu.weilnetz.de/doc/qemu-doc.html
