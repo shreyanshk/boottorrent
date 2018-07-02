@@ -163,7 +163,7 @@ func load_bin_qemu_x86_64(oskey string) {
 	time.Sleep(1 * time.Second)
 	c := osconfig[oskey]
 	c_qemu := make(chan bool)
-	qemu := exec.Command("/usr/bin/qemu-system-x86_64")
+	qemu := exec.Command("/usr/bin/qemu-system-x86_64") // TODO check more thoroughly if this command works also on i386
 	qemu.Args = append(qemu.Args, strings.Fields(c.Args)...)
 	// Qemu requires this env variable
 	qemu.Env = []string{"DISPLAY=:0"}
@@ -206,7 +206,7 @@ func load_qemu_iso(oskey string) {
 	time.Sleep(1 * time.Second)
 	c := osconfig[oskey]
 	c_qemu := make(chan bool)
-	qemu := exec.Command("/usr/bin/qemu-system-x86_64")
+	qemu := exec.Command("/usr/bin/qemu-system-x86_64") // TODO check more thoroughly if this command works also on i386
 	fields := "-cdrom " + c.Isofile
 	qemu.Args = append(qemu.Args, strings.Fields(fields)...)
 	// Qemu requires this env variable
