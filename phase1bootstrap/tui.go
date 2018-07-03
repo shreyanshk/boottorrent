@@ -24,16 +24,17 @@ type OS struct {
 	Dispname string
 	Method   string
 
+	// fields required for bin-qemu-x86_64
+	Args string
+
+	// fields required for bin
+	Binargs string
+	Bin     string
+
 	// fields required for kexec
 	Cmdline string
 	Initrd  string
 	Kernel  string
-
-	// fields required for bin-qemu-x86_64
-	Args string
-
-	// fields required for qemu-iso
-	Isofile string
 }
 
 // Conveniently misses fields for stuff that is probably not needed on client.
@@ -72,6 +73,11 @@ func start(oskey string) {
 	case "bin-qemu-x86_64":
 		load_bin_qemu_x86_64(oskey)
 		// added pause so that logs can be read.
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
+	case "bin":
+		exec_bin(oskey)
+		// control shouldn't reach next line.
+		// added in case exec fails
 		bufio.NewReader(os.Stdin).ReadBytes('\n')
 	default:
 		fmt.Println("Unsupported method! Aborting.")
@@ -185,6 +191,24 @@ func load_bin_qemu_x86_64(oskey string) {
 	}
 	ch <- true
 	return
+}
+
+// Method string: bin
+// function to exec binary provided by the user
+func exec_bin(oskey string) {
+	c := osconfig[oskey]
+	binpath := "/torrents/" + oskey + "/" + c.Bin
+	exec.Command(
+		"chmod",
+		"+x", binpath,
+	).Run()
+	// in Unix: $0 = path to binary; $1... = args
+	argsfull := binpath + " " + c.Binargs
+	fmt.Println("\033[H\033[2J")
+	err := unix.Exec(binpath, strings.Fields(argsfull), os.Environ())
+	if err != nil {
+		panic("Failed to launch binary.")
+	}
 }
 
 // function to execute when event KeyArrowDown is received
