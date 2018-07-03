@@ -40,7 +40,7 @@ def start():
             exit()
         with open(cfgfilepath, 'r', encoding='utf-8') as cfgfile:
             cfg = yaml.load(cfgfile)
-            valid = verify_config_v0(cfg)
+            valid = verify_config_v0(cfg, wd)
             if not valid:
                 exit()
         bt = BootTorrent(cfg, wd)
@@ -58,7 +58,7 @@ def version(args=None):
     click.echo(f"BootTorrent {__version__}")
 
 
-def verify_config_v0(cfg):
+def verify_config_v0(cfg, wd):
     """Function to validate the correctness
     of the configuration
     """
@@ -66,10 +66,17 @@ def verify_config_v0(cfg):
     # 1. Assert type
     # 2. Assert value
     if cfg is None:
-        err("configuration not found.","make sure you're in correct directory.")
+        err("configuration not found.",
+            "make sure you're in correct directory.")
     if type(cfg) is not dict:
         err("invalid configuration.", "check configuration.")
-    sections = ['aria2', 'boottorrent', 'dnsmasq', 'opentracker','transmission']
+    sections = [
+            'aria2',
+            'boottorrent',
+            'dnsmasq',
+            'opentracker',
+            'transmission',
+            ]
     for section in sections:
         s = cfg.get(section, None)
         if not s:
@@ -83,20 +90,8 @@ def verify_config_v0(cfg):
     if bt.get('version', "") != 0:
         err("Unsupported version.",
             "use correct version of BootTorrent.")
-    do = bt.get('display_oss', "")
-    if len(do) == 0:
-        err("No OSs are enabled.",
-            "add an OS to display_oss parameter.")
-    if type(do) is not list:
-        err("display_oss is not a list.",
-            "correct parameter value.")
-    else:
-        for val in do:
-            if type(val) is not str:
-                err("Invalid value in display_oss.",
-                     "make sure it's a string.")
     try:
-        to = int(bt['timeout'])
+        int(bt['timeout'])
     except KeyError:
         err("timeout not found.", "add timeout value.")
     except ValueError:
@@ -106,8 +101,10 @@ def verify_config_v0(cfg):
         err("default_os not set.", "set correct value.")
     if type(df) is not str:
         err("incorrect value for default_os", "check it's value.")
-    if df not in do:
-        err(f"{df} not found in display_oss.", "check it's value.")
+    cts = os.listdir(path=f'{wd}/oss')
+    oss = [i for i in cts if os.path.isdir(f"{wd}/oss/{i}")]
+    if df not in oss:
+        err(f"{df} not found in oss/.", "check default_os value.")
     try:
         st = int(bt['seed_time'])
         if st < 0:
@@ -216,6 +213,7 @@ def err(err, action):
     click.echo("Error! " + err)
     click.echo("Please " + action)
     exit()
+
 
 def inf(info, rec=None):
     click.echo("Information: " + info)

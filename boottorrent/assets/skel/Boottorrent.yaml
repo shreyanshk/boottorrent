@@ -1,6 +1,5 @@
 boottorrent:
     version: 0
-    # display_oss:
     timeout: 30
     # default_os:
     seed_time: 30

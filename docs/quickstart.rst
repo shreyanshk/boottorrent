@@ -47,12 +47,11 @@ Now, you need to add details about how to boot with these files. So, launch your
 Next, you need to explicitly tell BootTorrent to enable this OS and update default network ports of various components to make sure they don't conflict with other applications already running on your computer.
 
 .. code-block:: yaml
-    :emphasize-lines: 3,4,8,12
+    :emphasize-lines: 3,7,11
     :caption: Boottorrent.yaml
 
     boottorrent:
         ...
-        display_oss: [linuxos]
         default_os: linuxos
         ...
     opentracker:

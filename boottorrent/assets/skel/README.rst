@@ -8,11 +8,6 @@ This section stores configurations parameters that are related to the working of
     | type: int, required
     | Handle backward/forward compatibility.
 
-* display_oss
-    | type: list of strings, required
-    | Operating Systems choices available to clients.
-    | Populated with the name of the folders in the oss/ directory.
-
 * timeout
     | type: int, default 30
     | In case of multiple OSs, BootTorrent waits this long (seconds) for user input before booting default OS.
@@ -22,9 +17,9 @@ This section stores configurations parameters that are related to the working of
 * default_os
     | type: string, required if timeout is set
     | The default choice in case of no input from user.
-    | Must be a value from the display_oss list.
+    | Must be the name of a folder present in oss/ directory.
 
-* seed_time [WIP]
+* seed_time
     | type: int, default 30, required
     | BootTorrent seeds downloaded OS for at least this long (seconds) before loading.
     | Ideal value: (image size / client interface speed) + BootTorrent boot time on client.

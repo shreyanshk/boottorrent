@@ -4,11 +4,6 @@ boottorrent:
   seed_time: 0
   default_os: freedos
   host_ip: 192.168.1.1
-  display_oss:
-      - testos
-      - freedos
-      - alpine
-      - testbin
 
 dnsmasq:
   enable_dhcp: True

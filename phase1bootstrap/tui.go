@@ -45,7 +45,6 @@ type Conf struct {
 		Seed_time  int
 		Default_os string
 		Host_ip    string
-		Display_os []string
 	}
 	Aria2 struct {
 		Bt_enable_lpd        bool

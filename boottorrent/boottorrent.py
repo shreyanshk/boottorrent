@@ -37,6 +37,8 @@ class BootTorrent:
         # store handles to threads and processes
         self.process = dict({})
         self.threads = dict({})
+        cts = os.listdir(path=f'{wd}/oss')
+        self.oss = [i for i in cts if os.path.isdir(f"{wd}/oss/{i}")]
         self.wd = wd
 
     def sigint_handler(self, signal, frame):
@@ -127,11 +129,11 @@ class BootTorrent:
         # Transmission's security mechanism to avoid CSRF
         text = requests.get(f"http://localhost:{port}/transmission/rpc").text
         csrftoken = text[522:570]
-        for os in self.config['boottorrent']['display_oss']:  # noqa
+        for e in self.oss:
             args = {
                     'paused': False,
                     'download-dir': f"{self.wd}/oss",
-                    'filename': f"{self.wd}/out/torrents/{os}.torrent",
+                    'filename': f"{self.wd}/out/torrents/{e}.torrent",
                     }
             # adding torrent file now, see
             # https://trac.transmissionbt.com/browser/branches/1.7x/doc/rpc-spec.txt
@@ -147,7 +149,7 @@ class BootTorrent:
                         }
                     )
             if req.status_code == 200:
-                self.output.put(f"TRANSMISSION: Added torrent for {os}.\n")
+                self.output.put(f"TRANSMISSION: Added torrent for {e}.\n")
 
     def configure_dnsmasq(self):
         """Render dnsmasq.conf.tpl according to the configuration."""
@@ -245,13 +247,12 @@ class BootTorrent:
                 exit()
         else:
             opentracker = False
-        oss = self.config['boottorrent']['display_oss']
         # generating torrents now
-        for os in oss:  # noqa
-            filename = f"{self.wd}/out/torrents/{os}.torrent"
+        for e in self.oss:
+            filename = f"{self.wd}/out/torrents/{e}.torrent"
             cmd = [
                     "transmission-create",
-                    f"{self.wd}/oss/{os}",  # folder for which to generate
+                    f"{self.wd}/oss/{e}",  # folder for which to generate
                     "-o", filename,  # where should the files be placed
                     ]
             if opentracker:
@@ -278,12 +279,12 @@ class BootTorrent:
             f"{self.wd}/out/torrents/Boottorrent.yaml",
             )
         config = dict()
-        for os in self.config['boottorrent']['display_oss']:  # noqa
+        for e in self.oss:
             osconfig = open(
-                    f"{self.wd}/oss/{os}/config.yaml",
+                    f"{self.wd}/oss/{e}/config.yaml",
                     "r", encoding='utf-8'
                     ).read()
-            config[os] = yaml.load(osconfig)
+            config[e] = yaml.load(osconfig)
         configcontent = yaml.dump(config)
         with open(
                 f"{self.wd}/out/torrents/configs.yaml",

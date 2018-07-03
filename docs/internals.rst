@@ -377,7 +377,7 @@ The BootTorrent executable uses env's out/ directory as it's working directory. 
     | Files for Phase 1 Linux system are also copied to out/dnsmasq/ph1 directory.
 
 3. Generation of torrents.
-    | For all the OSs present in the boottorrent.display_oss field, torrent file for individual OS is generated via transmission-create binary and placed into env's out/torrents directory.
+    | For all the OSs present in the oss/ directory, torrent file for individual OS is generated via transmission-create binary and placed into env's out/torrents directory.
     | If Opentracker is enabled, it is added as external tracker to the torrents generated.
 
 4. Write configuration for the client TUI.
