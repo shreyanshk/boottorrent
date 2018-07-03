@@ -1,0 +1,4 @@
+dispname: Test Binary
+method: "bin"
+bin: hello
+binargs: ""
