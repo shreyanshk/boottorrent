@@ -1,35 +1,35 @@
-26828.8 	 libwebkit-video
+26828.8 	 libwebkit-video [removable?]
 8499.2 	 linux
 6144.0 	 qemu-x86_64
-5222.4 	 gtk+
+5222.4 	 gtk+ [removable?]
 4096.0 	 glibc-base
-3686.4 	 gtkmm
+3686.4 	 gtkmm [removable?]
 3584.0 	 xorg-xkeyboard-config
-3379.2 	 gst-ffmpeg-small
+3379.2 	 gst-ffmpeg-small [removable?]
 3379.2 	 xorg-server
-3276.8 	 gst-plugins-base
+3276.8 	 gst-plugins-base [removable?]
 2867.2 	 linux-wireless
-2764.8 	 gst-plugins-good
-2662.4 	 locale-es
-2457.6 	 linux-sound
-2457.6 	 poppler
-2355.2 	 locale-fr
-2355.2 	 locale-ru
-2252.8 	 locale-de
-2150.4 	 shared-mime-info
+2764.8 	 gst-plugins-good [removable?]
+2662.4 	 locale-es [remove!]
+2457.6 	 linux-sound [removable?]
+2457.6 	 poppler [removable?]
+2355.2 	 locale-fr [remove!]
+2355.2 	 locale-ru [remove!]
+2252.8 	 locale-de [remove!]
+2150.4 	 shared-mime-info [removable?]
 2048.0 	 libcrypto
-2048.0 	 locale-pt_BR
+2048.0 	 locale-pt_BR [remove!]
 2048.0 	 aria2
-1945.6 	 gstreamer
+1945.6 	 gstreamer [removable?]
 1945.6 	 linux-firmware
-1945.6 	 slitaz-icons-faenza
+1945.6 	 slitaz-icons-faenza [removable?]
 1945.6 	 xorg-libX11
-1843.2 	 alsa-lib
+1843.2 	 alsa-lib [removable?]
 1740.8 	 midori
 1740.8 	 ttf-dejavu
-1638.4 	 libvorbis
-1638.4 	 locale-it
-1536.0 	 libgiomm
+1638.4 	 libvorbis [removable?]
+1638.4 	 locale-it [remove!]
+1536.0 	 libgiomm [removable?]
 1433.6 	 glib
 1433.6 	 gvfs
 1433.6 	 libgio
