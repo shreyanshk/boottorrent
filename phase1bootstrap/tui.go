@@ -358,8 +358,13 @@ func layout(g *gocui.Gui) error {
 		v.Frame = false
 		v.SelBgColor = gocui.ColorGreen
 		v.Autoscroll = true
-		for k, _ := range display_names {
+		nlist := 0
+		for k, val := range display_names {
 			fmt.Fprintln(v, k)
+			if val == btconfig.Boottorrent.Default_os {
+				v.SetCursor(0, nlist)
+			}
+			nlist += 1
 		}
 		if _, err := g.SetCurrentView("list"); err != nil {
 			return err
