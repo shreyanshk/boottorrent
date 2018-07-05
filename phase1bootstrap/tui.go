@@ -174,7 +174,7 @@ func load_bin_qemu_x86_64(oskey string) {
 	qemu.Stdout = os.Stdout
 	qemu.Stderr = os.Stderr
 	go func() {
-		qemu.Run()
+		qemu.Run() // MAYBE Qemu sans Xorg (curses or nographic)? See issue #37
 		c_qemu <- true
 	}()
 	// now start seeding
