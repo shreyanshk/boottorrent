@@ -5,7 +5,7 @@ Frequently Asked Questions
 Why does BootTorrent require superuser network access?
 ------------------------------------------------------
 
-Binding to low network ports (<1024) on *nix based computers requires superuser access. Because BootTorrent needs access to port 67 (DHCP) and port 69 (TFTP), it needs superuser access. So, either you can run BootTorrent in an elevated shell or you could use ``setcap`` utility to provide appropriate permissions.
+Binding to low network ports (<1024) on Unix like computers requires superuser access. Because BootTorrent needs access to port 67 (DHCP) and port 69 (TFTP), it needs superuser access. So, either you can run BootTorrent in an elevated shell or you could use ``setcap`` utility to provide appropriate permissions.
 
 Which architectures are supported?
 ----------------------------------

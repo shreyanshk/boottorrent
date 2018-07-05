@@ -161,7 +161,7 @@ Operating system loading interface
 
 **Approach used**
 
-The executable /sbin/getty on client's RAM disk is replaced. The new binary is loaded from initrd during boot process. The binary /sbin/getty (previously: Login manager, now: BootTorrent TUI) is invoked for every console by the init system and has root access.
+A new executable ``/sbin/bttui`` (BootTorrent TUI) is placed in client's RAM disk. The new binary is loaded from initrd during boot process on TTY1 (configurable by ``phase1bootstrap/diff/etc/inittab``). The login manager Getty (/sbin/getty) is also invoked on TTY2 and every other TTY is disabled.
 
 **Alternative approaches**
 
@@ -433,7 +433,7 @@ It will then download a total of 4 files (again via TFTP):
 
 * diff.gz
     | Contains the changes we want over rootfs.gz which are then overlaid on rootfs.gz
-    | Currently contains only BootTorrent TUI, replacing /sbin/getty binary for minimal changes to rootfs.gz
+    | Currently contains only BootTorrent TUI.
 
 * torrents.gz
     | Contains the torrent metadata + the TUI configuration
@@ -443,7 +443,7 @@ Once these files are downloaded, the PXELinux loader loads the Kernel.
 Loading of the TUI
 ~~~~~~~~~~~~~~~~~~
 
-The init system on the SliTaz image then attempts to load /sbin/getty binary which launches the TUI on client.
+The init system on the SliTaz image then attempts to load /sbin/bttui binary which launches the TUI on client.
 
 The below diagram illustrates how the booting process on client takes place.
 
