@@ -205,6 +205,11 @@ def verify_config_v0(cfg, wd):
     elif not ote and tre and a2lpd:
         inf("You've enabled LPD but it is slow and unreliable.",
             "consider enabling Opentracker.")
+    cll = a2.get("console_log_level", "")
+    vcll = ['debug', 'info', 'notice', 'warn', 'error']
+    if cll not in vcll:
+        err("invalid value for Aria2 log level.",
+            "correct it's value.")
     # all checks passed
     return True
 

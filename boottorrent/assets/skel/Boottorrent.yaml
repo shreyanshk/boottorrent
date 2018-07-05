@@ -24,3 +24,4 @@ transmission:
 aria2:
     bt_enable_lpd: False
     enable_peer_exchange: True
+    console_log_level: error

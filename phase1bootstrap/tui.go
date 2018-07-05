@@ -49,6 +49,7 @@ type Conf struct {
 	Aria2 struct {
 		Bt_enable_lpd        bool
 		Enable_peer_exchange bool
+		Console_log_level    string
 	}
 }
 
@@ -90,6 +91,7 @@ func download_files(oskey string) {
 	aria2 := exec.Command(
 		"/usr/bin/aria2c",
 		"--check-integrity",
+		"--console-log-level="+btconfig.Aria2.Console_log_level,
 		"--allow-overwrite=true",
 		"--enable-dht=false",
 		"--enable-dht6=false",

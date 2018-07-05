@@ -97,3 +97,8 @@ Aria2 is used on client side to download files via torrents.
 * enable_peer_exchange
     | type: boolean, required, default: true
     | Enable Peer Exchange (PEX) protocol. Can improve download speeds if only LPD is enabled.
+
+* console_log_level
+    | type: string, required
+    | valid values: debug, info, notice, warn or error
+    | Can be used to configure Aria2's log level on the client.
