@@ -78,6 +78,8 @@ Pre-Install: Build assets
 
 **You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
 
+.. (atrent) you may explain that these "building phase" is useful for customizing phase1 boot, i.e., not only for doc purpose
+
 .. _`build dependencies`:
 
 Building assets requires additional software. This includes:
