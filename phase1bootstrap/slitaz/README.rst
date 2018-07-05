@@ -1,9 +1,24 @@
 BootTorrent uses these packages:
 
 * aria2
+
+* busybox
+    | Provides various essential system utilities.
+
 * kexec-tools
+
 * qemu-x86_64
-* xorg
+
+* slitaz-boot-scripts
+    | Provides SliTaz specific init scripts.
+
+* xdotool
+    | Used to focus window after launching Xorg.
+
+* xorg-server
+
+* xorg-xf86-video-vesa
+    | Video driver
 
 If you want to add more packages, you can append the package names to ``distro-packages.list`` file.
 
