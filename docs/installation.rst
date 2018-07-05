@@ -76,9 +76,7 @@ Or download the `tarball`_:
 Pre-Install: Build assets
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-**You can skip this section because it is only for documentation purpose as these resources are currently checked in with the repository**
-
-.. (atrent) you may explain that these "building phase" is useful for customizing phase1 boot, i.e., not only for doc purpose
+**You can skip this section if you do not intent to customize BootTorrent as these resources are currently checked in with the repository**
 
 .. _`build dependencies`:
 
@@ -105,6 +103,8 @@ To build the SliTaz live image that is run on the client, copy the phase1bootstr
 
     $ cd <path to copied directory>
     $ sudo tazlito gen-distro
+
+Hint: You can also customize the built image to include more packages, drivers or files etc. Read more `here <https://boottorrent.readthedocs.io/en/latest/faq.html#i-have-exotic-hardware-and-boottorrent-doesn-t-include-it-s-software-what-can-i-do-to-make-it-work>_`.
 
 It will ask if you want to 'Repack packages from rootfs?', please press 'n' and then enter. This will download SliTaz packages from the internet and make a custom live distribution usable with BootTorrent.
 
