@@ -1,0 +1,178 @@
+* Boottorrent compared to LTSP
+
+In this document we compare the different approaches and solutions adopted by Boottorrent versus [[https://en.wikipedia.org/wiki/Linux_Terminal_Server_Project][LTSP]] in order to allow clients to network boot an OS as fast as possible.
+
+This comparative analysis is needed to verify possible integration of Boottorrent with LTSP.
+
+** Introduction
+
+*** LTSP
+
+LTSP is usually used to deploy thin-client images but - since ver.5[fn:3] - is also able to serve "fat client" OS images, containing user applications that runs on client machines (versus applications that runs on the LTSP application server).
+
+Since LTSP[fn:4] relies on distributions to integrate its architecture into their respective packages, here we only analyze the *LTSP Debian way* to build and serve client OS images.
+
+*** TODO Boottorrent
+
+_FIXME_: provide a two/three sentences describing the main use case for boottorrent
+
+** Boot image build and updates
+
+*** LTSP
+    :PROPERTIES:
+    :CUSTOM_ID: ltsp-build
+    :END:
+
+LTSP provides [[https://manpages.debian.org/stretch/ltsp-server/ltsp-build-client.8.en.html][ltsp-build-client]], a collection bash scripts that builds a =chroot= containing the client boot environment and a [[https://en.m.wikipedia.org/wiki/SquashFS][SquashFS]] filesystem image using that environment.
+
+The =--fat-client-desktop= configuration options allows building a client boot chroot (and related image) using the provided desktop environment meta-package[fn:5]; an example command is:
+
+#+BEGIN_SRC sh
+sudo ltsp-build-client --dist buster --arch i386 --chroot i386_buster_fatclient --fat-client-desktop=task-lxqt-desktop
+#+END_SRC
+
+The =--late-packages= option can be used to install additional packages not provided by the selected meta-package.
+
+The [[https://manpages.debian.org/stretch/ltsp-server/ltsp-chroot.8.en.html][ltsp-chroot]] tool can be used to customize the client boot image, e.g. installing or removing applications[fn:7] or installing =authorized_keys= in the root user =.ssh= folder; following the previous example, to further customize our =i386_buster_fatclient we could:
+
+#+BEGIN_SRC sh
+sudo ltsp-chroot --arch i386_buster_fatclient
+echo "Do something..."
+exit
+#+END_SRC
+
+Finally, with [[https://manpages.debian.org/stretch/ltsp-server/ltsp-update-image.8.en.html][ltsp-update-image]] the client OS SquashFS filesystem image is updated with the =chroot= contents; following previous example:
+
+#+BEGIN_SRC sh
+sudo ltsp-update-image i386_buster_fatclient
+#+END_SRC
+
+**** Pros
+
+- images build process integrated into the LTSP server
+- easy updating of images
+
+**** Cons
+
+- a special set of plugins must be developed for each supported client OS
+
+*** Boottorrent
+
+Boottorrent provides a pre built customized[fn:8] boot image (phase1 boot) based on [[http://slitaz.org/en/][Slitaz]] live image.
+
+Users can further customize the phase1 boot image following the instructions provided in [[https://boottorrent.readthedocs.io/en/latest/installation.html#pre-install-build-assets][Installation - build assets]]; in short, the user needs to boot a Slitaz host (on bare metal or in a virtualized environment) and use the [[http://doc.slitaz.org/en:handbook:genlivecd][Tazlito]] tool to build the desired live image.
+
+**** Pros
+
+- customization is done using the stock Slitaz customization tool
+
+**** Cons
+
+- needs a dedicated (virtual or physical) host
+
+** Client OS image and updates
+
+*** LTSP
+
+The user facing client OS image is the same built in [[#ltsp-build][LTSP boot image]] section.
+
+**** Pros
+
+- easy to maintain
+
+*** Boottorrent
+
+Once phase1 boot is completed, the client OS image shows a menu that allows users to choose from a (configured) list of several OS images to be booted (phase2 boot).
+
+_FIXME_: list various types of images we can boot; e.g. live image, initrd and rootfs...
+
+**** Pros
+
+- great choice of client OS stock images
+
+**** Cons
+
+- client OS images must be customized using (external) dedicated tools
+
+** Client OS boot process
+
+*** LTSP
+
+The process of booting a client to an LTSP server is as follows:
+
+1. clients boot via PXE (Pre-eXecution Environment)
+2. PXE requests an IP address from a local DHCP server.
+3. The DHCP server passes additional parameters to the client and downloads a Linux initramfs filesystem image via TFTP into a RAM disk on the client itself.
+4. client boots the downloaded Linux initramfs image, using NBD (strongly suggested) or NFS as the root filesystem
+
+**** Pros
+
+- NBD performance allows several clients[fn:1] to efficiently use a network mounted root image
+- can be used on clients with [[http://wiki.ltsp.org/wiki/Installation#Memory][limited amount of RAM]] (starting from 256MB)
+
+**** TODO Cons
+
+- DHCP server "manually" configured
+
+*** TODO Boottorrent
+
+# _FIXME_: summarize https://boottorrent.readthedocs.io/en/latest/architecture.html#initialization-of-bios-uefi-network-boot-interface
+
+**** TODO Pros
+
+- easy DHCP configuration via templates and user space Python tools
+- phase2 boot process speed increases with the number of connected clients
+
+**** TODO Cons
+
+- not working on clients with limited amount of RAM[fn:9]
+
+** User interaction with client OS
+
+*** LTSP
+
+The client shows a graphical login screen - LDM - asking for username and password; once successfully authenticated, the configured window manager is started and the user =home= directory is remotely mounted on the client.
+
+*** Boottorrent
+
+_FIXME_: describe that user interaction with the virtualized OS depends on the chosen OS image, if remote homes are needed the mount process must be manually managed (am I wrong?)
+
+** Summary
+
+#+NAME:Comparison summary table
+| scope                | Boottorrent          | LTSP                           | Notes                                                   |
+|----------------------+----------------------+--------------------------------+---------------------------------------------------------|
+| <20>                 | <20>                 | <30>                           | <55>                                                    |
+| boot image build     | Slitaz/Tazlito       | ltsp-build-client              |                                                         |
+| OS image and update  | NA                   | ltsp-chroot, ltsp-update-image | live OS customization is managed "outside" Boottorrent  |
+| OS boot process      | PXE, TFTP, torrent   | PXE, TFTP, NBD                 | NBD cannot easily "torified"                            |
+| user interaction     | liveCD-like          | integrated                     |                                                         |
+|----------------------+----------------------+--------------------------------+---------------------------------------------------------|
+
+** TODO Conclusions
+
+The phase2 boot approach used by Boottorrent and the different image distribution methods - torrent versus NBD - deployed substantially makes the two approaches incompatible and Boottorrent cannot be integrated into LTSP.
+
+Nevertheless, both projects could integrate parts of respective tools:
+
+- Python tools from Boottorrent used to easily configure DHCP/TFTP could be ported/integrated into LTSP to ease the work to centrally manage the client boot parameters.
+
+- one or more plugins for =ltsp-build-client= could be written in order to build (and further update) a chroot Slitaz environment and related phase1 boot image, this would allow a Boottorrent self-contained phase1 boot image customization process.
+
+* Footnotes
+
+[fn:9] assessment needed, document it
+
+[fn:1] missing benchmarks
+
+[fn:8] required custom packages are defined in [[https://github.com/shreyanshk/boottorrent/blob/dev/phase1bootstrap/slitaz/distro-packages.list][phase1bootstrap/slitaz/distro-packages.list]]
+
+[fn:7] openssh-server is my preferred one, allowing me to ssh to thin client if needed
+
+[fn:6] details in [[https://git.launchpad.net/ltsp/tree/server/share/ltsp/plugins/ltsp-build-client/Debian/030-fat-client?h=debian/master][030-fat-client plugin]]
+
+[fn:5] or the desktop meta-packages installed on the LTSP server
+
+[fn:4] from ver. 5.x onward
+
+[fn:3] https://en.wikipedia.org/wiki/Linux_Terminal_Server_Project#Fat_clients
