@@ -1,3 +1,23 @@
+2018/07/06
+~~~~~~~~~~
+
+* Merged method 'qemu-iso' into 'bin-qemu-x86_64'
+* Add method 'bin' to execute binaries
+* Detection of available OSs programmatically
+* Slimed down SliTaz image (56 MiB -> 28 MiB)
+* Add parameter aria2.console_log_level, remove display_oss
+* Fixed bug of not highlighting correctly default OS
+
+2018/06/30
+~~~~~~~~~~
+
+* Enable boot of ISO files with Qemu on client computers.
+* Switched to Opentracker for the tracker service.
+* Added code to verify the validity of input parameters.
+* Removed DHT from the project on recommendation.
+* In addition to client TUI, enabled additional shell (tty2).
+* Few documentation updates and bug fixes.
+
 2018/06/23
 ~~~~~~~~~~
 
