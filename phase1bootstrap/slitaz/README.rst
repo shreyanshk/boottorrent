@@ -7,6 +7,9 @@ BootTorrent uses these packages:
 
 * kexec-tools
 
+* linux-kvm
+	| Linux KVM support drivers
+
 * qemu-x86_64
 
 * slitaz-boot-scripts
@@ -15,13 +18,14 @@ BootTorrent uses these packages:
 * xdotool
     | Used to focus window after launching Xorg.
 
+* xorg-libXinerama
+	| Dependency of xdotool
+
 * xorg-server
 
-* xorg-xf86-video-vesa
-    | Video driver
+* xorg-xf86-video-*
+    | Video drivers
 
 If you want to add more packages, you can append the package names to ``distro-packages.list`` file.
 
 For the list of all packages supported by SliTaz you can search `here <http://pkgs.slitaz.org/search.sh>`_.
-
-.. (atrent) actually I'd like to add some package that could be useful, such as ssh (both client and server), netstat/ss, a small web browser (there was midori, but also ncurses ones would be good), mc (midnight commander), tmux, if it does not fatten the image size, anyway let's stay minimal and let the user customize

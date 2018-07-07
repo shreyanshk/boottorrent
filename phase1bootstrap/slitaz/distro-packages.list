@@ -1,8 +1,12 @@
 aria2
 busybox
 kexec-tools
+linux-kvm
 qemu-x86_64
 slitaz-boot-scripts
 xdotool
+xorg-libXinerama
 xorg-server
 xorg-xf86-video-vesa
+xorg-xf86-video-nouveau
+xorg-xf86-video-ati

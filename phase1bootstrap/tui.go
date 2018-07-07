@@ -177,6 +177,14 @@ func load_bin_qemu_x86_64(oskey string) {
 		qemu.Run() // MAYBE Qemu sans Xorg (curses or nographic)? See issue #37
 		c_qemu <- true
 	}()
+	// try to shift focus to QEMU window
+	// --sync: wait for window to come
+	xdocmd := "xdotool windowfocus $(xdotool search --sync --name \"QEMU\")"
+	xdo := exec.Command("sh", "-c", xdocmd)
+	xdo.Env = []string{"DISPLAY=:0"}
+	xdo.Stdout = os.Stdout
+	xdo.Stderr = os.Stderr
+	xdo.Start()
 	// now start seeding
 	ch := make(chan bool)
 	go seed_files(oskey, ch)
