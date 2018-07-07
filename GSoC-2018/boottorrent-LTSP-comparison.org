@@ -113,6 +113,7 @@ The process of booting a client to an LTSP server is as follows:
 **** TODO Cons
 
 - DHCP server "manually" configured
+- topology is "star", i.e., the NBD server is still the only point of distribution for the root filesystem
 
 *** TODO Boottorrent
 
@@ -125,7 +126,7 @@ The process of booting a client to an LTSP server is as follows:
 
 **** TODO Cons
 
-- not working on clients with limited amount of RAM[fn:9]
+- not working on clients with limited amount of RAM[fn:9] (unless a caching mechanism - such as using already present swapspace - is implemented, albeit not straightforward)
 
 ** User interaction with client OS
 
