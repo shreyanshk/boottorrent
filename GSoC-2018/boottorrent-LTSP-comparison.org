@@ -62,6 +62,16 @@ Boottorrent provides a pre built customized[fn:8] boot image (phase1 boot) based
 
 Users can further customize the phase1 boot image following the instructions provided in [[https://boottorrent.readthedocs.io/en/latest/installation.html#pre-install-build-assets][Installation - build assets]]; in short, the user needs to boot a Slitaz host (on bare metal or in a virtualized environment) and use the [[http://doc.slitaz.org/en:handbook:genlivecd][Tazlito]] tool to build the desired live image.
 
+# Shreyanshk:
+#  I'd add that it is possible to use Docker as well to build the images on the host without any virtualization.
+#  The process (in short) would look like this:
+#  1. Script appends/updates ``distro-packages.list`` and ``tazlito.conf`` file as required.
+#  2. Updated files are copied to SliTaz's docker image.
+#  3. Image is then build inside the docker image.
+#  4. Export the built files (``bzImage`` & ``rootfs.gz``) to host with ``docker cp``.
+#
+#  Building with Docker is doable.
+
 **** Pros
 
 - customization is done using the stock Slitaz customization tool
@@ -108,6 +118,10 @@ The process of booting a client to an LTSP server is as follows:
 **** Pros
 
 - NBD performance allows several clients[fn:1] to efficiently use a network mounted root image
+
+# Shreyansh:
+#  How does one configure the NBD/NFS disk on LTSP?
+
 - can be used on clients with [[http://wiki.ltsp.org/wiki/Installation#Memory][limited amount of RAM]] (starting from 256MB)
 
 **** TODO Cons
@@ -128,11 +142,19 @@ The process of booting a client to an LTSP server is as follows:
 
 - not working on clients with limited amount of RAM[fn:9] (unless a caching mechanism - such as using already present swapspace - is implemented, albeit not straightforward)
 
+# Shreyansh:
+#   BootTorrent can work 256MiB of RAM.
+#   Baseline for BootTorrent is only 192 MiB.
+
 ** User interaction with client OS
 
 *** LTSP
 
 The client shows a graphical login screen - LDM - asking for username and password; once successfully authenticated, the configured window manager is started and the user =home= directory is remotely mounted on the client.
+
+# Shreyansh:
+#   Please detail more about how a client/server validates the credentials.
+#   And, once validated, what all information is received by the client?
 
 *** Boottorrent
 
