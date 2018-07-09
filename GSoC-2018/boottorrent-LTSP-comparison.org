@@ -72,6 +72,8 @@ Users can further customize the phase1 boot image following the instructions pro
 #
 #  Building with Docker is doable.
 
+# Giovanni: chroot is your friend: http://doc.slitaz.org/en:guides:chroot and http://doc.slitaz.org/en:handbook:chroot; asking a user to setup Docker "just" to customize his Slitaz image is overkill ;-)
+
 **** Pros
 
 - customization is done using the stock Slitaz customization tool
@@ -122,6 +124,8 @@ The process of booting a client to an LTSP server is as follows:
 # Shreyansh:
 #  How does one configure the NBD/NFS disk on LTSP?
 
+# Giovanni: out of scope here
+
 - can be used on clients with [[http://wiki.ltsp.org/wiki/Installation#Memory][limited amount of RAM]] (starting from 256MB)
 
 **** TODO Cons
@@ -146,15 +150,22 @@ The process of booting a client to an LTSP server is as follows:
 #   BootTorrent can work 256MiB of RAM.
 #   Baseline for BootTorrent is only 192 MiB.
 
+# Giovanni: the phase2 OS (aka "fat-client") image size _has_ to be added to the baseline BootTorrent image, am I wrong?
+
 ** User interaction with client OS
 
 *** LTSP
 
 The client shows a graphical login screen - LDM - asking for username and password; once successfully authenticated, the configured window manager is started and the user =home= directory is remotely mounted on the client.
 
+# Giovanni: _FIXME_
+# no, there is *nothing* mounted on the client, X Session i started on the server and uses client DISPLAY as "view port"
+
 # Shreyansh:
 #   Please detail more about how a client/server validates the credentials.
 #   And, once validated, what all information is received by the client?
+
+# Giovanni: out of scope here
 
 *** Boottorrent
 
