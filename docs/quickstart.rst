@@ -47,7 +47,7 @@ Now, you need to add details about how to boot with these files. So, launch your
 Next, you need to explicitly tell BootTorrent to enable this OS and update default network ports of various components to make sure they don't conflict with other applications already running on your computer.
 
 .. code-block:: yaml
-    :emphasize-lines: 3,7,11
+    :emphasize-lines: 3,7
     :caption: Boottorrent.yaml
 
     boottorrent:
@@ -57,10 +57,6 @@ Next, you need to explicitly tell BootTorrent to enable this OS and update defau
     opentracker:
         ...
         port: <available port number>
-        ...
-    transmission:
-        ...
-        rpc_port: <available port number>
         ...
 
 Hint: you can use any port number between 1024 to 65535 (inclusive).

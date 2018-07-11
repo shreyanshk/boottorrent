@@ -17,10 +17,6 @@ opentracker:
     enable: True
     port: 10001
 
-transmission:
-    rpc_port: 9091
-    lpd_enabled: False
-
 aria2:
     bt_enable_lpd: False
     enable_peer_exchange: True

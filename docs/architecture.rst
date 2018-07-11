@@ -219,7 +219,7 @@ Torrent software - server
 * **Responsibilities**
     | Seeds first-hand copy of Operating system files to the P2P network.
     | **Provides interface**: Initial data provider interface
-    | **Rationale**: P2P networks need that, collectively, the whole network should have one complete copy of the necessary files to successfully download them. Transmission makes sure that one complete copy is available at any point of time.
+    | **Rationale**: P2P networks need that, collectively, the whole network should have one complete copy of the necessary files to successfully download them. Torrent software on server makes sure that one complete copy is available at any point of time.
 
 * **Collaborators**
     | Client data sharing interface

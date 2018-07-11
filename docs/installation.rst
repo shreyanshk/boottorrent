@@ -11,7 +11,9 @@ Components this project depends on include:
 
 * `Python 3.6`_ with `Pip`_
 
-* `Transmission`_
+* `Aria2`_
+
+* `mktorrent`_
 
 * `Dnsmasq`_
 
@@ -19,12 +21,13 @@ Components this project depends on include:
 
 * `Opentracker`_ (Optional)
 
-.. _Transmission: https://github.com/transmission/transmission
+.. _Aria2: https://github.com/aria2/aria2
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
 .. _Opentracker: http://erdgeist.org/arts/software/opentracker/
 .. _Python 3.6: https://www.python.org/
 .. _Pip: https://pip.pypa.io/en/stable/
 .. _bsdtar: http://www.libarchive.org/
+.. _mktorrent: https://github.com/Rudde/mktorrent
 
 After installation, please make sure that binary files are available in your ``PATH`` variable. You can check it with this command (example for ``dnsmasq``):
 
@@ -41,12 +44,9 @@ The package itself depends on a few Python libraries which are installed automat
 
 * `Jinja2`_
 
-* `Requests`_
-
 .. _Click: http://click.pocoo.org/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _Jinja2: http://jinja.pocoo.org/
-.. _Requests: http://docs.python-requests.org/en/master/
 
 These dependencies are only for the host running BootTorrent. Please check your distribution specific guide for instructions on how to install them. For building BootTorrent and the list of build dependencies, please refer `build dependencies`_.
 
@@ -104,7 +104,9 @@ To build the SliTaz live image that is run on the client, copy the phase1bootstr
     $ cd <path to copied directory>
     $ sudo tazlito gen-distro
 
-Hint: You can also customize the built image to include more packages, drivers or files etc. Read more `here <https://boottorrent.readthedocs.io/en/latest/faq.html#i-have-exotic-hardware-and-boottorrent-doesn-t-include-it-s-software-what-can-i-do-to-make-it-work>_`.
+Hint: You can also customize the built image to include more packages, drivers or files etc. Read more `here in the FAQ`_.
+
+.. _here in the FAQ: <https://boottorrent.readthedocs.io/en/latest/faq.html#i-have-exotic-hardware-and-boottorrent-doesn-t-include-it-s-software-what-can-i-do-to-make-it-work>
 
 It will ask if you want to 'Repack packages from rootfs?', please press 'n' and then enter. This will download SliTaz packages from the internet and make a custom live distribution usable with BootTorrent.
 

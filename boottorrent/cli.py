@@ -75,7 +75,6 @@ def verify_config_v0(cfg, wd):
             'boottorrent',
             'dnsmasq',
             'opentracker',
-            'transmission',
             ]
     for section in sections:
         s = cfg.get(section, None)
@@ -174,35 +173,17 @@ def verify_config_v0(cfg, wd):
                 "correct it's value.")
     except ValueError:
         err("Invalid value for Opentracker port.", "correct it's value.")
-    # check transmission section
-    tr_exists = shutil.which("transmission-daemon")
-    if not tr_exists:
-        err("Transmission is not installed.", "install Transmission.")
-    tr = cfg['transmission']
-    trp = tr.get("rpc_port", "")
-    if not trp:
-        err("Transmission port not configured.", "configure it's value")
-    try:
-        trp = int(trp)
-        if not 0 < trp < 65536:
-            err("Invalid value for Transmission port.",
-                "correct it's value.")
-    except ValueError:
-        err("Invalid value for Transmission port.", "correct it's value.")
-    tre = tr.get("lpd_enabled", "")
-    if tre and type(tre) is not bool:
-        err("Invalid value for transmission.lpd_enabled",
-            "set it to a bool value.")
     # check aria2 section
+    ot_exists = shutil.which("aria2c")
     a2 = cfg['aria2']
     a2lpd = a2.get("bt_enable_lpd", "")
     if type(a2lpd) is not bool:
         err("Invalid value for aria2.bt_enable_lpd",
             "set it to a bool value.")
-    if not ote and (not tre or not a2lpd):
+    if not ote and not a2lpd:
         err("You've not enabled any peer discovery mechanism.",
             "Please either enable LPD or Opentracker.")
-    elif not ote and tre and a2lpd:
+    elif not ote and a2lpd:
         inf("You've enabled LPD but it is slow and unreliable.",
             "consider enabling Opentracker.")
     cll = a2.get("console_log_level", "")

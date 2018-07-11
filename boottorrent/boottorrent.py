@@ -3,16 +3,13 @@
 """Main module."""
 from distutils.dir_util import copy_tree
 from jinja2 import Template
-import json
 import os
 import pathlib
 import queue
-import requests
 import shutil
 import signal
 import subprocess
 import threading
-import time
 import yaml
 
 
@@ -32,7 +29,7 @@ class BootTorrent:
         self.assets = os.path.dirname(__file__) + "/assets"
         self.config = config
         # This is the output queue where external
-        # components (transmission, dnamasq, opentracker) send their stdout.
+        # components (aria2, dnamasq, opentracker) send their stdout.
         self.output = queue.Queue()
         # store handles to threads and processes
         self.process = dict({})
@@ -73,14 +70,14 @@ class BootTorrent:
         self.generate_torrents()
         self.generate_client_config()
         self.generate_initrd()
-        self.configure_transmission_host()
+        self.configure_aria2_host()
 
         # Launching the processes
         # (in another thread so as to not block main thread)
         t_thread = threading.Thread(
-                target=self.start_process_transmission,
+                target=self.start_process_aria2,
                 )
-        self.threads['transmission'] = t_thread
+        self.threads['aria2'] = t_thread
         d_thread = threading.Thread(
                 target=self.start_process_dnsmasq,
                 )
@@ -100,11 +97,6 @@ class BootTorrent:
         for _, val in self.threads.items():
             val.start()
 
-        # wait for the transmission process to start and
-        # initialize before adding torrents
-        time.sleep(3)
-        self.add_generated_torrents()
-
         # wait for threads to finish before exiting
         for _, val in self.threads.items():
             val.join()
@@ -118,38 +110,6 @@ class BootTorrent:
                 break
             print(line, end="")
             self.output.task_done()
-
-    def add_generated_torrents(self):
-        """
-        Function to add the generated .torrent files
-        to the Transmission process.
-        """
-        port = self.config['transmission']['rpc_port']
-        # get X-Transmission-Session-Id; To make torrent-add request later
-        # Transmission's security mechanism to avoid CSRF
-        text = requests.get(f"http://localhost:{port}/transmission/rpc").text
-        csrftoken = text[522:570]
-        for e in self.oss:
-            args = {
-                    'paused': False,
-                    'download-dir': f"{self.wd}/oss",
-                    'filename': f"{self.wd}/out/torrents/{e}.torrent",
-                    }
-            # adding torrent file now, see
-            # https://trac.transmissionbt.com/browser/branches/1.7x/doc/rpc-spec.txt
-            # for API details
-            req = requests.post(
-                    f"http://localhost:{port}/transmission/rpc",
-                    data=json.dumps({
-                        "method": "torrent-add",
-                        "arguments": args,
-                        }),
-                    headers={
-                        'X-Transmission-Session-Id': csrftoken,
-                        }
-                    )
-            if req.status_code == 200:
-                self.output.put(f"TRANSMISSION: Added torrent for {e}.\n")
 
     def configure_dnsmasq(self):
         """Render dnsmasq.conf.tpl according to the configuration."""
@@ -171,23 +131,31 @@ class BootTorrent:
                 ) as dnsmasqfile:
             dnsmasqfile.write(dnsmasqconf)  # write config file
 
-    def configure_transmission_host(self):
-        """Render settings.json file according to configuration"""
-        # location where the transmission process can find files
-        self.config['transmission']['osdir'] = f"{self.wd}/oss"
+    def configure_aria2_host(self):
+        """Render aria2.conf file according to configuration"""
+        conf = dict(self.config['aria2'])
+        conf['input_file'] = f"{self.wd}/out/aria2/list"
+        conf['dir'] = f"{self.wd}/oss"
         with open(
-                f"{self.assets}/tpls/transmission.json.tpl",
+                f"{self.assets}/tpls/aria2.conf.tpl",
                 'r', encoding='utf-8'
                 ) as f:
             data = f.read()
-            transmissionconf = Template(data).render(
-                    **self.config['transmission']
+            aria2conf = Template(data).render(
+                    **conf
                     )
         with open(
-                f"{self.wd}/out/transmission/settings.json",
+                f"{self.wd}/out/aria2/conf",
                 'w', encoding='utf-8'
                 ) as f:
-            f.write(transmissionconf)  # write config
+            f.write(aria2conf)  # write config
+        # Make list of torrent files for Aria2
+        with open(
+                f"{self.wd}/out/aria2/list",
+                "w", encoding='utf-8',
+                ) as f:
+            for i in self.oss:
+                f.write(f"{self.wd}/out/torrents/{i}.torrent\n")
 
     def start_process_dnsmasq(self):
         """Start the Dnsmasq process"""
@@ -199,6 +167,8 @@ class BootTorrent:
                 )
         self.process['dnsmasq'] = process
         for line in process.stdout:
+            if line in [None, "", " ", "\n", " \n"]:
+                continue
             self.output.put(f"DNSMASQ: {line}")
 
     def start_process_opentracker(self):
@@ -214,23 +184,26 @@ class BootTorrent:
                 )
         self.process['opentracker'] = process
         for line in process.stdout:
+            if line in [None, "", " ", "\n", " \n"]:
+                continue
             self.output.put(f"OPENTRACKER: {line}")
 
-    def start_process_transmission(self):
-        """Start the Transmissio process"""
+    def start_process_aria2(self):
+        """Start the Aria2 torrent client process"""
         process = subprocess.Popen(
                 [
-                    'transmission-daemon',
-                    '-f', '-g',  # Stay in foreground, do not fork
-                    f'{self.wd}/out/transmission',
+                    'aria2c',
+                    f"--conf-path", f"{self.wd}/out/aria2/conf",
                     ],
                 stdout=subprocess.PIPE,
                 stderr=subprocess.STDOUT,
                 universal_newlines=True,
                 )
-        self.process['transmission'] = process
+        self.process['aria2'] = process
         for line in process.stdout:
-            self.output.put(f"TRANSMISSION: {line}")
+            if line in [None, "", " ", "\n", " \n"]:
+                continue
+            self.output.put(f"ARIA2: {line}")
 
     def generate_torrents(self):
         """
@@ -238,26 +211,21 @@ class BootTorrent:
         """
         if self.config['opentracker']['enable']:
             opentracker = True
-            try:
-                host_ip = self.config['boottorrent']['host_ip']
-                port = self.config['opentracker']['port']
-            except KeyError:
-                print("Please check configuration!")
-                print("Missing host IP or Opentracker port.")
-                exit()
         else:
             opentracker = False
+        host_ip = self.config['boottorrent']['host_ip']
+        port = self.config['opentracker']['port']
         # generating torrents now
         for e in self.oss:
             filename = f"{self.wd}/out/torrents/{e}.torrent"
             cmd = [
-                    "transmission-create",
-                    f"{self.wd}/oss/{e}",  # folder for which to generate
+                    "mktorrent",
                     "-o", filename,  # where should the files be placed
+                    f"{self.wd}/oss/{e}",  # folder for which to generate
                     ]
             if opentracker:
                 # add Opentracker as external tracker, if enabled
-                cmd.extend(["-t", f"http://{host_ip}:{port}/announce"])
+                cmd.extend(["-a", f"http://{host_ip}:{port}/announce"])
             p = subprocess.Popen(
                     cmd,
                     stdout=subprocess.PIPE,
@@ -265,8 +233,13 @@ class BootTorrent:
                     universal_newlines=True,
                 )
             p.wait()
-            for line in p.stdout:
-                self.output.put(f"TRANSMISSION-CREATE: {line}\n")
+            if p.returncode == 0:
+                self.output.put(f"MKTORRENT: Created torrent for {e}.\n")
+            else:
+                for line in p.stdout:
+                    if line in [None, "", " ", "\n", " \n"]:
+                        continue
+                    self.output.put(f"MKTORRENT: {line}.\n")
 
     def generate_client_config(self):
         """
@@ -326,7 +299,7 @@ class BootTorrent:
                 exist_ok=False,
                 )
         pathlib.Path.mkdir(
-                pathlib.Path(self.wd + "/out/transmission"),
+                pathlib.Path(self.wd + "/out/aria2"),
                 parents=True,
                 exist_ok=False,
                 )

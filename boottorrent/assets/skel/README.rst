@@ -73,19 +73,6 @@ Enabling Opentracker requires that you set host_ip field as well.
     | type: int, required if Opentracker is enabled, default: 10001
     | Port on which to run the tracker.
 
-**Section: transmission**
-
-An instance of Transmission is launched on the host to server the OS files to the clients via torrents.
-
-* rpc_port
-    | type: int, required, default: 9091
-    | The port where Transmission will provide it's WebUI and API.
-
-* lpd_enabled
-    | type: boolean, required, default: false
-    | Local Peer Discovery (LPD) can be enabled if it is not possible to enable Opentracker as a tracker. Though, Opentracker is recommended.
-    | Seed/Peer discovery via LPD can be slow or might not work at all.
-
 **Section: aria2**
 
 Aria2 is used on client side to download files via torrents.

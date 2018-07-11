@@ -104,18 +104,17 @@ Choices limited to BitTorrent.
 
 None
 
-`Transmission`_
-***************
+`Aria2`_
+********
 
-.. _Transmission: https://transmissionbt.com/
+.. _Aria2: https://github.com/aria2/aria2
 
-Transmission is a BitTorrent client.
+Aria2 is a BitTorrent client.
 
 **Rationale**
 
 * Popular and available in most distributions.
-* Includes both torrent creation and seeding tools.
-* Programmable via API.
+* Programmable via CLI interface.
 
 **Alternative software**
 
@@ -206,9 +205,8 @@ Core components
 
 External components that run on the host include:
 
-* **Transmission**
-    | For every sub-directory in the oss/ directory, a torrent file is created with the help of transmission-create binary and placed in the environment's out/torrents directory.
-    | Transmission-daemon acts as the seeder for all the torrents.
+* **Aria2**
+    | Aria2 acts as the seeder for all the torrents.
 
 * **bsdtar**
     | Because client computers can unpack RAM disks in their early phase of boot, the torrents metadata is packed into a RAM disk on the host and is unpacked by the client computers on booting the Phase-1 Linux system.
@@ -292,23 +290,6 @@ Jinja2 is a templating engine / processor in Python.
 
 Numerous: Visit `Python's templating documentation <https://wiki.python.org/moin/Templating>`_ for information.
 
-`Python-Requests`_
-******************
-
-.. _Python-Requests: http://docs.python-requests.org/en/master/
-
-Requests is an HTTP library for Python.
-
-**Rationale**
-
-* It is used to interact with Transmission's HTTP API to add torrents to it's daemon process.
-
-**Alternate packages**
-
-* `Python-urllib3`_
-
-.. _Python-urllib3: http://urllib3.readthedocs.io/en/latest/
-
 Client Package
 --------------
 
@@ -377,7 +358,7 @@ The BootTorrent executable uses env's out/ directory as it's working directory. 
     | Files for Phase 1 Linux system are also copied to out/dnsmasq/ph1 directory.
 
 3. Generation of torrents.
-    | For all the OSs present in the oss/ directory, torrent file for individual OS is generated via transmission-create binary and placed into env's out/torrents directory.
+    | For all the OSs present in the oss/ directory, torrent file for individual OS is generated via mktorrent binary and placed into env's out/torrents directory.
     | If Opentracker is enabled, it is added as external tracker to the torrents generated.
 
 4. Write configuration for the client TUI.
@@ -390,8 +371,9 @@ The BootTorrent executable uses env's out/ directory as it's working directory. 
     | SliTaz kernel can unpack 'newc' type of initrd file. So, the env's out/torrents directory (containing torrent metadata + TUI configuration) is packed into a 'newc' archive which is then mounted by the kernel on client during its boot process without any additional software.
     | This new initrd is placed at out/dnsmasq/ph1/torrents.gz location.
 
-6. Write configuration for Transmission.
-    | 'transmission' section of the 'config' and assets/tpls/transmission.json.tpl are send to Jinja2 to get final configuration file for Transmission which is then written to env's out/transmission/settings.json file.
+6. Write configuration for Aria2.
+    | 'aria2' section of the 'config' and assets/tpls/aria2.conf.tpl are send to Jinja2 to get final configuration file for Aria2 which is then written to env's out/aria2/conf file.
+    | The torrents are listed in out/aria2/list file which is read by Aria2 to load the torrents.
 
 At this point, configuration for these components is present in the out/ directory and these processes are ready to be launched.
 Note: Opentracker doesn't require configuration file and its CLI is simple. So, it's not written.
@@ -399,13 +381,10 @@ Note: Opentracker doesn't require configuration file and its CLI is simple. So, 
 7. Launch external components on the host.
     | After the configuration(s) is written for components, they are launched and passed the path to their respective configuration.
 
-8. Add generated torrents to Transmission.
-    | Torrent metadata present in the out/torrents directory is then added to Transmission via it's Web API.
-
 At this point:
 
 * Dnsmasq is ready to serve any DHCP/TFTP requests.
-* Transmission is seeding the torrents.
+* Aria2 is seeding the torrents.
 * Opentracker tracker (if enabled) is ready to serve the clients.
 
 So, BootTorrent goes standby and waits for requests to come.

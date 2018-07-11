@@ -61,7 +61,7 @@ The improvements over the 'boottorrent' UniMi project includes:
 Where are the logs and how can I configure them? (verbosity, target file/daemon, etc.)
 --------------------------------------------------------------------------------------
 
-The logs for Dnsmasq and Transmission are currenly prepended with 'DNSMASQ:' and 'TRANSMISSION:' and are displayed on the terminal screen. You can use shell redirection to write the logs to any file. Currently, there are no options to control the verbosity of the logs.
+The logs for Dnsmasq and Aria2 are currenly prepended with 'DNSMASQ:' and 'ARIA2:' and are displayed on the terminal screen. It's possible to control Aria2's logging via console_log_level parameter. You can also use shell redirection to write the logs to any file.
 
 Where are the downloaded OS files saved on the client?
 ------------------------------------------------------
