@@ -174,7 +174,9 @@ def verify_config_v0(cfg, wd):
     except ValueError:
         err("Invalid value for Opentracker port.", "correct it's value.")
     # check aria2 section
-    ot_exists = shutil.which("aria2c")
+    a2_exists = shutil.which("aria2c")
+    if not a2_exists:
+        err("Aria2 not found.", "install Aria2.")
     a2 = cfg['aria2']
     a2lpd = a2.get("bt_enable_lpd", "")
     if type(a2lpd) is not bool:
