@@ -28,7 +28,7 @@ setup(
     description="P2P bittorrent based network boot",
     entry_points={
         'console_scripts': [
-            'boottorrent=boottorrent.cli:main',
+            'boottorrent=boottorrent.cli:parse_args',
         ],
     },
     install_requires=requirements,

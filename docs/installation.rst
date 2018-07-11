@@ -38,13 +38,10 @@ After installation, please make sure that binary files are available in your ``P
 
 The package itself depends on a few Python libraries which are installed automatically by Pip package manager. These libraries are:
 
-* `Click`_
-
 * `PyYAML`_
 
 * `Jinja2`_
 
-.. _Click: http://click.pocoo.org/
 .. _PyYAML: https://github.com/yaml/pyyaml
 .. _Jinja2: http://jinja.pocoo.org/
 

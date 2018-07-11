@@ -1,3 +1,2 @@
-Click>=6.0
 PyYAML>=3.12
 Jinja2>=2.10

@@ -244,27 +244,6 @@ Opentracker is an in-memory, standalone BitTorrent tracker.
 .. _Hefur: https://github.com/abique/hefur
 .. _Chihaya: https://github.com/chihaya/chihaya
 
-`Python-Click`_
-***************
-
-.. _Python-Click: http://click.pocoo.org/5/
-
-Click is a Python package for creating command line interfaces in a composable way with little code.
-
-**Rationale**
-
-* It is used to implement the CLI in the package.
-* Code and it's documentation are placed together. Avoiding changing at multiple places on code changes.
-* It automatically generates CLI documentation from code and it's comments.
-
-**Alternate package**
-
-* `docopt`_
-* `argparse`_
-
-.. _docopt: http://docopt.org/
-.. _argparse: https://docs.python.org/3/library/argparse.html
-
 `Python-PyYAML`_
 ****************
 
