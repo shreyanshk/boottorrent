@@ -151,6 +151,7 @@ Aria2 is a BitTorrent client.
 * `qbittorrent`_
 * `rtorrent`_
 
+.. _Transmission: https://transmissionbt.com/
 .. _ctorrent-dnh: http://www.rahul.net/dholmes/ctorrent/
 .. _qbittorrent: https://www.qbittorrent.org/
 .. _rtorrent: https://github.com/rakshasa/rtorrent
