@@ -12,9 +12,9 @@ LTSP is usually used to deploy thin-client images but - since ver.5[fn:3] - is a
 
 Since LTSP[fn:4] relies on distributions to integrate its architecture into their respective packages, here we only analyze the *LTSP Debian way* to build and serve client OS images.
 
-*** TODO Boottorrent
+*** Boottorrent
 
-_FIXME_: provide a two/three sentences describing the main use case for boottorrent
+BootTorrent is used to network boot multiple computers connected together with the help of BitTorrent P2P technology. This distributed P2P booting process reduces the load on the central server which means that the computers can be booted faster than conventional network boot systems.
 
 ** Boot image build and updates
 
@@ -96,7 +96,10 @@ The user facing client OS image is the same built in [[#ltsp-build][LTSP boot im
 
 Once phase1 boot is completed, the client OS image shows a menu that allows users to choose from a (configured) list of several OS images to be booted (phase2 boot).
 
-_FIXME_: list various types of images we can boot; e.g. live image, initrd and rootfs...
+- Linux Kernel images
+- ISO files
+- Floppy disk images
+- Virtual Hard drives supported by QMEU
 
 **** Pros
 
@@ -135,7 +138,13 @@ The process of booting a client to an LTSP server is as follows:
 
 *** TODO Boottorrent
 
-# _FIXME_: summarize https://boottorrent.readthedocs.io/en/latest/architecture.html#initialization-of-bios-uefi-network-boot-interface
+The process of booting a client with BootTorrent is as follows:
+
+1. clients boot via PXE (Pre-eXecution Environment)
+2. PXE requests an IP address from a local DHCP server.
+3. The DHCP server passes additional parameters to the client and downloads a Linux initramfs filesystem image via TFTP into a RAM disk on the client itself.
+4. The client loads the Linux system and the linux system launches the BootTorrent client application.
+5. The BootTorrent client application launches the requested OS via configured method. (Kexec, Qemu, binary etc)
 
 **** TODO Pros
 
@@ -169,7 +178,11 @@ The client shows a graphical login screen - LDM - asking for username and passwo
 
 *** Boottorrent
 
-_FIXME_: describe that user interaction with the virtualized OS depends on the chosen OS image, if remote homes are needed the mount process must be manually managed (am I wrong?)
+The client starts the requested OS image.
+
+If the requested OS image is a Linux kernel which is Kexe'd then the OS image itself will have to be configured to configure/mount any other resource/filesystem as needed. This can be achieved in a straightforward way in the OS's init system.
+
+If the requested OS image is run on QEMU, then the OS cannot access the hardware directly. Hence, raw access of host resources will not be available unless proper arguments are given by the image maintainer.
 
 ** Summary
 
