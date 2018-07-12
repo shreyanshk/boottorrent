@@ -5,3 +5,10 @@ export PYBUIKD_NAME = boottorrent
 
 %:
 	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
+
+override_dh_auto_build: export http_proxy=127.0.0.1:9
+override_dh_auto_build: export https_proxy=127.0.0.1:9
+override_dh_auto_build:
+	dh_auto_build
+	PYTHONPATH=. python3 -m sphinx -N -bhtml docs/ build/html
+	PYTHONPATH=. python3 -m sphinx -N -bman docs/ build/man
