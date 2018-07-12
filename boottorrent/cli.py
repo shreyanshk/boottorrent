@@ -115,6 +115,11 @@ def verify_config_v0(cfg, wd):
             err(f"invalid value for '{section}'.",
                 "check it's value.")
             return False
+    mk_exists = shutil.which("mktorrent")
+    if not mk_exists:
+        err("mktorrent is not installed.",
+            "install it.")
+        return False
     # check boottorrent section
     bt = cfg['boottorrent']
     if bt.get('version', "") != 0:
