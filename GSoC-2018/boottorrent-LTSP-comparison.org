@@ -165,10 +165,15 @@ The process of booting a client with BootTorrent is as follows:
 
 *** LTSP
 
-The client shows a graphical login screen - LDM - asking for username and password; once successfully authenticated, the configured window manager is started and the user =home= directory is remotely mounted on the client.
+The client shows a graphical login manager (LDM)[fn:2], asking for username and password to be used for connection to the LTSP server; if needed the user can use the "Preferences" menu to change the default XSession or language, selecting from lists provided by the [[https://manpages.debian.org/stretch/ldm-server/ldminfod.8.en.html][ldminfod]] service running on the LTSP server.
 
-# Giovanni: _FIXME_
-# no, there is *nothing* mounted on the client, X Session i started on the server and uses client DISPLAY as "view port"
+After providing username and password, the login manager starts an ssh process like this: =ssh -Y -t -M -S /var/run/ldm_socket_1262_<server> -o NumberOfPasswordPrompts=<login-attempts> -o ConnectTimeout=10 -l <user> <server> echo LTSPROCKS; exec /bin/sh -=, if the authentication fails the entire login process is aborted and the LDM process respawned.
+
+If the authentication process succeeds, the LTSP client starts a remote Xsession via ssh, like in this example: =ssh -Y -t -S /var/run/ldm_socket_1262_roquette roquette  LTSP_CLIENT=10.38.2.32 LTSP_CLIENT_HOSTNAME=terminal003 LC_ALL=it_IT.UTF-8 LANGUAGE=it_IT.UTF-8 LANG=it_IT.UTF-8 DISPLAY=10.38.2.32:2  PULSE_SERVER=tcp:10.38.2.32:4713 ESPEAKER=10.38.2.32:16001 LTSP_ALSA_DEFAULT=pulse /etc/X11/Xsession "i3" < /dev/null > /dev/null ; /usr/sbin/ltspfsmounter all cleanup=
+
+Furthermore, the =home= of the authenticated user is mounted on the client via sshfs, like in this example: =sshfs -o allow_other,nonempty,ControlPath=/var/run/ldm_socket_1262_roquette roquette:/home/<user> /home/<user>=
+
+In this remote session all applications are started on the LTSP server, unless they are started as [[http://wiki.ltsp.org/wiki/Ltsp-localapps][local applications]], local applications can access files in the user home via the above mentioned sshfs mount.
 
 # Shreyansh:
 #   Please detail more about how a client/server validates the credentials.
@@ -207,6 +212,8 @@ Nevertheless, both projects could integrate parts of respective tools:
 - one or more plugins for =ltsp-build-client= could be written in order to build (and further update) a chroot Slitaz environment and related phase1 boot image, this would allow a Boottorrent self-contained phase1 boot image customization process.
 
 * Footnotes
+
+[fn:2] using this command: xinit /usr/share/ltsp/xinitrc /usr/sbin/ldm -- :2 vt2 -auth /var/run/ldm-xauth-SxIgLTJrI/Xauthority -config /var/run/ltsp-xorg.conf -depth 16 -br
 
 [fn:9] assessment needed, document it
 

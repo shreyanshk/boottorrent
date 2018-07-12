@@ -117,3 +117,4 @@ ENV/
 .mypy_cache/
 *.*~
 /.#TODO.rst
+/GSoC-2018/.#boottorrent-LTSP-comparison.org
