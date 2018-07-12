@@ -1,6 +1,7 @@
 phase1bootstrap/diff.gz
 phase1bootstrap/diff/sbin/
 envtest/out/
+envtest/Boottorrent.yaml
 
 #
 # folders
