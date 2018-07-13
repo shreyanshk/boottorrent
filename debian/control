@@ -1,21 +1,35 @@
 Source: boottorrent
-Section: unknown
+Section: python
 Priority: optional
 Maintainer: Shreyansh Khajanchi <shreyansh_k@live.com>
-Build-Depends: debhelper (>=11~), dh-python, python3-all, python3-setuptools, python3-docutils, python3-sphinx, python3-sphinxcontrib.seqdiag, python3-sphinxcontrib.blockdiag
-Standards-Version: 4.0.0
+Build-Depends:
+ debhelper (>=11),
+ dh-python (>= 2.20160609~),
+ python3-all,
+ python3-setuptools,
+ python3-sphinx,
+ python3-sphinxcontrib.seqdiag,
+ python3-sphinxcontrib.blockdiag,
+Standards-Version: 4.1.4
 Homepage: https://www.github.com/shreyanshk/boottorrent
 X-Python3-Version: >= 3.6
+Rules-Requires-Root: no
 
 Package: boottorrent
 Architecture: all
-Section: python
-Depends: ${python3:Depends}, ${misc:Depends}, python3, dnsmasq, aria2, mktorrent, python3-jinja2, python3-yaml
+Depends:
+ dnsmasq,
+ aria2,
+ mktorrent,
+ ${python3:Depends},
+ python3,
+ python3-jinja2,
+ python3-yaml,
+ ${misc:Depends},
 Description: distributed P2P BitTorrent based network booting for various Operating systems.
 
 Package: boottorrent-doc
 Architecture: all
-Section: doc
-Depends: ${sphinxdoc:Depends}, ${misc:Depends}
+Depends: ${misc:Depends}, ${sphinxdoc:Depends}
 Description: distributed P2P BitTorrent based network booting for various Operating systems.
 	This is the commong documentation package.
