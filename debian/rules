@@ -1,13 +1,7 @@
 #!/usr/bin/make -f
 
-#export DH_VERBOSE=1
-export PYBUILD_NAME=boottorrent
 export LC_ALL=C.UTF-8
+export PYBUILD_NAME=boottorrent
 
 %:
-	dh $@ --with python3,sphinxdoc --buildsystem pybuild
-
-override_dh_auto_build:
-	dh_auto_build
-#	PYTHONPATH=$(CURDIR) python3 -m sphinx -N -bhtml docs/ build/html
-#	PYTHONPATH=$(CURDIR) python3 -m sphinx -N -bman docs/ build/man
+	dh $@ --with python3,sphinxdoc --buildsystem=pybuild
