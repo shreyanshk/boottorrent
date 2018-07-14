@@ -3,10 +3,12 @@ Section: python
 Priority: optional
 Maintainer: Shreyansh Khajanchi <shreyansh_k@live.com>
 Build-Depends:
- debhelper (>=11),
+ debhelper (>=10),
  dh-python,
  python3-all,
  python3-setuptools,
+ python3-pip,
+ python3-wheel,
  python3-sphinx,
  python3-sphinxcontrib.seqdiag,
  python3-sphinxcontrib.blockdiag,
@@ -26,9 +28,3 @@ Depends:
  python3-yaml,
  ${misc:Depends},
 Description: distributed P2P BitTorrent based network booting for various Operating systems.
-
-Package: boottorrent-doc
-Architecture: all
-Depends: ${misc:Depends}, ${sphinxdoc:Depends}
-Description: distributed P2P BitTorrent based network booting for various Operating systems.
-	This is the commong documentation package.
