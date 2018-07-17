@@ -26,13 +26,6 @@ Depends:
  ${python3:Depends},
  python3-jinja2,
  python3-yaml,
+ ${sphinxdoc:Depends},
  ${misc:Depends},
 Description: distributed P2P BitTorrent based network booting for various Operating systems.
-
-# Package: boottorrent-doc
-# Architecture: all
-# Depends:
-#  ${misc:Depends},
-#  ${sphinxdoc:Depends},
-# Description: distributed P2P BitTorrent based network booting for various Operating systems.
-#  This is the common documentation package.
