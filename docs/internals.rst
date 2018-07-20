@@ -270,6 +270,21 @@ Jinja2 is a templating engine / processor in Python.
 
 Numerous: Visit `Python's templating documentation <https://wiki.python.org/moin/Templating>`_ for information.
 
+`mktorrent`_
+************
+
+.. _mktorrent: https://github.com/Rudde/mktorrent
+
+mktorrent is a simple command line utility to create BitTorrent metainfo files.
+
+**Rationale**
+
+* mktorrent is used to create torrent files for all the OSs present in the oss/ directory.
+
+**Alternate packages**
+
+None
+
 Client Package
 --------------
 

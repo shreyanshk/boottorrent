@@ -10,17 +10,17 @@ Binding to low network ports (<1024) on Unix like computers requires superuser a
 Which architectures are supported?
 ----------------------------------
 
-Currently, BootTorrent only supports x86 architecture and it's 64-bit extension (AMD64/x86_64) on the server and the clients. The server can be either 32-bit or 64-bit regardless of whatever type of Operating system is being served. The client has to additionally support 64-bit extensions to run any 64-bit Operating system being served, in absence os which it can only run 32-bit Operating systems.
+Currently, BootTorrent only supports x86 architecture and it's 64-bit extension (AMD64/x86_64) on the server and the clients. The server can be either 32-bit or 64-bit regardless of whatever type of Operating system is being served. The client has to additionally support 64-bit extensions to run any 64-bit Operating system being served, in absence of which it can only run 32-bit Operating systems.
 
 Can I mix 32-bit and 64-bit machines?
 -------------------------------------
 
 Yes, you can mix them but please note that 32-bit machines will fail to boot any 64-bit Operating System being served.
 
-What happens to previous DHCP configurations, if the host computer is the DHCP server, the DHCP server is active, and I start BootTorrent?
-------------------------------------------------------------------------------------------------------------------------------------------
+What happens to previous DHCP configuration, if BootTorrent is started on a host with active DHCP server?
+---------------------------------------------------------------------------------------------------------
 
-BootTorrent doesn't change any already present DHCP configurations and won't terminate any other running DHCP server. BootTorrent also allows you to limit the interfaces on which it serves DHCP requests by configuring the ``Boottorrent.yaml`` file. Please note that if multiple DHCP servers are running on same interface then there is a possibility of conflict. So, please make sure of this before starting BootTorrent.
+BootTorrent doesn't change any present DHCP configurations and won't terminate any other running DHCP server. BootTorrent also allows you to limit the interfaces on which it serves DHCP requests by configuring the ``Boottorrent.yaml`` file. Please note that if multiple DHCP servers are running on same interface then there is a possibility of conflict. So, please make sure of this before starting BootTorrent.
 
 Can I run BootTorrent if there is already an external DHCP server on the network?
 ---------------------------------------------------------------------------------
@@ -31,6 +31,8 @@ What can I do if I don't have any control over the present DHCP server?
 -----------------------------------------------------------------------
 
 Your network administrator will have to manually set the DHCP server to point to BootTorrent server. Please disable DHCP server provided by BootTorrent and ask your network administrator to set PXE boot file to "<IP of BootTorrent server>/pxelinux.0" and DHCP option 209 to "<IP of BootTorrent server>/pxelinux.cfg" (https://tools.ietf.org/html/rfc5071) in the active DHCP server. Please refer to your DHCP server's documentation for instructions on how to set these options.
+
+You'll also need to disable the DHCP server provided by BootTorrent. Please read more about usage documentation for more details.
 
 I have exotic hardware and BootTorrent doesn't include it's software. What can I do to make it work?
 ----------------------------------------------------------------------------------------------------
@@ -46,7 +48,38 @@ You can modify these files according to your needs and then place the generated 
 How can I add support for more architectures to BootTorrent?
 ------------------------------------------------------------
 
-You can start with porting the runtime and build dependencies to the new architecture. Then you can proceed to port the client package to the new architecture. This include the files in the boottorrent/assets/ph1 directory: PXE Linux loader and Phase 1 Linux system. If you've made it this far, please consider creating a pull request. :-)
+You can start with porting the runtime and build dependencies to the new architecture. Then you can proceed to port the client package to the new architecture. This include the files in the boottorrent/assets/ph1 directory: PXE Linux loader and Phase 1 Linux system. If you've made it this far, please consider creating a pull request.
+
+The client package (boottorrent/assets/ph1) consists of:
+
+* pxelinux.0
+	| It is the PXE Linux bootloader (based on Syslinux).
+
+* pxelinux.cfg
+	| It is the configuration file for the above bootloader.
+
+* ldlinux.c32
+	| It is a COM32 library for loading Linux kernel. It is provided with Syslinux.
+
+* bzImage
+	| It is the Linux kernel image (currently for x86 architecture).
+
+* rootfs.gz
+	| It is the rootfs corresponding with the kernel image.
+
+* diff.gz
+	| Diff file containing BootTorrent specific changes to the SliTaz image.
+
+The client TUI package (phase1bootstrap) consists of:
+
+* tui.go
+	| BootTorrent TUI written in Golang.
+
+* Makfile
+	| Makefile to automate the process of compiling the TUI software.
+	| Variables ``GOOS`` and ``GOARCH`` will be of interest if you want to port the software to other architectures. Read more at `Golang documentation`_.
+
+.. _Golang documentation: https://golang.org/doc/install/source#environment
 
 What are the differences between BootTorrent and the original 'boottorrent' UniMi project?
 ------------------------------------------------------------------------------------------

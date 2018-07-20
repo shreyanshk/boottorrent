@@ -97,10 +97,10 @@ Then, execute these commands on your computer:
 
 .. code-block:: console
 
-    $ whoami
+    # whoami
     root
-    $ source <virtualenv>/bin/activate # if you're using virtualenv
-    $ boottorrent start
+    # source <virtualenv>/bin/activate # if you're using virtualenv
+    # boottorrent start
 
 With setcap
 ~~~~~~~~~~~
