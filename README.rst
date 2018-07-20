@@ -5,9 +5,6 @@ BootTorrent
 .. image:: https://img.shields.io/pypi/v/boottorrent.svg
         :target: https://pypi.python.org/pypi/boottorrent
 
-.. image:: https://img.shields.io/travis/shreyanshk/boottorrent.svg
-        :target: https://travis-ci.org/shreyanshk/boottorrent
-
 .. image:: https://readthedocs.org/projects/boottorrent/badge/?version=latest
         :target: https://boottorrent.readthedocs.io/en/latest/?badge=latest
         :alt: Documentation Status
@@ -68,5 +65,8 @@ The above images were created from tests done at the University of Milan (ITALY)
 Features
 --------
 
-* TODO
-
+* Boot Linux Kernel with Kexec.
+* Includes Qemu to run any type of Operating system on client machine.
+* Ability to run a binary executable.
+* Client side user input to choose an OS.
+* Leverage BitTorrent to transfer files over the network.
