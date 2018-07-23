@@ -118,3 +118,10 @@ ENV/
 *.*~
 /.#TODO.rst
 /GSoC-2018/.#boottorrent-LTSP-comparison.org
+
+
+
+
+
+# git stats
+stats
