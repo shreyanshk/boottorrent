@@ -2,6 +2,11 @@
 Testing BootTorrent
 ===================
 
+
+(TODO: start with the goal)
+
+
+
 Brief stack overview
 --------------------
 
@@ -107,12 +112,15 @@ The constraints of BootTorrent is that testing it requires launching multiple co
 
 As work around for these contraints, all testing code must reside on the server, where BootTorrent code will always be in control. Hence, the testing process is:
 
+
+.. (atrent) do you mean simulating the whole process on a single machine?
 1. Launch VMs on local machine.
     | VBox can be used to launch VMs.
 
 2. Scrape VM window to get it's state.
     | Python package pyscreenshot can be used to grab screen.
 
+.. (atrent) reason about false-positives and false-negatives in this recognition
 3. Compare captured image to provided testing image.
     | Pixel to pixel comparison need to be done. Python Imaging Library (PIL) can be used.
 
@@ -132,4 +140,4 @@ Process
 
 5. The screenshot is cropped to the area of VM window
 
-6. The cropped screenshot is compared against know screenshot and result is returned
+6. The cropped screenshot is compared against known screenshot and result is returned
