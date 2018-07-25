@@ -2,10 +2,13 @@
 Testing BootTorrent
 ===================
 
+The goal of testing is:
 
-(TODO: start with the goal)
+1. To check if features work correctly on rebuilds of Phase1 Linux System because it's build process is out of control of BootTorrent project and it's result may not be reproducible.
 
+2. To ensure any contributed code from other sources do not break BootTorrent.
 
+3. To help quickly test the package when porting to other architectures.
 
 Brief stack overview
 --------------------
@@ -108,20 +111,25 @@ Basic requirements
 Suggested methodology
 ~~~~~~~~~~~~~~~~~~~~~
 
-The constraints of BootTorrent is that testing it requires launching multiple computers (either physical or virtual). The host OS on the client computer also loses control of the hardware in case of Kexec. So, any client side testing code won't work. In case of Qemu based boot, the host OS on client cannot get the status of the guest OS until guest OS exits (at which point Qemu returns control) because Qemu takes control.
+The constraints of BootTorrent is that testing it requires launching multiple computers (either physical or virtual). The host OS / BootTorrent / Application code on the client computer also loses control of the hardware in case of Kexec. So, any client side testing code won't work. In case of Qemu based boot, the host OS on client cannot get the status of the guest OS until guest OS exits (at which point Qemu returns control) because Qemu takes control.
 
-As work around for these contraints, all testing code must reside on the server, where BootTorrent code will always be in control. Hence, the testing process is:
+This means that the server computer needs to use out-of-band methods to verify that tested feature work. One method is to capture the screenshot of the client computer as a user would see it and work with screenshots to test if the software behaves as expected. This, in turn, means that client computer needs to be simulated on the host computer itself because in this case the server can use standard Xorg protocols to capture the screenshot of the VirtualBox VM window. This captured image can then be used to reason about the state of the system and identify if a feature worked.
 
+**Note: This testing code may not work on Wayland because the protocol doesn't allow capturing other windows due to security reasons.**
 
-.. (atrent) do you mean simulating the whole process on a single machine?
-1. Launch VMs on local machine.
-    | VBox can be used to launch VMs.
+As work around for these contraints, all testing code must reside on the server and the whole process should be simulated on the server, where BootTorrent code will always be in control.
 
-2. Scrape VM window to get it's state.
+Hence, the testing process is:
+
+1. Launch an Xorg based session.
+
+2. Launch VMs on local machine.
+    | VirtualBox can be used to launch VMs.
+
+3. Scrape VM window to get it's state.
     | Python package pyscreenshot can be used to grab screen.
 
-.. (atrent) reason about false-positives and false-negatives in this recognition
-3. Compare captured image to provided testing image.
+4. Compare captured image to provided testing image.
     | Pixel to pixel comparison need to be done. Python Imaging Library (PIL) can be used.
 
  **Note: These requirements are additional over the runtime requirements.**
@@ -141,3 +149,16 @@ Process
 5. The screenshot is cropped to the area of VM window
 
 6. The cropped screenshot is compared against known screenshot and result is returned
+
+Concerns
+~~~~~~~~
+
+The suggested testing methodology has the following issues:
+
+1. The testing won't work with Wayland based sessions which is increasingly becoming the default session type in various popular distributions.
+
+2. The written code may be dependent on the GUI / User Interface of the server as the code is working with screenshots. This means that, for example, even changing width of title bar may result in apparent failure of a test because of mismatch at pixel level in the "truth" screenshots.
+
+3. Software that change display color characteristics such as Redshift / Gamma correction / Tone correction may influence testing because they change the RGB intensity at the pixel level which will invalidate all "truth" screenshots.
+
+i.e: The code will be very dependent on the display settings of the computer.
