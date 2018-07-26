@@ -12,6 +12,8 @@ Build-Depends:
  python3-sphinx,
  python3-sphinxcontrib.seqdiag,
  python3-sphinxcontrib.blockdiag,
+ python3-jinja2,
+ python3-yaml,
 Standards-Version: 4.1.4
 Homepage: https://www.github.com/shreyanshk/boottorrent
 X-Python3-Version: >= 3.6
