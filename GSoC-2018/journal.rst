@@ -1,3 +1,21 @@
+2018/07/28
+~~~~~~~~~~
+
+* Helped pack OpenTracker (dependency of BootTorrent) as Debian package (https://github.com/shreyanshk/opentracker).
+* Delivered all the deliverables of the project.
+* Fixed an issue due to which documentation was not included in built Debian package
+* Fixed an issue on building with git-buildpackage
+
+2018/07/14
+~~~~~~~~~~
+
+* Moved from Transmission to Aria2 + mktorrent
+* Made a Debian package for BootTorrent.
+* Removed dependency on Python Click & Python Requests
+* Added various system drivers and programs (KVM, xdotool, xf86-video packages)
+* Refactored the code a bit.
+* Squashed bugs and updated documentations.
+
 2018/07/06
 ~~~~~~~~~~
 
