@@ -266,7 +266,88 @@ def verify_config_v0(cfg, wd):
         err("invalid value for Aria2 log level.",
             "correct it's value.")
         return False
+    # checking the OS configs.
+    friendlynamelist = []
+    for osdir in oss:
+        cfgfilepath = f"{wd}/oss/{osdir}/config.yaml"
+        if not pathlib.Path(cfgfilepath).exists():
+            err(f"config.yaml for {osdir} doesn't exist.", "check config.")
+            return False
+        with open(cfgfilepath, 'r', encoding='utf-8') as f:
+            oscfg = yaml.load(f)
+            method = oscfg.get("method", None)
+            if not method:
+                err(f"method for {osdir} not defined.", "define method.")
+                return False
+            if method not in ['bin', 'kexec', 'bin-qemu-x86_64']:
+                err(f"Invalid method for {osdir}.", "check config.")
+                return False
+            dispname = oscfg.get("dispname", "")
+            if dispname == "":
+                err(f"display name not set for {osdir}.", "set display name.")
+                return False
+            if dispname in friendlynamelist:
+                err(f"{dispname} found multiple times.", "correct it.")
+                return False
+            friendlynamelist.append(dispname)
+            ospath = f"{wd}/oss/{osdir}"
+            if method == 'bin':
+                valid = verify_config_v0_method_bin(oscfg, ospath)
+                if not valid:
+                    return False
+            elif method == 'kexec':
+                valid = verify_config_v0_method_kexec(oscfg, ospath)
+                if not valid:
+                    return False
+            else:
+                valid = verify_config_v0_method_qemu(oscfg, ospath)
+                if not valid:
+                    return False
     # all checks passed
+    return True
+
+
+def verify_config_v0_method_kexec(oscfg, ospath):
+    """Function to verify for method kexec
+    """
+    kernel = oscfg.get("kernel", "")
+    initrd = oscfg.get("initrd", "")
+    if kernel == "":
+        err(f"kernel not set for {oscfg['dispname']}.", "set it.")
+        return False
+    if initrd == "":
+        err(f"initrd not set for {oscfg['dispname']}.", "set it.")
+        return False
+    if not pathlib.Path(f"{ospath}/{kernel}").exists():
+        err(f"Specified kernel for {oscfg['dispname']} doesn't exists.",
+            "correct it.")
+        return False
+    if not pathlib.Path(f"{ospath}/{initrd}").exists():
+        err(f"Specified initrd for {oscfg['dispname']} doesn't exists.",
+            "correct it.")
+        return False
+    return True
+
+
+def verify_config_v0_method_qemu(oscfg, ospath):
+    """Function to verify for method bin-qemu-x86_64
+    """
+    # nothing to check here
+    # leaving stub just in case needed
+    return True
+
+
+def verify_config_v0_method_bin(oscfg, ospath):
+    """Function to verify for method bin
+    """
+    binfile = oscfg.get("bin", "")
+    if binfile == "":
+        err(f"binary isn't specified for {oscfg['dispname']}.",
+            "specify it.")
+        return False
+    if not pathlib.Path(f"{ospath}/{binfile}").exists():
+        err(f"binary for {oscfg['dispname']} not found.", "check it.")
+        return False
     return True
 
 
