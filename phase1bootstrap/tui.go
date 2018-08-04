@@ -393,6 +393,42 @@ func layout(g *gocui.Gui) error {
 }
 
 func main() {
+	// check if required binaries exist.
+	binerror := false
+	bin := "/usr/bin/aria2c"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Aria2 binary doesn't exist.")
+	}
+	bin = "/usr/sbin/kexec"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Kexec binary doesn't exist.")
+	}
+	bin = "/usr/bin/Xorg"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Xorg binary doesn't exist.")
+	}
+	bin = "/usr/bin/qemu-system-x86_64"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Qemu binary doesn't exist.")
+	}
+	bin = "/bin/sh"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! sh binary doesn't exist.")
+	}
+	bin = "/bin/chmod"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! chmod binary doesn't exist.")
+	}
+	if binerror {
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
+		os.Exit(0)
+	}
 	// This block sets global variables.
 	boottorrent, err := ioutil.ReadFile("/torrents/Boottorrent.yaml")
 	if err != nil {
