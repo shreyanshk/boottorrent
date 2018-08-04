@@ -65,7 +65,13 @@ var bool_t bool
 
 // function to launch the OS
 func start(oskey string) {
-	download_files(oskey)
+	dlstatus := download_files(oskey)
+	if dlstatus != nil {
+		// download was unsuccessful
+		// added pause so that logs can be read.
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
+		os.Exit(0)
+	}
 	method := osconfig[oskey].Method
 	switch method {
 	case "kexec":
@@ -87,7 +93,7 @@ func start(oskey string) {
 }
 
 // function to download the files via aria2 command
-func download_files(oskey string) {
+func download_files(oskey string) error {
 	aria2 := exec.Command(
 		"/usr/bin/aria2c",
 		"--check-integrity",
@@ -104,7 +110,10 @@ func download_files(oskey string) {
 	)
 	aria2.Stdout = os.Stdout
 	aria2.Stderr = os.Stderr
-	aria2.Run()
+	// aria2 returns 0 on success, all other return vals are errors
+	// https://aria2.github.io/manual/en/html/aria2c.html#exit-status
+	// Run()'s retval is nil if launched program returns 0
+	return aria2.Run()
 }
 
 // function to seed the downloaded files
