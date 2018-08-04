@@ -65,7 +65,13 @@ var bool_t bool
 
 // function to launch the OS
 func start(oskey string) {
-	download_files(oskey)
+	dlstatus := download_files(oskey)
+	if dlstatus != nil {
+		// download was unsuccessful
+		// added pause so that logs can be read.
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
+		os.Exit(0)
+	}
 	method := osconfig[oskey].Method
 	switch method {
 	case "kexec":
@@ -87,7 +93,7 @@ func start(oskey string) {
 }
 
 // function to download the files via aria2 command
-func download_files(oskey string) {
+func download_files(oskey string) error {
 	aria2 := exec.Command(
 		"/usr/bin/aria2c",
 		"--check-integrity",
@@ -104,7 +110,10 @@ func download_files(oskey string) {
 	)
 	aria2.Stdout = os.Stdout
 	aria2.Stderr = os.Stderr
-	aria2.Run()
+	// aria2 returns 0 on success, all other return vals are errors
+	// https://aria2.github.io/manual/en/html/aria2c.html#exit-status
+	// Run()'s retval is nil if launched program returns 0
+	return aria2.Run()
 }
 
 // function to seed the downloaded files
@@ -384,6 +393,42 @@ func layout(g *gocui.Gui) error {
 }
 
 func main() {
+	// check if required binaries exist.
+	binerror := false
+	bin := "/usr/bin/aria2c"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Aria2 binary doesn't exist.")
+	}
+	bin = "/usr/sbin/kexec"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Kexec binary doesn't exist.")
+	}
+	bin = "/usr/bin/Xorg"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Xorg binary doesn't exist.")
+	}
+	bin = "/usr/bin/qemu-system-x86_64"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! Qemu binary doesn't exist.")
+	}
+	bin = "/bin/sh"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! sh binary doesn't exist.")
+	}
+	bin = "/bin/chmod"
+	if _, err := os.Stat(bin); os.IsNotExist(err) {
+		binerror = true
+		fmt.Println("Error! chmod binary doesn't exist.")
+	}
+	if binerror {
+		bufio.NewReader(os.Stdin).ReadBytes('\n')
+		os.Exit(0)
+	}
 	// This block sets global variables.
 	boottorrent, err := ioutil.ReadFile("/torrents/Boottorrent.yaml")
 	if err != nil {
