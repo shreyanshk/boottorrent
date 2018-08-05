@@ -23,7 +23,7 @@ None, our choices are limited by hardware.
 
 .. _Dnsmasq: http://www.thekelleys.org.uk/dnsmasq/doc.html
 
-Dnsmasq implements various protocols such as DHCP, BOOTP, PXE and TFTP support. It also includes support via Lua scripting language. Three protocols, DHCP, PXE and TFTP are currently being used in BootTorrent.
+Dnsmasq implements various protocols such as DHCP, BOOTP, PXE and TFTP. It also includes scripting support via Lua scripting language. Three protocols: DHCP, PXE and TFTP are currently being used in BootTorrent.
 
 **Rationale**
 
@@ -161,13 +161,13 @@ Operating system loading interface
 
 **Approach used**
 
-A new executable ``/sbin/bttui`` (BootTorrent TUI) is placed in client's RAM disk. The new binary is loaded from initrd during boot process on TTY1 (configurable by ``phase1bootstrap/diff/etc/inittab``). The login manager Getty (/sbin/getty) is also invoked on TTY2 and every other TTY is disabled.
+A new binary ``/sbin/bttui`` (BootTorrent TUI) is placed in client's RAM disk. The new binary is loaded from initrd during boot process on TTY1 (configurable by ``phase1bootstrap/diff/etc/inittab``) by the init process on the client. The login manager Getty (/sbin/getty) is also invoked on TTY2 and every other TTY is disabled.
 
 **Alternative approaches**
 
 * Replace with init
     | System will not load other drivers/software etc. (since init system has been removed)
-* Launch with init system.
+* Launch as a service.
     | Changes needed to be made in the base image are numerous.
 
 `Golang`_ Terminal User Interface (TUI)
@@ -230,9 +230,9 @@ Opentracker is an in-memory, standalone BitTorrent tracker.
 
 **Rationale**
 
-* It allows fast discovery of other seeds/peers in the network. (Compared to LPD)
+* It allows fast discovery of other seeds/peers in the network (compared to LPD).
 * It doesn't need a database or configuration file.
-* Integrated web interface to display statistics for the torrents being served.
+* Includes integrated web interface to display statistics for the torrents being served.
 
 **Alternative software**
 
@@ -403,14 +403,15 @@ It will then download a total of 4 files (again via TFTP):
     | The Linux kernel
 
 * rootfs.gz
-    | SliTaz initrd containing all the drivers, programs, utilities ... etc
+    | SliTaz initrd containing all the drivers, programs, utilities etc.
 
 * diff.gz
     | Contains the changes we want over rootfs.gz which are then overlaid on rootfs.gz
     | Currently contains only BootTorrent TUI.
 
 * torrents.gz
-    | Contains the torrent metadata + the TUI configuration
+    | Contains the torrent metadata + the TUI configuration.
+    | It is updated on every invocation of BootTorrent on server.
 
 Once these files are downloaded, the PXELinux loader loads the Kernel.
 
@@ -421,6 +422,8 @@ The init system on the SliTaz image then attempts to load /sbin/bttui binary whi
 
 The below diagram illustrates how the booting process on client takes place.
 
+Note: The booting process starts with PXE on the client (client.PXE) and the vertical axis represents time.
+
 .. seqdiag::
 
     seqdiag {
@@ -428,7 +431,7 @@ The below diagram illustrates how the booting process on client takes place.
         client.PXE -> host.DHCP [label = "Req. DHCP address"]
         client.PXE <- host.DHCP [label = "IP Addr + PXE Config"]
         client.PXE -> host.TFTP [label = "Req. PXE Linux loader binary"]
-        client.PXE <- host.TFTP [label = "Linux loader binary"]
+        client.PXE <- host.TFTP [label = "PXE Linux loader binary"]
         client.PXE -> client.LL [label = "Start Linux loader", leftnote = "PXE exits"]
         client.LL -> host.TFTP [label = "Req Kernel + initrd(s)"]
         client.LL <- host.TFTP [label = "Kernel + initrd(s)"]

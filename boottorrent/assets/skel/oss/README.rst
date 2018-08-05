@@ -11,7 +11,7 @@ The fields allowed in the config.yaml file include:
 * method
     | type: string, required
     | The method via which the OS is to be loaded.
-    | Valid values include: [kexec bin-qemu-x86_64 qemu-iso]
+    | Valid values include: [kexec bin bin-qemu-x86_64]
 
 **Fields for Linux/Kexec**
 
@@ -43,7 +43,7 @@ The fields allowed in the config.yaml file include:
     | type: string
     | These are the CLI arguments passed to the binary.
 
-Once you add an OS here, please also update your Boottorrent.yaml file to include it.
+Once you add an OS here, please also update your Boottorrent.yaml file accordingly.
 
 Example: Adding a Linux based OS
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
