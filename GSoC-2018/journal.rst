@@ -1,3 +1,9 @@
+2018/08/6
+~~~~~~~~~
+
+* Add some more user configuration sanity check code.
+* Minor corrections / improvements to the documentation.
+
 2018/07/28
 ~~~~~~~~~~
 
