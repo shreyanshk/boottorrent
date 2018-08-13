@@ -107,3 +107,8 @@ What mode is used to run Qemu in BootTorrent?
 ---------------------------------------------
 
 Currently, Qemu is run in system emulation mode. That is, a complete computer is emulated/virtualized by Qemu.
+
+How can I debug BootTorrent on clients?
+-------------------------------------------
+
+TazPanel, included with SliTaz, provides complete access to the client system remotely. You can connect to TazPanel on any client computer by opening ``http://CLIENT_IP:82/`` with your favourite browser from the server computer.
