@@ -392,6 +392,24 @@ func layout(g *gocui.Gui) error {
 	return nil
 }
 
+// function to enable remote debugging connections from server
+func setUpRemoteDebug() {
+	exec.Command(
+		"/etc/init.d/tazpanel",
+		"stop",
+	).Run()
+	exec.Command(
+		"/bin/sed", "-i",
+		"-e", "s/^D:\\*/#D:\\*/",
+		"-e", "s/^A:127.0.0.1/A:"+btconfig.Boottorrent.Host_ip+"/",
+		"/etc/slitaz/httpd.conf",
+	).Run()
+	exec.Command(
+		"/etc/init.d/tazpanel",
+		"start",
+	).Run()
+}
+
 func main() {
 	// check if required binaries exist.
 	binerror := false
@@ -451,6 +469,7 @@ func main() {
 		panic(err)
 	}
 
+	setUpRemoteDebug()
 	timeout := btconfig.Boottorrent.Timeout
 
 	if timeout == 0 {
