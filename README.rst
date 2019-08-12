@@ -22,7 +22,7 @@ The advantage of BootTorrent over standard network booting is that the bottlenec
     |    receiving it from server.        |     +----+      +----+     | |
     |                                     |       ^           ^        | |
     |                                     |    FE |           | FE     | |
-    |  +------+ 1 GBps  +------+ 100 MBps |       v           v        | |
+    |  +------+ 1 Gbps  +------+ 100 Mbps |       v           v        | |
     |  |Server|-------->|Switch|--------->|     +----+  FE  +----+     | |
     |  +------+  Link   +------+ Link(FE) |     |Node|<---->|Node|     | |
     |                                     |     +----+      +----+     | |
