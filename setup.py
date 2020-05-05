@@ -23,7 +23,6 @@ setup(
         'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.6',
     ],
     description="P2P bittorrent based network boot",
     entry_points={
@@ -38,6 +37,7 @@ setup(
     keywords='boottorrent',
     name='boottorrent',
     packages=find_packages(include=['boottorrent']),
+    python_requires='>=3.6',
     url='https://github.com/shreyanshk/boottorrent',
     version='0.1.0',
     zip_safe=False,
